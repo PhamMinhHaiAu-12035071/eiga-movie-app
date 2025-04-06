@@ -21,17 +21,18 @@ lib/
 ├── core/                         # System configuration
 │   ├── di/                      # Dependency Injection (GetIt, Injectable)
 │   ├── router/                  # Navigation (auto_route)
-│   └── theme/                   # Common interface
+│   └── env/                     # Environment configuration
 ├── features/                    # Feature module separation
 │   └── [feature_name]/
-│       ├── domain/              # Entity, repository abstract
-│       ├── application/         # Bloc/Cubit, UseCase, intermediate logic
-│       ├── infrastructure/      # Repository implementation, API services
 │       └── presentation/        # UI, page, widget, router
-└── shared/                      # Reusable resources
-    ├── constants/
-    ├── utils/
-    └── widgets/
+├── shared/                      # Reusable resources
+│   └── widgets/                 # Shared widgets
+├── generated/                   # Generated code (assets, translations)
+├── app.dart                     # Main application widget
+├── bootstrap.dart               # Application initialization
+├── main_development.dart        # Entry point for development environment
+├── main_staging.dart            # Entry point for staging environment
+└── main_production.dart         # Entry point for production environment
 ```
 
 ### 📘 Structure Explanation
@@ -40,6 +41,7 @@ lib/
 | `core/`     | Core configuration for the entire system – not belonging to any feature |
 | `features/` | Modules divided by functionality – easy to scale, maintain, and test separately |
 | `shared/`   | Reusable widgets and logic across modules                               |
+| `generated/`| Auto-generated code from the build_runner or other code generators      |
 
 ---
 
@@ -47,12 +49,11 @@ lib/
 
 ```bash
 # 1. Create a standard structure directory
-lib/features/your_feature/{domain,application,infrastructure,presentation}
+lib/features/your_feature/presentation
 
-# 2. Define Entity & Repo Interface (domain)
-# 3. Create UseCase + Bloc/Cubit (application)
-# 4. Set up actual repo/service (infrastructure)
-# 5. Build UI/page + router (presentation)
+# 2. Create UI components (presentation layer)
+# 3. Set up navigation in the router
+# 4. Add the feature to the main app flow
 ```
 
 ---
@@ -226,16 +227,16 @@ class UserListPage extends StatelessWidget {
 
 ## ✅ Cursor Checklist – During Code Analysis or Code Generation
 
-- [ ] Correct structure of `core/`, `features/`, `shared/`
-- [ ] Each feature has all 4 layers (domain, app, infra, presentation)
+- [ ] Correct structure of `core/`, `features/`, `shared/`, `generated/`
+- [ ] Each feature has a `presentation/` layer
 - [ ] Sufficient comments for classes, functions, and important logic
 - [ ] No overly long classes/methods/files
 - [ ] Logic & UI tests are present
 - [ ] Variable, class, file names follow naming conventions
 - [ ] No warnings from `flutter analyze`
-- [ ] Clear separation between UI ↔ Logic ↔ Data
-- [ ] Localization is implemented using `slang` with generated Dart accessors
-- [ ] Translation files are under `lib/i18n/` and structured with nested keys
+- [ ] Clear separation between UI components
+- [ ] Environment configuration is properly set up in `core/env/`
+- [ ] Assets are properly managed through the generated code in `generated/`
 
 ---
 

@@ -8,28 +8,25 @@ A Flutter app that allows workers to easily input order data using a modern, hig
 
 ## 📦 Project Structure (Clean Architecture)
 
-The application applies Clean Architecture and organizes the source code in a feature-first structure consisting of 4 layers:
-
-- **Presentation Layer:** UI Widgets, Pages, Navigation bindings
-- **Application Layer:** Bloc, Cubit, UseCases (business logic and state management)
-- **Domain Layer:** Entities, Repository Interfaces, Business rules
-- **Infrastructure Layer:** Services, API clients, Repository Implementations
-
-Typical folder structure:
+The application applies Clean Architecture and organizes the source code in a feature-first structure:
 
 ```
 lib/
-├── core/                         # Common system configurations (DI, router, theme)
-├── features/                     # Separate functionalities (feature-first)
+├── core/                         # Common system configurations
+│   ├── di/                      # Dependency Injection (GetIt, Injectable)
+│   ├── router/                  # Navigation (auto_route)
+│   └── env/                     # Environment configuration
+├── features/                    # Separate functionalities (feature-first)
 │   └── [feature_name]/          
-│       ├── domain/              # Entity, Repository interface
-│       ├── application/         # Bloc/Cubit, UseCases
-│       ├── infrastructure/      # API, Repository implementation
 │       └── presentation/        # UI Widgets, Pages, Route bindings
-└── shared/                      # Shared components
-    ├── constants/
-    ├── utils/
-    └── widgets/
+├── shared/                      # Shared components
+│   └── widgets/                 # Reusable widgets
+├── generated/                   # Generated code (assets, translations)
+├── app.dart                     # Main application widget
+├── bootstrap.dart               # Application initialization  
+├── main_development.dart        # Entry point for development
+├── main_staging.dart            # Entry point for staging
+└── main_production.dart         # Entry point for production
 ```
 
 Each feature may come with a `README.md` file describing its functionality, main logic, and related APIs.
