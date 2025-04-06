@@ -1,18 +1,11 @@
+// lib/core/router/app_router.dart
 import 'package:auto_route/auto_route.dart';
-import 'package:ksk_app/features/onboarding/router/onboarding_router.dart';
+import 'package:ksk_app/core/router/app_router.gr.dart' show OnboardingRoute;
 
-part 'app_router.gr.dart';
-
-@AutoRouterConfig(replaceInRouteName: 'Screen,Route')
+@AutoRouterConfig(replaceInRouteName: 'Page,Route')
 class AppRouter extends RootStackRouter {
-  final onBoardingRoutes = OnBoardingRouter().routes;
-
   @override
   List<AutoRoute> get routes => [
-        AutoRoute(
-          path: '/onboarding/*',
-          page: EmptyRouterPage.page,
-          children: onBoardingRoutes,
-        ),
+        AutoRoute(path: '/', page: OnboardingRoute.page, initial: true),
       ];
 }

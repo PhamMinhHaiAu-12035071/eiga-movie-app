@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:ksk_app/core/router/app_router.dart' show AppRouter;
 
 class AppBlocObserver extends BlocObserver {
   const AppBlocObserver();
@@ -21,7 +22,9 @@ class AppBlocObserver extends BlocObserver {
   }
 }
 
-Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
+Future<void> bootstrap(
+  FutureOr<Widget> Function(AppRouter appRouter) builder,
+) async {
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
@@ -31,9 +34,11 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
 
   Bloc.observer = const AppBlocObserver();
 
+  final appRouter = AppRouter();
+
   // Add cross-flavor configuration here
 
-  runApp(await builder());
+  runApp(await builder(appRouter));
 
   // Once app is fully loaded, remove splash screen
   FlutterNativeSplash.remove();
