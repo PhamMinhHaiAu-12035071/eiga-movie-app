@@ -1,0 +1,74 @@
+name: ksk_app
+description: Ứng dụng cho phép công nhân nhập liệu đơn hàng
+version: 1.0.0+1
+publish_to: none
+
+environment:
+  sdk: ^3.5.0
+
+dependencies:
+  after_layout: ^1.2.0
+  auto_route: ^10.0.1
+  basic_utils: ^5.8.2
+  bloc: ^9.0.0
+  chopper: ^8.1.0
+  collection: ^1.19.1
+  dartx: ^1.2.0
+  device_info_plus: ^11.3.3
+  dio: ^5.8.0+1
+  envied: ^1.1.1
+  equatable: ^2.0.7
+  flutter:
+    sdk: flutter
+  flutter_bloc: ^9.1.0
+  flutter_hooks: ^0.21.2
+  flutter_native_splash: ^2.4.5
+  flutter_screenutil: ^5.9.3
+  freezed: ^3.0.4
+  gap: ^3.0.1
+  get_it: ^8.0.3
+  injectable: ^2.5.0
+  logger: ^2.5.0
+  meta: ^1.16.0
+  nil: ^1.1.1
+  package_info_plus: ^8.3.0
+  path_provider: ^2.1.5
+  rxdart: ^0.28.0
+  slang: ^4.6.0
+  slang_flutter: ^4.6.0
+
+dev_dependencies:
+  auto_route_generator: ^10.0.1
+  bloc_test: ^10.0.0
+  build_runner: ^2.4.15
+  chopper_generator: ^8.1.0
+  envied_generator: ^1.1.1
+  flutter_gen_runner: ^5.10.0
+  flutter_test:
+    sdk: flutter
+  freezed_annotation: ^3.0.0
+  injectable_generator: ^2.7.0
+  json_annotation: ^4.9.0
+  json_serializable: ^6.9.4
+  mocktail: ^1.0.4
+  pretty_chopper_logger: ^1.2.2
+  slang_build_runner: ^4.6.0
+  very_good_analysis: ^7.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/splash/splash_bg.png
+    - assets/images/splash/app_logo.png
+
+# FlutterGen configuration
+flutter_gen:
+  output: lib/generated/
+  line_length: 80
+
+  integrations:
+    image: true
+    flutter_svg: false
+    rive: false
+    lottie: false

@@ -1,0 +1,20 @@
+include: package:very_good_analysis/analysis_options.7.0.0.yaml
+
+analyzer:
+  exclude:
+    - '**/*.g.dart'
+    - '**/*.gm.dart'
+    - '**/*.freezed.dart'
+    - '**/*.module.dart'
+    - '**/*.gr.dart'
+    - '**/*.gen.dart'
+    - '**/*.config.dart'
+    - '**/*.mapper.dart'
+    - 'lib/generated/**'
+    - 'lib/core/di/injection.config.dart'
+    - 'lib/core/router/app_router.gr.dart'
+    - 'lib/features/onboarding/router/onboarding_router.gr.dart'
+
+linter:
+  rules:
+    public_member_api_docs: false

@@ -1,0 +1,26 @@
+flutter_native_splash:
+  # Màu nền fallback (khi ảnh nền chưa load)
+  color: "#FFFFFF"
+
+  # Logo chính cho bản < Android 12
+  image: assets/images/splash/app_logo.png
+
+  # Ảnh nền gradient toàn màn hình (dùng cho tất cả version, cả Android 12)
+  background_image: assets/images/splash/splash_bg.png
+
+  # Kích hoạt splash cho mỗi nền tảng
+  android: true
+  ios: true
+  web: true
+
+  # Vị trí logo
+  android_gravity: center
+  ios_content_mode: center
+
+  # Cấu hình Android 12
+  android_12:
+    # Màu nền adaptive icon
+    icon_background_color: "#FFFFFF"
+
+    # Logo hiển thị giữa icon (thay cho foreground_image/splash cũ)
+    image: assets/images/splash/app_logo.png
