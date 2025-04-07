@@ -1,9 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:injectable/injectable.dart';
+import 'package:ksk_app/core/asset/app_image.dart';
 import 'package:ksk_app/features/onboarding/application/cubit/onboarding_state.dart';
 import 'package:ksk_app/features/onboarding/domain/models/onboarding_info.dart';
 import 'package:ksk_app/features/onboarding/domain/repositories/i_onboarding_repository.dart';
-import 'package:ksk_app/generated/assets.gen.dart';
 
 /// Manages the state and logic of the onboarding feature
 @injectable
@@ -14,18 +14,18 @@ class OnboardingCubit extends Cubit<OnboardingState> {
           OnboardingState(
             slides: [
               OnboardingInfo(
-                image: Assets.images.onboarding.onboarding1,
-                title: 'Welcome to EIGA',
-                description: 'Discover and book movie tickets with ease',
+                image: OnboardingImages().screen1,
+                title: 'ONBOARDING',
+                description: 'Choose movies, watch trailers, take tickets',
               ),
               OnboardingInfo(
-                image: Assets.images.onboarding.onboarding2,
+                image: OnboardingImages().screen2,
                 title: 'Find Your Favorite Movies',
                 description:
                     'Explore new and popular movies from around the world',
               ),
               OnboardingInfo(
-                image: Assets.images.onboarding.onboarding3,
+                image: OnboardingImages().screen3,
                 title: 'Book Tickets Quickly',
                 description:
                     'Book movie tickets anytime, anywhere with just a few taps',

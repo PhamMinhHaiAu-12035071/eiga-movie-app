@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ksk_app/core/di/injection.dart';
+import 'package:ksk_app/core/styles/app_text_styles.dart';
+import 'package:ksk_app/core/styles/colors/app_colors.dart';
 import 'package:ksk_app/features/onboarding/application/cubit/onboarding_cubit.dart';
 import 'package:ksk_app/features/onboarding/application/cubit/onboarding_state.dart';
 import 'package:ksk_app/features/onboarding/presentation/widgets/onboarding_dot_indicator.dart';
@@ -54,9 +56,9 @@ class _OnboardingPageState extends State<OnboardingPage> {
                         onPressed: () => _finishOnboarding(context),
                         child: Text(
                           'Skip',
-                          style: TextStyle(
-                            fontSize: 16.sp,
-                            color: Colors.grey,
+                          style: AppTextStyle.heading(
+                            color: AppColors.onboardingBlue,
+                            fontWeight: FontWeight.w700,
                           ),
                         ),
                       ),

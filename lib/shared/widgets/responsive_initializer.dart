@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:nil/nil.dart' show nil;
 
 /// A widget that initializes responsive scaling for its child widget.
 ///
@@ -54,7 +55,7 @@ class ResponsiveInitializer extends StatelessWidget {
             }
 
             // Return an empty container if constraints are not valid
-            return const SizedBox.shrink();
+            return nil;
           },
         ),
       );

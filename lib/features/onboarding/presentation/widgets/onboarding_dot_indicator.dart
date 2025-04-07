@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:ksk_app/core/styles/colors/app_colors.dart';
 
 /// Widget that displays dot indicators for page position in onboarding
 class OnboardingDotIndicator extends StatelessWidget {
@@ -38,8 +39,8 @@ class OnboardingDotIndicator extends StatelessWidget {
       width: isActive ? 24.w : 8.w,
       decoration: BoxDecoration(
         color: isActive
-            ? Theme.of(context).colorScheme.primary
-            : Colors.grey.withAlpha(102), // 0.4 alpha ~ 102/255
+            ? AppColors.primary
+            : AppColors.onboardingBlue.withAlpha(102), // 0.4 * 255 ≈ 102
         borderRadius: BorderRadius.circular(4.r),
       ),
     );

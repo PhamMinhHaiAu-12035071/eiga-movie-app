@@ -15,7 +15,14 @@ lib/
 ├── core/                         # Common system configurations
 │   ├── di/                      # Dependency Injection (GetIt, Injectable)
 │   ├── router/                  # Navigation (auto_route)
-│   └── env/                     # Environment configuration
+│   ├── env/                     # Environment configuration
+│   ├── asset/                   # Asset management
+│   ├── styles/                  # UI styles definitions
+│   │   ├── colors/             # Color definitions and extensions
+│   │   └── app_text_styles.dart # Text style definitions
+│   └── themes/                  # Theme management
+│       ├── extensions/         # Theme extensions for assets, colors, etc.
+│       └── app_theme.dart      # Main theme configuration
 ├── features/                    # Separate functionalities (feature-first)
 │   └── [feature_name]/          
 │       └── presentation/        # UI Widgets, Pages, Route bindings
@@ -259,24 +266,20 @@ Text(t.auth.welcome(name: 'David'));
 
 ## 📖 References
 
-- [Bloc Pattern](https://bloclibrary.dev/)
-- [Chopper & Dio Integration](https://pub.dev/packages/chopper)
-- [Dependency Injection with Injectable & GetIt](https://pub.dev/packages/injectable)
-- [RxDart Documentation](https://pub.dev/packages/rxdart)
-- [Very Good Analysis (Linting)](https://pub.dev/packages/very_good_analysis)
-- [Dartx Extensions](https://pub.dev/packages/dartx)
-- [Gap Package](https://pub.dev/packages/gap)
-- [Nil Package](https://pub.dev/packages/nil)
-- [Basic Utils](https://pub.dev/packages/basic_utils)
-- [Flutter Hooks](https://pub.dev/packages/flutter_hooks)
-- [Path Provider](https://pub.dev/packages/path_provider)
-- [Package Info Plus](https://pub.dev/packages/package_info_plus)
-- [Collection Package](https://pub.dev/packages/collection)
-- [Meta Package](https://pub.dev/packages/meta)
-- [Device Info Plus](https://pub.dev/packages/device_info_plus)
-- [Logger](https://pub.dev/packages/logger)
-- [After Layout](https://pub.dev/packages/after_layout)
-- [Envied](https://pub.dev/packages/envied)
+- [Clean Architecture – Uncle Bob](https://8thlight.com/blog/uncle-bob/2012/08/13/the-clean-architecture.html)
+- [Effective Dart](https://dart.dev/guides/language/effective-dart)
+- [Bloc Pattern](https://bloclibrary.dev/#/)
+- [GRASP Patterns](https://en.wikipedia.org/wiki/GRASP_(object-oriented_design))
+- [Very Good Ventures Blog](https://verygood.ventures/blog)
+- [slang – Dart i18n made easy](https://pub.dev/packages/slang)
+- [Flutter Hooks Documentation](https://pub.dev/packages/flutter_hooks)
+- [Logger Package](https://pub.dev/packages/logger)
+- [Collection & Meta Packages](https://dart.dev/guides/libraries/useful-libraries)
+- [After Layout Documentation](https://pub.dev/packages/after_layout)
+- [Envied - Secure Environment Variables](https://pub.dev/packages/envied)
+- [Vibe Coding Tutorial Weather App](https://github.com/erkansahin/vibe_coding_tutorial_weather_app)
+- [Smart App Monorepo by Banua Coder](https://github.com/banua-coder/smart-app)
+- [Storage App by Draphonix](https://github.com/draphonix/storage)
 
 ---
 

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:ksk_app/core/styles/app_text_styles.dart';
+import 'package:ksk_app/core/styles/colors/app_colors.dart';
 
 /// Widget for the next button or completion button in onboarding
 class OnboardingNextButton extends StatelessWidget {
@@ -27,7 +29,7 @@ class OnboardingNextButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: Theme.of(context).colorScheme.primary,
+          backgroundColor: AppColors.primary,
           foregroundColor: Colors.white,
           minimumSize: Size(double.infinity, 56.h),
           shape: RoundedRectangleBorder(
@@ -36,9 +38,9 @@ class OnboardingNextButton extends StatelessWidget {
         ),
         child: Text(
           text,
-          style: TextStyle(
-            fontSize: 16.sp,
-            fontWeight: FontWeight.bold,
+          style: AppTextStyle.heading(
+            color: Colors.white,
+            fontWeight: FontWeight.w500,
           ),
         ),
       ),

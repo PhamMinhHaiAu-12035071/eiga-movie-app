@@ -21,7 +21,14 @@ lib/
 ├── core/                         # System configuration
 │   ├── di/                      # Dependency Injection (GetIt, Injectable)
 │   ├── router/                  # Navigation (auto_route)
-│   └── env/                     # Environment configuration
+│   ├── env/                     # Environment configuration
+│   ├── asset/                   # Asset management
+│   ├── styles/                  # UI styles definitions
+│   │   ├── colors/             # Color definitions and extensions
+│   │   └── app_text_styles.dart # Text style definitions
+│   └── themes/                  # Theme management
+│       ├── extensions/         # Theme extensions for assets, colors, etc.
+│       └── app_theme.dart      # Main theme configuration
 ├── features/                    # Feature module separation
 │   └── [feature_name]/
 │       ├── domain/              # Business logic and rules
@@ -261,6 +268,9 @@ class UserListPage extends StatelessWidget {
 - [Collection & Meta Packages](https://dart.dev/guides/libraries/useful-libraries)
 - [After Layout Documentation](https://pub.dev/packages/after_layout)
 - [Envied - Secure Environment Variables](https://pub.dev/packages/envied)
+- [Vibe Coding Tutorial Weather App](https://github.com/erkansahin/vibe_coding_tutorial_weather_app)
+- [Smart App Monorepo by Banua Coder](https://github.com/banua-coder/smart-app)
+- [Storage App by Draphonix](https://github.com/draphonix/storage)
 
 ---
 

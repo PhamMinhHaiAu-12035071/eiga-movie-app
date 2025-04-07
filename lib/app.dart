@@ -1,6 +1,8 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:ksk_app/core/env/env_development.dart';
 import 'package:ksk_app/core/router/app_router.dart' show AppRouter;
+import 'package:ksk_app/core/themes/app_theme.dart';
 import 'package:ksk_app/shared/widgets/responsive_initializer.dart';
 
 class App extends StatelessWidget {
@@ -10,14 +12,11 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ResponsiveInitializer(
+      designSize: kIsWeb ? const Size(1024, 768) : const Size(375, 812),
       builder: (context) => MaterialApp.router(
         routerConfig: appRouter.config(),
-        theme: ThemeData(
-          appBarTheme: AppBarTheme(
-            backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-          ),
-          useMaterial3: true,
-        ),
+        theme: AppTheme.light(ThemeData.light()).themeData,
+        darkTheme: AppTheme.dark(ThemeData.dark()).themeData,
       ),
     );
   }

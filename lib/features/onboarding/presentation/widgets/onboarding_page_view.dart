@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gap/gap.dart' show Gap;
+import 'package:ksk_app/core/styles/app_text_styles.dart';
+import 'package:ksk_app/core/styles/colors/app_colors.dart';
 import 'package:ksk_app/features/onboarding/domain/models/onboarding_info.dart';
 
 /// Widget that displays a page in the onboarding flow
@@ -62,27 +65,25 @@ class OnboardingPageView extends StatelessWidget {
               );
             },
           ),
-          SizedBox(height: 40.h),
+          Gap(28.h),
 
           // Title
           Text(
             slide.title,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 28.sp,
-              fontWeight: FontWeight.bold,
-              color: Theme.of(context).colorScheme.primary,
+            style: AppTextStyle.headingLg(
+              color: AppColors.onboardingBlue,
+              fontWeight: FontWeight.w900,
             ),
           ),
-          SizedBox(height: 16.h),
+          Gap(12.h),
 
           // Description
           Text(
             slide.description,
             textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 16.sp,
-              color: Colors.grey[700],
+            style: AppTextStyle.body(
+              color: Colors.black,
+              fontWeight: FontWeight.w700,
             ),
           ),
         ],
