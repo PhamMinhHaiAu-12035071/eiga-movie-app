@@ -44,8 +44,7 @@ class OnboardingPageView extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           // Illustration image
-          Image.asset(
-            slide.imagePath,
+          slide.image.image(
             height: 260.h,
             width: 260.w,
             fit: BoxFit.contain,

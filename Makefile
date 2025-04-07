@@ -2,7 +2,7 @@
 # Provides simplified commands for common Flutter operations
 # Follows the structure in the Flutter Structure Rule
 
-.PHONY: setup clean test analyze format build-dev build-prod run-dev deps help install-lcov coverage docs-start docs-build docs-serve docs-install gen-env gen-assets
+.PHONY: setup clean test analyze format build-dev build-prod run-dev deps help install-lcov coverage docs-start docs-build docs-serve docs-install gen find-todos
 
 # Variables
 FLUTTER = fvm flutter
@@ -32,8 +32,8 @@ help:
 	@echo "  make deps               - Update dependencies"
 	@echo "  make install-lcov       - Install lcov for coverage reports"
 	@echo "  make coverage           - Generate code coverage and open reports"
-	@echo "  make gen-env            - Generate env models from .env files"
-	@echo "  make gen-assets         - Generate asset classes using FlutterGen"
+	@echo "  make gen                - Generate all code (assets, env models, l10n, etc.)"
+	@echo "  make find-todos         - Find TODOs in the code"
 	@echo ""
 	@echo "Documentation commands:"
 	@echo "  make docs-install       - Install Docusaurus dependencies"
@@ -126,14 +126,10 @@ deps:
 	$(FLUTTER) pub upgrade
 	$(FLUTTER) pub outdated
 
-# Generate env models from .env files
-gen-env:
-	$(FLUTTER) pub run build_runner build --delete-conflicting-outputs
-
-# Generate asset classes using FlutterGen
-gen-assets:
-	@echo "Generating asset classes using FlutterGen..."
-	$(FLUTTER) pub run build_runner build --delete-conflicting-outputs
+# Generate all code (assets, env models, l10n, etc.)
+gen:
+	@echo "Generating all code (assets, env models, l10n, etc.)..."
+	$(DART) pub run build_runner build --delete-conflicting-outputs
 
 # Find TODOs in the code
 find-todos:
