@@ -25,15 +25,18 @@ dependencies:
   flutter_native_splash: ^2.4.5
   flutter_screenutil: ^5.9.3
   freezed: ^3.0.4
+  freezed_annotation: ^3.0.0
   gap: ^3.0.1
   get_it: ^8.0.3
   injectable: ^2.5.0
+  json_annotation: ^4.9.0
   logger: ^2.5.0
   meta: ^1.16.0
   nil: ^1.1.1
   package_info_plus: ^8.3.0
   path_provider: ^2.1.5
   rxdart: ^0.28.0
+  shared_preferences: ^2.5.3
   slang: ^4.6.0
   slang_flutter: ^4.6.0
 
@@ -46,9 +49,7 @@ dev_dependencies:
   flutter_gen_runner: ^5.10.0
   flutter_test:
     sdk: flutter
-  freezed_annotation: ^3.0.0
   injectable_generator: ^2.7.0
-  json_annotation: ^4.9.0
   json_serializable: ^6.9.4
   mocktail: ^1.0.4
   pretty_chopper_logger: ^1.2.2
@@ -61,6 +62,7 @@ flutter:
   assets:
     - assets/images/splash/splash_bg.png
     - assets/images/splash/app_logo.png
+    - assets/images/onboarding/
 
 # FlutterGen configuration
 flutter_gen:

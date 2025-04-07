@@ -31,6 +31,29 @@ lib/
 
 Each feature may come with a `README.md` file describing its functionality, main logic, and related APIs.
 
+## 🚀 Features
+
+### 🌟 Onboarding
+
+The onboarding feature provides new users with an introduction to the app's key features. It follows Clean Architecture principles with a complete separation of concerns:
+
+- **Domain Layer**: Defines the core business logic and entities
+  - Models: `OnboardingInfo` representing each onboarding slide
+  - Repository interfaces: `IOnboardingRepository` for persistence
+
+- **Infrastructure Layer**: Implements data access logic
+  - Repository implementation using SharedPreferences for state persistence
+
+- **Application Layer**: Manages state and business logic
+  - `OnboardingCubit` for state management with slides information
+  - `OnboardingState` to track current page and slide data
+
+- **Presentation Layer**: UI components
+  - `OnboardingPage`: Main screen with page navigation
+  - Reusable widgets: `OnboardingPageView`, `OnboardingDotIndicator`, `OnboardingNextButton`
+
+The onboarding flow presents users with information about key app features, with smooth page transitions, progress indicators, and options to skip or move to the next screen.
+
 ## 🚀 Getting Started
 
 The project consists of 3 configuration environments:

@@ -24,7 +24,15 @@ lib/
 │   └── env/                     # Environment configuration
 ├── features/                    # Feature module separation
 │   └── [feature_name]/
+│       ├── domain/              # Business logic and rules
+│       │   ├── models/          # Business entities/models
+│       │   └── repositories/    # Repository interfaces
+│       ├── infrastructure/      # Implementation of repositories
+│       │   └── repositories/    # Repository implementations
+│       ├── application/         # State management and use cases
+│       │   └── cubit/           # Cubits/BLoCs
 │       └── presentation/        # UI, page, widget, router
+│           └── widgets/         # Reusable UI components
 ├── shared/                      # Reusable resources
 │   └── widgets/                 # Shared widgets
 ├── generated/                   # Generated code (assets, translations)
@@ -320,6 +328,73 @@ class MyService {
   }
 }
 ```
+
+---
+
+## 📚 Feature Implementation Examples
+
+### 🌟 Onboarding Feature Example
+
+The onboarding feature demonstrates how to implement a complete feature using Clean Architecture. This pattern can be replicated for other features.
+
+#### 📂 Directory Structure
+
+```
+lib/features/onboarding/
+├── domain/
+│   ├── models/
+│   │   └── onboarding_info.dart       # Data model for onboarding slides
+│   └── repositories/
+│       └── i_onboarding_repository.dart # Repository interface
+├── infrastructure/
+│   └── repositories/
+│       └── onboarding_repository.dart  # Repository implementation
+├── application/
+│   └── cubit/
+│       ├── onboarding_cubit.dart      # State management
+│       └── onboarding_state.dart      # State definitions
+├── presentation/
+│   ├── onboarding_page.dart           # Main page
+│   └── widgets/
+│       ├── onboarding_page_view.dart  # Slide display
+│       ├── onboarding_dot_indicator.dart # Progress indicator
+│       └── onboarding_next_button.dart # Navigation button
+└── README.md                          # Feature documentation
+```
+
+#### 🧩 Implementation Patterns
+
+1. **Domain Layer**:
+   - Models define pure data structures (`OnboardingInfo`)
+   - Repository interfaces specify contracts (`IOnboardingRepository`)
+
+2. **Infrastructure Layer**:
+   - Implements repository interfaces (`OnboardingRepository`)
+   - Handles data storage (e.g., using `SharedPreferences`)
+
+3. **Application Layer**:
+   - State management with `OnboardingCubit` and `OnboardingState`
+   - Encapsulates business logic
+
+4. **Presentation Layer**:
+   - Main page (`OnboardingPage`) uses Auto Route for navigation
+   - Reusable UI components in the `widgets` folder
+   - Uses ScreenUtil for responsive design
+
+#### 🧠 Design Patterns Applied
+
+- **Repository Pattern**: Abstracts data operations
+- **BLoC/Cubit Pattern**: Separates UI from business logic
+- **Dependency Injection**: Components receive their dependencies
+- **Builder Pattern**: Complex UI broken into smaller widgets
+
+#### 📑 Best Practices
+
+- Clear comments on every class and important method
+- Single Responsibility for each class
+- Error handling for asset loading
+- Responsive design using ScreenUtil
+- Clean separation between data, logic, and UI
 
 ---
 

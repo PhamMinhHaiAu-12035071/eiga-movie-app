@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:ksk_app/core/di/injection.dart';
 import 'package:ksk_app/core/router/app_router.dart' show AppRouter;
 
 class AppBlocObserver extends BlocObserver {
@@ -33,6 +34,9 @@ Future<void> bootstrap(
   };
 
   Bloc.observer = const AppBlocObserver();
+
+  // Khởi tạo dependency injection
+  await configureDependencies();
 
   final appRouter = AppRouter();
 
