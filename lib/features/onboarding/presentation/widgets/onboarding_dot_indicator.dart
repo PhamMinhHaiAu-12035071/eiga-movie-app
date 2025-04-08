@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ksk_app/core/styles/colors/app_colors.dart';
+import 'package:ksk_app/core/styles/sizes/app_dimension.dart';
 
 /// Widget that displays dot indicators for page position in onboarding
 class OnboardingDotIndicator extends StatelessWidget {
@@ -34,14 +34,14 @@ class OnboardingDotIndicator extends StatelessWidget {
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
-      margin: EdgeInsets.symmetric(horizontal: 4.w),
-      height: 7.h,
-      width: isActive ? 14.w : 7.w,
+      margin: EdgeInsets.symmetric(horizontal: AppDimension.h4),
+      height: AppDimension.v8,
+      width: isActive ? AppDimension.h16 : AppDimension.h8,
       decoration: BoxDecoration(
         color: isActive
             ? AppColors.onboardingBlue
             : AppColors.onboardingBlue.withAlpha(102),
-        borderRadius: BorderRadius.circular(4.r),
+        borderRadius: BorderRadius.circular(AppDimension.r4),
       ),
     );
   }

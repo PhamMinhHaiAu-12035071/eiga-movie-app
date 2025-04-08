@@ -1,3 +1,8 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
 # Domain Layer Guidelines
 
 ## Directory Structure

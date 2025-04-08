@@ -6,6 +6,7 @@ import 'package:gap/gap.dart' show Gap;
 import 'package:ksk_app/core/di/injection.dart';
 import 'package:ksk_app/core/styles/app_text_styles.dart';
 import 'package:ksk_app/core/styles/colors/app_colors.dart';
+import 'package:ksk_app/core/styles/sizes/app_dimension.dart';
 import 'package:ksk_app/features/onboarding/application/cubit/onboarding_cubit.dart';
 import 'package:ksk_app/features/onboarding/application/cubit/onboarding_state.dart';
 import 'package:ksk_app/features/onboarding/presentation/widgets/onboarding_dot_indicator.dart';
@@ -51,10 +52,10 @@ class _OnboardingPageState extends State<OnboardingPage> {
                 decoration: const BoxDecoration(
                   color: AppColors.onboardingBackground,
                 ),
-                padding: EdgeInsets.symmetric(horizontal: 24.w),
+                padding: EdgeInsets.symmetric(horizontal: AppDimension.h24),
                 child: Column(
                   children: [
-                    Gap(50.h),
+                    Gap(AppDimension.v48),
 
                     // Header with logo and app name
                     const OnboardingHeader(),
@@ -73,7 +74,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                       currentIndex: state.currentPage,
                     ),
 
-                    Gap(40.h),
+                    Gap(AppDimension.v40),
 
                     // Next or Get Started button
                     OnboardingNextButton(
@@ -88,7 +89,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                       },
                     ),
 
-                    Gap(30.h),
+                    Gap(AppDimension.v32),
 
                     // Skip button
                     TextButton(
@@ -101,7 +102,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                         ),
                       ),
                     ),
-                    Gap(40.h),
+                    Gap(AppDimension.v40),
                   ],
                 ),
               ),

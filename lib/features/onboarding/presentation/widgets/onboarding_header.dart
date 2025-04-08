@@ -4,6 +4,7 @@ import 'package:gap/gap.dart' show Gap;
 import 'package:ksk_app/core/asset/app_image.dart' show AppImage;
 import 'package:ksk_app/core/styles/app_text_styles.dart';
 import 'package:ksk_app/core/styles/colors/app_colors.dart';
+import 'package:ksk_app/core/styles/sizes/app_dimension.dart';
 
 /// Widget that displays the header for the onboarding screen
 /// Contains the logo and app name
@@ -14,16 +15,16 @@ class OnboardingHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 35.w),
+      padding: EdgeInsets.symmetric(horizontal: AppDimension.h32),
       child: Row(
         children: [
           SizedBox(
-            height: 60.h,
+            height: AppDimension.v56,
             child: AppImage.of(context).onboarding.logo.image(
                   fit: BoxFit.contain,
                 ),
           ),
-          Gap(14.w),
+          Gap(AppDimension.h16),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

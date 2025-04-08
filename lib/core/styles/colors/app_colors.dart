@@ -110,6 +110,8 @@ class AppColors {
   // Onboarding Colors
   static const Color skipButtonColor = Color(0xFF607395);
   static const Color onboardingBackground = Color(0xFFE9F0F2);
+  static const Color onboardingGradientStart = Color(0xFF00B3C6);
+  static const Color onboardingGradientEnd = Color(0xFF5D84B4);
 
   // Dark Theme Colors
   static const Color bgMainDark = Color(0xFF121212);

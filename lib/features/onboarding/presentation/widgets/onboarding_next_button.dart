@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ksk_app/core/styles/app_text_styles.dart';
 import 'package:ksk_app/core/styles/colors/app_colors.dart';
+import 'package:ksk_app/core/styles/sizes/app_border_radius.dart';
+import 'package:ksk_app/core/styles/sizes/app_dimension.dart';
 
 /// Widget for the next button or completion button in onboarding
 class OnboardingNextButton extends StatelessWidget {
@@ -25,16 +26,16 @@ class OnboardingNextButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 40.w),
+      padding: EdgeInsets.symmetric(horizontal: AppDimension.h40),
       child: Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12.r),
+          borderRadius: BorderRadius.circular(AppBorderRadius.md),
           gradient: const LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Color(0xFF00B3C6),
-              Color(0xFF5D84B4),
+              AppColors.onboardingGradientStart,
+              AppColors.onboardingGradientEnd,
             ],
           ),
         ),
@@ -44,9 +45,9 @@ class OnboardingNextButton extends StatelessWidget {
             foregroundColor: AppColors.white,
             backgroundColor: AppColors.transparent,
             shadowColor: AppColors.transparent,
-            minimumSize: Size(double.infinity, 56.h),
+            minimumSize: Size(double.infinity, AppDimension.v56),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12.r),
+              borderRadius: BorderRadius.circular(AppBorderRadius.md),
             ),
           ),
           child: Text(

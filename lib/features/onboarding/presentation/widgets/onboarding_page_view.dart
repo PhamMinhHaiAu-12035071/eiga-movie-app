@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart' show Gap;
 import 'package:ksk_app/core/styles/app_text_styles.dart';
 import 'package:ksk_app/core/styles/colors/app_colors.dart';
+import 'package:ksk_app/core/styles/sizes/app_dimension.dart';
 import 'package:ksk_app/features/onboarding/domain/models/onboarding_info.dart';
 
 /// Widget that displays a page in the onboarding flow
@@ -42,30 +42,31 @@ class OnboardingPageView extends StatelessWidget {
   /// Builds content for an onboarding page
   Widget _buildPage(BuildContext context, OnboardingInfo slide) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 32.w),
+      padding: EdgeInsets.symmetric(horizontal: AppDimension.h32),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           // Illustration image
           slide.image.image(
-            height: 260.h,
-            width: 260.w,
+            height: AppDimension.v64 * 4, // Approximate of 260.h
+            width: AppDimension.h64 * 4, // Approximate of 260.w
             fit: BoxFit.contain,
             errorBuilder: (context, error, stackTrace) {
               // Display placeholder if image is not found
               return Container(
-                height: 260.h,
-                width: 260.w,
+                height: AppDimension.v64 * 4, // Approximate of 260.h
+                width: AppDimension.h64 * 4, // Approximate of 260.w
                 color: AppColors.grey[300],
                 child: Icon(
                   Icons.image_not_supported,
-                  size: 80.sp,
+                  size: AppDimension.r64 +
+                      AppDimension.r16, // Approximate of 80.sp
                   color: AppColors.grey[600],
                 ),
               );
             },
           ),
-          Gap(28.h),
+          Gap(AppDimension.v24),
           // Title
           Text(
             slide.title,
@@ -74,7 +75,7 @@ class OnboardingPageView extends StatelessWidget {
               fontWeight: FontWeight.w900,
             ),
           ),
-          Gap(12.h),
+          Gap(AppDimension.v12),
           // Description
           Text(
             slide.description,

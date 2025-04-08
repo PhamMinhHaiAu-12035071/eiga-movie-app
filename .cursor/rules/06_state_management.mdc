@@ -1,3 +1,8 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
 # State Management Guidelines (Application Layer)
 
 ## Directory Structure
