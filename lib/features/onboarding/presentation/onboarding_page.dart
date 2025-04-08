@@ -47,57 +47,63 @@ class _OnboardingPageState extends State<OnboardingPage> {
         builder: (context, state) {
           return Scaffold(
             body: SafeArea(
-              child: Column(
-                children: [
-                  Gap(50.h),
+              child: Container(
+                decoration: const BoxDecoration(
+                  color: AppColors.onboardingBackground,
+                ),
+                padding: EdgeInsets.symmetric(horizontal: 24.w),
+                child: Column(
+                  children: [
+                    Gap(50.h),
 
-                  // Header with logo and app name
-                  const OnboardingHeader(),
+                    // Header with logo and app name
+                    const OnboardingHeader(),
 
-                  // PageView to display onboarding pages
-                  OnboardingPageView(
-                    controller: _pageController,
-                    slides: state.slides,
-                    onPageChanged: (index) =>
-                        context.read<OnboardingCubit>().updatePage(index),
-                  ),
+                    // PageView to display onboarding pages
+                    OnboardingPageView(
+                      controller: _pageController,
+                      slides: state.slides,
+                      onPageChanged: (index) =>
+                          context.read<OnboardingCubit>().updatePage(index),
+                    ),
 
-                  // Dot indicators
-                  OnboardingDotIndicator(
-                    pageCount: state.slides.length,
-                    currentIndex: state.currentPage,
-                  ),
+                    // Dot indicators
+                    OnboardingDotIndicator(
+                      pageCount: state.slides.length,
+                      currentIndex: state.currentPage,
+                    ),
 
-                  Gap(40.h),
+                    Gap(40.h),
 
-                  // Next or Get Started button
-                  OnboardingNextButton(
-                    text: state.isLastPage ? 'Get Started' : 'Next',
-                    isLastPage: state.isLastPage,
-                    onPressed: () {
-                      if (state.isLastPage) {
-                        _finishOnboarding(context);
-                      } else {
-                        _nextPage(context);
-                      }
-                    },
-                  ),
+                    // Next or Get Started button
+                    OnboardingNextButton(
+                      text: state.isLastPage ? 'Get Started' : 'Next',
+                      isLastPage: state.isLastPage,
+                      onPressed: () {
+                        if (state.isLastPage) {
+                          _finishOnboarding(context);
+                        } else {
+                          _nextPage(context);
+                        }
+                      },
+                    ),
 
-                  Gap(30.h),
+                    Gap(30.h),
 
-                  // Skip button
-                  TextButton(
-                    onPressed: () => _finishOnboarding(context),
-                    child: Text(
-                      'Skip',
-                      style: AppTextStyle.heading(
-                        color: AppColors.skipButtonColor,
-                        fontWeight: FontWeight.w700,
+                    // Skip button
+                    TextButton(
+                      onPressed: () => _finishOnboarding(context),
+                      child: Text(
+                        'Skip',
+                        style: AppTextStyle.heading(
+                          color: AppColors.skipButtonColor,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                     ),
-                  ),
-                  Gap(40.h),
-                ],
+                    Gap(40.h),
+                  ],
+                ),
               ),
             ),
           );
