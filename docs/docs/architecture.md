@@ -24,7 +24,14 @@ lib/
 ├── core/                         # Common system configurations
 │   ├── di/                      # Dependency Injection (GetIt, Injectable)
 │   ├── router/                  # Navigation (auto_route)
-│   └── theme/                   # Common interface
+│   ├── env/                     # Environment configuration
+│   ├── asset/                   # Asset management
+│   ├── styles/                  # UI styles definitions
+│   │   ├── colors/             # Color definitions and extensions
+│   │   └── app_text_styles.dart # Text style definitions
+│   └── themes/                  # Theme management
+│       ├── extensions/         # Theme extensions for assets, colors, etc.
+│       └── app_theme.dart      # Main theme configuration
 ├── features/                    # Feature module separation
 │   └── [feature_name]/
 │       ├── domain/              # Entity, repository abstract

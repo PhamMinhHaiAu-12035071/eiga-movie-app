@@ -1,0 +1,92 @@
+# KSK App Project Intelligence
+
+## Project Patterns & Preferences
+
+### Code Organization
+- Follow Clean Architecture principles strictly
+- Feature-first organization with domain, application, infrastructure, and presentation layers
+- Keep feature-specific code within its feature directory
+- Place shared code in the shared directory
+- Core system configurations belong in the core directory
+
+### Naming Conventions
+- Use PascalCase for classes, enums, and typedef
+- Use camelCase for variables, functions, and instances
+- Use snake_case for file names
+- Prefix interfaces with 'I' (e.g., IRepository)
+- Prefix abstract classes with 'Base' (e.g., BaseWidget)
+- Suffix implementations with 'Impl' (e.g., RepositoryImpl)
+- Use plural for collections (e.g., users, orders)
+
+### State Management
+- Use BLoC/Cubit for state management
+- Separate state into data, status, and error properties
+- Use freezed for immutable state objects
+- Follow unidirectional data flow
+- Keep presentation logic in BLoCs/Cubits, not in widgets
+
+### Dependency Injection
+- Register dependencies in a centralized location
+- Use @injectable and @lazySingleton annotations
+- Repository interfaces should be registered with their implementations
+- Favor constructor injection over service location where possible
+
+### Testing
+- Write unit tests for domain and application layers
+- Write widget tests for presentation layer
+- Mock dependencies using mocktail
+- Follow the Arrange-Act-Assert pattern
+- Target 80%+ code coverage
+
+### Flutter Specifics
+- Use const constructors wherever possible
+- Extract reusable widgets to shared/widgets
+- Use flutter_screenutil for responsive sizing
+- Prefer composition over inheritance
+- Use StatelessWidget with flutter_hooks where possible
+
+### Documentation
+- Include a README.md for each feature
+- Document public APIs and complex logic
+- Use dartdoc comments for public methods and classes
+- Include examples for complex functionality
+- Comment on non-obvious implementation details
+
+## Implementation Paths
+
+### Adding a New Feature
+1. Define domain models and repository interfaces
+2. Implement application layer with state management
+3. Create repository implementation
+4. Build UI components and screens
+5. Write tests
+6. Register dependencies for DI
+
+### Environment Configuration
+1. Add environment variables to appropriate .env files
+2. Generate code using envied_generator
+3. Access environment variables through repository
+
+### Navigation
+1. Define routes in app_router.dart
+2. Generate route code using auto_route_generator
+3. Use AutoRouter for navigation in widgets
+
+### Form Handling
+1. Create form fields with appropriate validators
+2. Use BLoC/Cubit for form state management
+3. Implement form submission through repository
+
+## User Preferences & Workflow
+- Use FVM for Flutter version management
+- Run code generation after model changes
+- Keep a clean project structure
+- Maintain high test coverage
+- Document architectural decisions
+
+## Known Challenges & Solutions
+- Environment configuration issues: Check .env files and regenerate code
+- Navigation errors: Ensure route is registered in app_router.dart
+- Dependency injection problems: Check module registration and run build_runner
+- State management complexity: Extract complex logic to use cases
+- Code generation failures: Clear build cache and rerun with --delete-conflicting-outputs 
