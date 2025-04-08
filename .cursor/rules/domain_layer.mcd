@@ -1,0 +1,164 @@
+# Domain Layer Guidelines
+
+## Directory Structure
+
+```
+lib/
+  └── feature_name/
+      └── domain/
+          ├── feature_repository.dart  # Interface definition (no I prefix)
+          └── models/                 # Domain models
+              └── feature_model.dart
+```
+
+## Domain Layer Conventions
+
+### Model Structure
+
+1.  Models must:
+    *   Be immutable.
+    *   Use the `@freezed` annotation.
+    *   Have a factory constructor for instantiation.
+    *   Ideally have a factory constructor for initial/default state (`factory FeatureModel.initial()`).
+
+2.  Model Properties:
+    *   Use specific types (avoid `dynamic`).
+    *   Include dartdoc comments for non-obvious properties.
+    *   Be defined within the `@freezed` class definition.
+
+### Repository Interface Structure
+
+1.  Repository interfaces must:
+    *   Define a clear contract for data access and business logic operations related to the domain.
+    *   Use a clear abstract class name without an 'I' prefix (e.g., `FeatureRepository`).
+    *   Include clear dartdoc comments for all methods, explaining purpose, parameters, and return values (including potential errors).
+    *   Define potential domain-specific error types (e.g., using an `enum FeatureError`).
+    *   Return `Future<Result<SuccessType, FailureType>>` for operations that involve external interactions (networking, storage) or can fail. Use a standard `Result` type (like from `multiple_result` or a custom one).
+
+2.  Interface Methods:
+    *   Should generally be asynchronous (`Future`).
+    *   Have clear, descriptive parameter names.
+    *   Use the agreed `Result` type as the return type for fallible operations.
+    *   Document possible failure types (`FailureType`) in the dartdoc.
+
+## Naming Conventions
+
+### Files
+
+1.  Model files:
+    *   Use `_model.dart` suffix (e.g., `feature_model.dart`).
+    *   Use `snake_case`.
+    *   Be descriptive of the model content.
+    *   Place inside a `models/` subdirectory within the domain layer.
+
+2.  Repository Interface files:
+    *   Do NOT use the `i_` prefix.
+    *   Use `_repository.dart` suffix (e.g., `feature_repository.dart`).
+    *   Use `snake_case`.
+
+### Classes
+
+1.  Model classes:
+    *   Use `PascalCase`.
+    *   Should match their file names (without the suffix).
+    *   Example: `FeatureModel` in `feature_model.dart`.
+
+2.  Repository Interface classes:
+    *   Use `PascalCase`.
+    *   Do NOT use 'I' prefix.
+    *   Example: `FeatureRepository` in `feature_repository.dart`.
+    *   Implementation classes should use `Impl` suffix (e.g., `FeatureRepositoryImpl`) for clarity.
+
+## Code Organization
+
+1.  Models:
+    *   One core domain model per file usually. Related value objects can be in the same file or separate files within the `models/` directory.
+    *   Group related models in the `domain/models/` folder.
+
+2.  Interfaces:
+    *   One repository interface per file.
+    *   Define clear method contracts.
+    *   Define or reference associated error types.
+    *   Document all methods thoroughly.
+
+## Best Practices
+
+1.  Domain Models:
+    *   Keep models focused on the core business entity or value object.
+    *   Use appropriate data types.
+    *   Include validation logic directly in the model if it's intrinsic to the object's consistency (e.g., value objects).
+    *   Use `@Default` annotation with `@freezed` for default values.
+
+2.  Repository Interfaces:
+    *   Define contracts based on use cases, not just CRUD operations.
+    *   Use the `Result` type consistently for error handling in fallible operations.
+    *   Keep methods focused on a single logical operation.
+    *   Clearly document expected outcomes and potential errors.
+
+## Testing Guidelines
+
+1.  Directory Structure:
+    ```
+    test/
+      └── features/
+          └── feature_name/
+              └── domain/
+                  ├── models/
+                  │   └── feature_model_test.dart
+                  └── feature_repository_test.dart # Optional: Test interface contract if complex
+    ```
+
+2.  Model Testing:
+    *   Test factory constructors and default values.
+    *   Test `copyWith` methods if applicable.
+    *   Test equality (`==`) and `hashCode`.
+    *   Test any validation logic within the model.
+
+3.  Testing Conventions:
+    *   Use `mocktail` for mocking dependencies if testing abstract classes or logic within the domain layer (less common).
+    *   Group tests logically using `group()`.
+    *   Use descriptive test names (`test('should return initial state when initial factory is called', ...)`).
+
+## Code Example
+
+```dart
+// feature_model.dart
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'feature_model.freezed.dart';
+
+@freezed
+class FeatureModel with _$FeatureModel {
+  const factory FeatureModel({
+    required String id,
+    @Default('') String name,
+    @Default(false) bool isActive,
+  }) = _FeatureModel;
+
+  factory FeatureModel.initial() => const FeatureModel(id: '');
+}
+
+// feature_repository.dart (no 'i_' prefix)
+import 'package:multiple_result/multiple_result.dart';
+import 'models/feature_model.dart'; // Assuming FeatureModel is in models/
+
+// Define potential errors
+enum FeatureError { notFound, networkError, validation, unknown }
+
+/// Repository interface for managing Feature data.
+abstract class FeatureRepository {
+  /// Fetches a feature by its unique ID.
+  ///
+  /// Returns [Success<FeatureModel>] if found.
+  /// Returns [Failure<FeatureError.notFound>] if the feature doesn't exist.
+  /// Returns [Failure<FeatureError.networkError>] for connectivity issues.
+  Future<Result<FeatureModel, FeatureError>> getFeature(String id);
+
+  /// Creates a new feature.
+  ///
+  /// Requires a [feature] model instance.
+  /// Returns [Success<FeatureModel>] with the created feature (potentially with updated ID/timestamps).
+  /// Returns [Failure<FeatureError.validation>] if the provided data is invalid.
+  /// Returns [Failure<FeatureError.networkError>] for connectivity issues.
+  Future<Result<FeatureModel, FeatureError>> createFeature(FeatureModel feature);
+} 

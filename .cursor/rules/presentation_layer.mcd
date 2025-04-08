@@ -1,0 +1,426 @@
+# KSK App: Presentation Layer Guidelines
+
+## Core Principles
+
+1. **Single Responsibility**
+   * Each UI component should have a clearly defined purpose
+   * Widgets should do one thing well
+   * Separate complex widgets into smaller, focused components
+
+2. **Unidirectional Data Flow**
+   * Data flows down from state to UI
+   * Events flow up from UI to state managers
+   * Avoid circular dependencies between UI components
+
+3. **Centralized Styling**
+   * ALL styling MUST come from centralized repositories
+   * NO colors, text styles, or dimensions defined within widgets
+   * Theme and style consistency across the application
+
+4. **Separation from Business Logic**
+   * UI components should not contain business logic
+   * Use BLoCs/Cubits to handle state and logic
+   * Presentation layer only visualizes state
+
+## Directory Structure
+
+```
+lib/
+├── features/
+│   └── [feature_name]/
+│       └── presentation/
+│           ├── pages/           # Full screens that use routers
+│           │   └── feature_page.dart
+│           ├── views/           # Main UI container components
+│           │   └── feature_view.dart
+│           └── widgets/         # Feature-specific UI components
+│               ├── feature_widget_one.dart
+│               └── feature_widget_two.dart
+├── shared/
+│   └── widgets/               # Reusable widgets across features
+│       ├── buttons/
+│       ├── inputs/
+│       └── layouts/
+└── core/
+    ├── styles/                # Centralized styling system
+    │   ├── colors/            # Color definitions
+    │   │   └── app_colors.dart
+    │   ├── sizes/             # Size and spacing definitions
+    │   │   └── app_sizes.dart
+    │   ├── app_text_styles.dart # Text style definitions
+    │   └── styles.dart        # Export file for all styles
+    └── themes/                # Theme configurations
+        ├── extensions/        # Theme extensions
+        ├── app_theme.dart     # Theme definitions
+        └── themes.dart        # Export file for themes
+```
+
+## UI Styling Guidelines
+
+### Color Usage
+
+* ALL colors MUST be imported from centralized styles:
+  ```dart
+  import 'package:app/core/styles/styles.dart';
+  ```
+* NEVER use Color constructor directly in widgets
+* Access colors via: `AppColors.primary`, `AppColors.background`, etc.
+* Use theme-dependent colors where appropriate: `Theme.of(context).colorScheme.primary`
+
+✅ CORRECT:
+```dart
+Container(
+  color: AppColors.background,
+  child: Icon(Icons.check, color: AppColors.success),
+)
+```
+
+❌ INCORRECT:
+```dart
+Container(
+  color: Color(0xFFF5F5F5),  // WRONG: Hardcoded color
+  child: Icon(Icons.check, color: Colors.green),  // WRONG: Using Colors directly
+)
+```
+
+### Text Style Usage
+
+* ALL text styles MUST be imported from centralized styles
+* NEVER create TextStyle instances directly in widgets
+* Access text styles via: `AppTextStyles.heading1`, `AppTextStyles.bodyMedium`, etc.
+* For minor variations, use `copyWith()` on existing styles
+
+✅ CORRECT:
+```dart
+Text(
+  'Hello World',
+  style: AppTextStyles.heading2,
+)
+
+// With minor variation
+Text(
+  'Hello World',
+  style: AppTextStyles.heading2.copyWith(color: AppColors.primary),
+)
+```
+
+❌ INCORRECT:
+```dart
+Text(
+  'Hello World',
+  style: TextStyle(  // WRONG: Creating TextStyle directly
+    fontSize: 24,
+    fontWeight: FontWeight.bold,
+  ),
+)
+```
+
+### Dimension Usage
+
+* ALL spacing, sizes, and dimensions MUST use centralized values
+* NEVER hardcode numerical values for padding, margin, etc.
+* Use ScreenUtil extensions for responsive sizing: `.w`, `.h`, `.r`, `.sp`
+* Access dimensions via: `AppSizes.spacing16`, `AppSizes.radius8`, etc.
+
+✅ CORRECT:
+```dart
+Padding(
+  padding: EdgeInsets.all(AppSizes.spacing16.w),
+  child: Container(
+    width: AppSizes.iconSize.w,
+    height: AppSizes.iconSize.h,
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(AppSizes.radius8.r),
+    ),
+  ),
+)
+```
+
+❌ INCORRECT:
+```dart
+Padding(
+  padding: EdgeInsets.all(16.0),  // WRONG: Hardcoded value
+  child: Container(
+    width: 24,  // WRONG: Hardcoded value
+    height: 24,  // WRONG: Hardcoded value
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(8.0),  // WRONG: Hardcoded value
+    ),
+  ),
+)
+```
+
+## Widget Structure
+
+### Page Components
+
+* Pages are the top-level routable screens
+* Use the suffix `Page` (e.g., `MovieDetailsPage`)
+* Responsible for:
+  - Setting up state management providers
+  - Handling routing parameters
+  - Basic layout structure
+  - Delegating to view components
+
+Example:
+
+```dart
+@RoutePage()
+class FeaturePage extends StatelessWidget {
+  const FeaturePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => getIt<FeatureBloc>()..add(const FeatureEvent.load()),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Feature', style: AppTextStyles.heading6),
+          backgroundColor: AppColors.surface,
+        ),
+        body: const FeatureView(),
+      ),
+    );
+  }
+}
+```
+
+### View Components
+
+* Views are container components that implement the screen layout
+* Use the suffix `View` (e.g., `MovieDetailsView`)
+* Responsible for:
+  - Managing the layout of a screen
+  - Handling state consumption
+  - Error and loading states
+  - Delegating to smaller widgets
+
+Example:
+
+```dart
+class FeatureView extends StatelessWidget {
+  const FeatureView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<FeatureBloc, FeatureState>(
+      builder: (context, state) {
+        return state.maybeWhen(
+          loading: () => Center(
+            child: CircularProgressIndicator(color: AppColors.primary),
+          ),
+          loaded: (data) => FeatureContent(data: data),
+          error: (message) => ErrorView(
+            message: message,
+            onRetry: () => context.read<FeatureBloc>()
+              .add(const FeatureEvent.load()),
+          ),
+          orElse: () => const SizedBox.shrink(),
+        );
+      },
+    );
+  }
+}
+```
+
+### Widgets
+
+* Widgets are reusable UI components
+* Use descriptive names (e.g., `MovieCard`, `RatingBar`)
+* Responsible for:
+  - Rendering specific UI elements
+  - Handling user interactions
+  - Limited internal state if necessary
+
+Example:
+
+```dart
+class FeatureWidget extends StatelessWidget {
+  final String title;
+  final VoidCallback onTap;
+
+  const FeatureWidget({
+    super.key,
+    required this.title,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(AppSizes.radius8.r),
+      child: Container(
+        padding: EdgeInsets.all(AppSizes.spacing16.w),
+        decoration: BoxDecoration(
+          color: AppColors.surface,
+          borderRadius: BorderRadius.circular(AppSizes.radius8.r),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.shadow.withOpacity(0.1),
+              blurRadius: AppSizes.blur4.r,
+              offset: Offset(0, AppSizes.offset2.h),
+            ),
+          ],
+        ),
+        child: Text(
+          title,
+          style: AppTextStyles.bodyMedium,
+        ),
+      ),
+    );
+  }
+}
+```
+
+## Layout Responsiveness
+
+1. **ScreenUtil Integration**
+   * Initialize ScreenUtil in your app startup:
+     ```dart
+     void main() {
+       runApp(
+         ScreenUtilInit(
+           designSize: const Size(375, 812),
+           minTextAdapt: true,
+           splitScreenMode: true,
+           builder: (context, child) => const App(),
+         ),
+       );
+     }
+     ```
+   * Use extensions for responsive sizing:
+     - `.w` for widths (e.g., `AppSizes.spacing16.w`)
+     - `.h` for heights (e.g., `AppSizes.spacing16.h`)
+     - `.r` for radii (e.g., `AppSizes.radius8.r`)
+     - `.sp` for font sizes (e.g., `28.sp`)
+
+2. **Layout Best Practices**
+   * Prefer `Expanded`, `Flexible`, and `FractionallySizedBox` for proportional sizing
+   * Use `LayoutBuilder` for container-aware sizing
+   * Apply `MediaQuery` for screen-aware adjustments
+   * Create responsive layouts with `OrientationBuilder`
+
+3. **Adaptive Widgets**
+   * Create platform-adaptive widgets when needed
+   * Use `Theme.of(context).platform` to check the platform
+   * Consider different device sizes and orientations
+
+## State Interaction
+
+1. **State Consumption**
+   * Use `BlocBuilder` for UI that depends on state
+   * Use `BlocListener` for side effects (navigation, dialogs)
+   * Use `BlocConsumer` when both are needed
+   * Structure state handling for all possible states
+
+2. **Event Dispatching**
+   * Dispatch events using `context.read<BloC>().add(Event())`
+   * Keep event creation close to dispatch point
+   * Document the purpose of event dispatching
+
+3. **Form Handling**
+   * Use BLoC/Cubit to manage form state
+   * Validate input before submitting
+   * Show appropriate error messages
+   * Provide visual feedback for form actions
+
+## Error Handling
+
+1. **Error Presentation**
+   * Display user-friendly error messages
+   * Provide recovery actions when possible
+   * Use consistent error UI components
+   * Log errors for debugging
+
+2. **Error Component Design**
+   * Create reusable error widgets
+   * Include retry options when applicable
+   * Design for different error types
+   * Consider empty states as a type of error state
+
+3. **Loading States**
+   * Show loading indicators for async operations
+   * Use skeleton screens for better UX
+   * Maintain consistent loading patterns
+   * Consider partial loading states
+
+## User Input
+
+1. **Input Validation**
+   * Validate input in real-time
+   * Show validation errors inline
+   * Use appropriate input constraints
+   * Format input values properly
+
+2. **Input Components**
+   * Create reusable input components
+   * Maintain consistent appearance and behavior
+   * Support keyboard types
+   * Implement focus handling
+
+3. **Action Feedback**
+   * Provide visual feedback for user actions
+   * Use appropriate animations
+   * Ensure accessibility
+   * Consider loading states for actions
+
+## Navigation
+
+1. **Route Definition**
+   * Define routes with auto_route
+   * Use consistent routing patterns
+   * Handle deep linking
+   * Manage route parameters properly
+
+2. **Navigation Actions**
+   * Use router for navigation
+   * Handle navigation errors
+   * Support back navigation
+   * Consider nested navigation
+
+3. **Transitions**
+   * Use appropriate transition animations
+   * Maintain consistent transitions
+   * Consider platform conventions
+   * Handle transition timing properly
+
+## Accessibility
+
+1. **Semantic Labels**
+   * Provide appropriate semantic labels
+   * Use semantics for custom widgets
+   * Support screen readers
+   * Consider keyboard navigation
+
+2. **Color Contrast**
+   * Ensure sufficient color contrast
+   * Don't rely solely on color for meaning
+   * Consider color blindness
+   * Test with accessibility tools
+
+3. **Touch Targets**
+   * Make touch targets adequately sized
+   * Provide appropriate spacing
+   * Support gesture customization
+   * Ensure consistent behavior
+
+## Testing
+
+1. **Widget Testing**
+   * Write tests for all custom widgets
+   * Test different states and configurations
+   * Mock dependencies
+   * Verify user interactions
+
+2. **Integration Testing**
+   * Test widget interactions
+   * Verify navigation
+   * Test form submissions
+   * Check error handling
+
+3. **Golden Tests**
+   * Create golden tests for critical UI components
+   * Verify visual appearance
+   * Test different themes
+   * Consider device sizes

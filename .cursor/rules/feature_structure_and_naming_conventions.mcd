@@ -1,0 +1,553 @@
+# KSK App: Feature Structure & Naming Conventions
+
+## Project Structure Overview
+
+```
+lib/
+├── core/                      # Core application code
+│   ├── di/                    # Dependency injection setup
+│   ├── network/               # Network-related code
+│   ├── styles/                # Centralized styling system
+│   │   ├── colors/            # Color definitions
+│   │   │   └── app_colors.dart
+│   │   ├── sizes/             # Size definitions
+│   │   │   └── app_sizes.dart
+│   │   ├── app_text_styles.dart # Text style definitions
+│   │   └── styles.dart        # Export file for all styles
+│   ├── themes/                # Theme configurations
+│   │   ├── extensions/        # Theme extensions
+│   │   ├── app_theme.dart     # Theme definitions
+│   │   └── themes.dart        # Export file for themes
+│   └── utils/                 # Utility functions and constants
+├── features/                  # Feature modules
+│   └── [feature_name]/        # A specific feature
+│       ├── domain/            # Domain layer
+│       ├── application/       # Application layer
+│       ├── infrastructure/    # Infrastructure layer
+│       └── presentation/      # Presentation layer
+├── shared/                    # Shared code across features
+│   ├── domain/                # Shared domain models
+│   ├── infrastructure/        # Shared infrastructure
+│   └── widgets/               # Shared UI components
+└── app.dart                   # Application entry point
+```
+
+## Design Principles
+
+1. **Feature-First Organization**
+   * Code is primarily organized by feature
+   * Each feature contains its own layered architecture
+   * Shared code is extracted to the shared directory
+   * Core system configurations belong in the core directory
+
+2. **Clean Architecture**
+   * Domain layer defines business rules and entities
+   * Application layer implements use cases
+   * Infrastructure layer provides implementations
+   * Presentation layer handles UI and state management
+
+3. **Centralized Styling & Theming**
+   * ALL styles MUST be defined in core/styles directory
+   * ALL themes MUST be defined in core/themes directory
+   * NO local style definitions are allowed in features or widgets
+   * Use imports from centralized source for consistent styling
+
+## Style Organization
+
+### Color Management
+
+* ALL colors MUST be defined in `core/styles/colors/app_colors.dart`
+* NEVER define colors directly in feature code
+* Access colors via AppColors class:
+
+```dart
+// core/styles/colors/app_colors.dart
+class AppColors {
+  // Primary palette
+  static const Color primary = Color(0xFF0A84FF);
+  static const Color primaryVariant = Color(0xFF007AFF);
+  static const Color secondary = Color(0xFF34C759);
+  
+  // Surface colors
+  static const Color background = Color(0xFFF2F2F7);
+  static const Color surface = Color(0xFFFFFFFF);
+  
+  // Text colors
+  static const Color textPrimary = Color(0xFF000000);
+  static const Color textSecondary = Color(0xFF8E8E93);
+  
+  // Status colors
+  static const Color error = Color(0xFFFF3B30);
+  static const Color success = Color(0xFF34C759);
+  static const Color warning = Color(0xFFFF9500);
+  static const Color info = Color(0xFF0A84FF);
+  
+  // Additional colors
+  static const Color divider = Color(0xFFE5E5EA);
+  static const Color shadow = Color(0xFF000000);
+}
+```
+
+### Text Styles
+
+* ALL text styles MUST be defined in `core/styles/app_text_styles.dart`
+* NEVER create text styles directly in widgets
+* Access text styles via AppTextStyles class:
+
+```dart
+// core/styles/app_text_styles.dart
+class AppTextStyles {
+  // Headings
+  static final TextStyle heading1 = TextStyle(
+    fontSize: 28.sp,
+    fontWeight: FontWeight.bold,
+    color: AppColors.textPrimary,
+  );
+  
+  static final TextStyle heading2 = TextStyle(
+    fontSize: 24.sp,
+    fontWeight: FontWeight.bold,
+    color: AppColors.textPrimary,
+  );
+  
+  // Body text
+  static final TextStyle bodyLarge = TextStyle(
+    fontSize: 16.sp,
+    fontWeight: FontWeight.normal,
+    color: AppColors.textPrimary,
+  );
+  
+  static final TextStyle bodyMedium = TextStyle(
+    fontSize: 14.sp,
+    fontWeight: FontWeight.normal,
+    color: AppColors.textPrimary,
+  );
+  
+  static final TextStyle bodySmall = TextStyle(
+    fontSize: 12.sp,
+    fontWeight: FontWeight.normal,
+    color: AppColors.textPrimary,
+  );
+  
+  // Button text
+  static final TextStyle buttonLarge = TextStyle(
+    fontSize: 16.sp,
+    fontWeight: FontWeight.semiBold,
+    color: AppColors.textPrimary,
+  );
+}
+```
+
+### Sizes & Spacing
+
+* ALL sizes and spacing MUST be defined in `core/styles/sizes/app_sizes.dart`
+* NEVER use hardcoded numerical values for layout
+* Access sizes via AppSizes class:
+
+```dart
+// core/styles/sizes/app_sizes.dart
+class AppSizes {
+  // Spacing
+  static const double spacing4 = 4.0;
+  static const double spacing8 = 8.0;
+  static const double spacing12 = 12.0;
+  static const double spacing16 = 16.0;
+  static const double spacing24 = 24.0;
+  static const double spacing32 = 32.0;
+  static const double spacing48 = 48.0;
+  
+  // Border radius
+  static const double radius4 = 4.0;
+  static const double radius8 = 8.0;
+  static const double radius12 = 12.0;
+  static const double radius16 = 16.0;
+  
+  // Icon sizes
+  static const double iconSmall = 16.0;
+  static const double iconMedium = 24.0;
+  static const double iconLarge = 32.0;
+  
+  // Effects
+  static const double blur4 = 4.0;
+  static const double blur8 = 8.0;
+  static const double offset2 = 2.0;
+  static const double offset4 = 4.0;
+}
+```
+
+## Theming System
+
+* ALL theme data MUST be defined in `core/themes/app_theme.dart`
+* Provide light and dark theme variations
+* Use ThemeData for base theme and ThemeExtensions for custom theme properties
+
+```dart
+// core/themes/app_theme.dart
+class AppTheme {
+  static ThemeData get light => ThemeData(
+    brightness: Brightness.light,
+    colorScheme: ColorScheme.light(
+      primary: AppColors.primary,
+      secondary: AppColors.secondary,
+      background: AppColors.background,
+      surface: AppColors.surface,
+      error: AppColors.error,
+      onPrimary: Colors.white,
+      onSecondary: Colors.white,
+      onBackground: AppColors.textPrimary,
+      onSurface: AppColors.textPrimary,
+      onError: Colors.white,
+    ),
+    textTheme: TextTheme(
+      headlineLarge: AppTextStyles.heading1,
+      headlineMedium: AppTextStyles.heading2,
+      bodyLarge: AppTextStyles.bodyLarge,
+      bodyMedium: AppTextStyles.bodyMedium,
+      bodySmall: AppTextStyles.bodySmall,
+      labelLarge: AppTextStyles.buttonLarge,
+    ),
+    // Other theme properties...
+  ).copyWith(
+    extensions: [
+      MyCustomThemeExtension.light,
+    ],
+  );
+
+  static ThemeData get dark => ThemeData(
+    brightness: Brightness.dark,
+    // Dark theme configuration...
+  );
+}
+```
+
+## UI Styling Rules
+
+1. **No Hard-Coded Styles**
+   * NEVER define colors, text styles, or sizes directly in widgets
+   * ALWAYS import from centralized style repository
+   * Use `Theme.of(context)` for theme-dependent styling
+
+2. **Style Import Pattern**
+   * Import all styles from the centralized export:
+     ```dart
+     import 'package:app/core/styles/styles.dart';
+     ```
+
+3. **Theme Usage**
+   * Access theme properties via:
+     ```dart
+     final primaryColor = Theme.of(context).colorScheme.primary;
+     final bodyText = Theme.of(context).textTheme.bodyMedium;
+     ```
+
+4. **Responsive Sizing**
+   * Use ScreenUtil extensions for responsive sizing:
+     ```dart
+     Container(
+       width: AppSizes.spacing48.w,
+       height: AppSizes.spacing48.h,
+       padding: EdgeInsets.all(AppSizes.spacing16.w),
+       child: Text(
+         'Hello',
+         style: AppTextStyles.bodyLarge.copyWith(fontSize: 16.sp),
+       ),
+     )
+     ```
+
+## File Naming Conventions
+
+* Use `snake_case` for all file names
+* Use descriptive file names that indicate purpose
+* Follow consistent patterns for different file types:
+
+| File Type | Format | Example |
+|-----------|--------|---------|
+| Entity | `entity_name.dart` | `movie.dart` |
+| Repository Interface | `i_repository_name.dart` | `i_movie_repository.dart` |
+| Repository Implementation | `repository_name_impl.dart` | `movie_repository_impl.dart` |
+| BLoC | `feature_bloc.dart` | `movie_list_bloc.dart` |
+| BLoC Event | `feature_event.dart` | `movie_list_event.dart` |
+| BLoC State | `feature_state.dart` | `movie_list_state.dart` |
+| Page | `feature_page.dart` | `movie_details_page.dart` |
+| View | `feature_view.dart` | `movie_details_view.dart` |
+| Widget | `descriptive_widget_name.dart` | `movie_card.dart` |
+
+## Class Naming Conventions
+
+* Use `PascalCase` for class names
+* Use clear, descriptive names
+* Follow established patterns for different types:
+
+| Class Type | Format | Example |
+|------------|--------|---------|
+| Entity | `EntityName` | `Movie` |
+| Repository Interface | `IRepositoryName` | `IMovieRepository` |
+| Repository Implementation | `RepositoryNameImpl` | `MovieRepositoryImpl` |
+| BLoC | `FeatureBloc` | `MovieListBloc` |
+| BLoC Event | `FeatureEvent` | `MovieListEvent` |
+| BLoC State | `FeatureState` | `MovieListState` |
+| Page | `FeaturePage` | `MovieDetailsPage` |
+| View | `FeatureView` | `MovieDetailsView` |
+| Widget | `DescriptiveWidgetName` | `MovieCard` |
+| Model | `EntityName` + `Model` | `MovieModel` |
+| DTO | `EntityName` + `Dto` | `MovieDto` |
+
+## Feature Structure
+
+Each feature should have the following structure:
+
+```
+lib/features/[feature_name]/
+├── domain/                # Domain layer
+│   ├── entities/          # Business entities
+│   └── repositories/      # Repository interfaces
+├── application/           # Application layer
+│   ├── blocs/             # BLoCs or Cubits
+│   │   ├── feature_bloc.dart
+│   │   ├── feature_event.dart
+│   │   └── feature_state.dart
+│   └── dtos/              # Data Transfer Objects
+├── infrastructure/        # Infrastructure layer
+│   ├── datasources/       # Data sources (API, local, etc.)
+│   ├── models/            # Data models (API responses)
+│   └── repositories/      # Repository implementations
+└── presentation/          # Presentation layer
+    ├── pages/             # Pages (screens)
+    ├── views/             # Container views
+    └── widgets/           # UI components
+```
+
+## Layer Responsibilities
+
+1. **Domain Layer**
+   * Contains business entities and logic
+   * Defines repository interfaces
+   * Framework-independent
+
+2. **Application Layer**
+   * Contains BLoCs/Cubits for state management
+   * Manages business logic for UI
+   * Connects domain and presentation layers
+
+3. **Infrastructure Layer**
+   * Implements repository interfaces
+   * Handles data fetching and storage
+   * Provides model conversions to domain entities
+
+4. **Presentation Layer**
+   * Contains UI components
+   * Consumes BLoCs/Cubits for state
+   * NEVER uses the infrastructure layer directly
+   * All styling must use core/styles and core/themes
+
+## Dependency Injection
+
+* Register all dependencies in the `lib/core/di/injection.dart` file
+* Use GetIt for dependency injection
+* Register dependencies with appropriate scope
+
+```dart
+// Example registration
+@module
+abstract class FeatureModule {
+  @lazySingleton
+  IFeatureRepository provideFeatureRepository(
+    FeatureApiService service,
+  ) => 
+    FeatureRepositoryImpl(service);
+  
+  @injectable
+  FeatureBloc provideFeatureBloc(
+    IFeatureRepository repository,
+  ) =>
+    FeatureBloc(repository);
+}
+```
+
+## Code Generation
+
+Use the following code generation tools:
+
+1. **Injectable**
+   * For dependency injection
+   * Run with `flutter pub run build_runner build`
+
+2. **Freezed**
+   * For immutable models, BLoC events, and states
+   * Add `part 'file_name.freezed.dart'` to files
+   * Run with `flutter pub run build_runner build`
+
+3. **JSON Serializable**
+   * For API models
+   * Add:
+     ```dart
+     part 'model.g.dart'
+     
+     @JsonSerializable()
+     class Model {...}
+     ```
+
+## Implementation Examples
+
+### Entity Example
+
+```dart
+// lib/features/movies/domain/entities/movie.dart
+class Movie {
+  final String id;
+  final String title;
+  final String overview;
+  final String posterPath;
+  final DateTime releaseDate;
+  final double voteAverage;
+  
+  const Movie({
+    required this.id,
+    required this.title,
+    required this.overview,
+    required this.posterPath,
+    required this.releaseDate,
+    required this.voteAverage,
+  });
+  
+  String get posterUrl => 'https://image.tmdb.org/t/p/w500$posterPath';
+  
+  String get releaseYear => 
+    releaseDate != null ? DateFormat('yyyy').format(releaseDate) : '';
+}
+```
+
+### Repository Interface Example
+
+```dart
+// lib/features/movies/domain/repositories/i_movie_repository.dart
+abstract class IMovieRepository {
+  Future<Either<Failure, List<Movie>>> getNowPlaying();
+  Future<Either<Failure, Movie>> getMovieDetails(String id);
+  Future<Either<Failure, List<Movie>>> searchMovies(String query);
+}
+```
+
+### BLoC Example with Freezed
+
+```dart
+// lib/features/movies/application/blocs/movie_list/movie_list_event.dart
+part of 'movie_list_bloc.dart';
+
+@freezed
+class MovieListEvent with _$MovieListEvent {
+  const factory MovieListEvent.load() = _Load;
+  const factory MovieListEvent.refresh() = _Refresh;
+  const factory MovieListEvent.search(String query) = _Search;
+}
+
+// lib/features/movies/application/blocs/movie_list/movie_list_state.dart
+part of 'movie_list_bloc.dart';
+
+@freezed
+class MovieListState with _$MovieListState {
+  const factory MovieListState.initial() = _Initial;
+  const factory MovieListState.loading() = _Loading;
+  const factory MovieListState.loaded(List<Movie> movies) = _Loaded;
+  const factory MovieListState.error(String message) = _Error;
+}
+
+// lib/features/movies/application/blocs/movie_list/movie_list_bloc.dart
+part 'movie_list_event.dart';
+part 'movie_list_state.dart';
+part 'movie_list_bloc.freezed.dart';
+
+@injectable
+class MovieListBloc extends Bloc<MovieListEvent, MovieListState> {
+  final IMovieRepository _repository;
+  
+  MovieListBloc(this._repository) : super(const MovieListState.initial()) {
+    on<_Load>(_onLoad);
+    on<_Refresh>(_onRefresh);
+    on<_Search>(_onSearch);
+  }
+  
+  Future<void> _onLoad(
+    _Load event,
+    Emitter<MovieListState> emit,
+  ) async {
+    emit(const MovieListState.loading());
+    
+    final result = await _repository.getNowPlaying();
+    
+    emit(result.fold(
+      (failure) => MovieListState.error(failure.message),
+      (movies) => MovieListState.loaded(movies),
+    ));
+  }
+  
+  // Other event handlers...
+}
+```
+
+### Repository Implementation Example
+
+```dart
+// lib/features/movies/infrastructure/repositories/movie_repository_impl.dart
+@LazySingleton(as: IMovieRepository)
+class MovieRepositoryImpl implements IMovieRepository {
+  final MovieApiService _apiService;
+  
+  MovieRepositoryImpl(this._apiService);
+  
+  @override
+  Future<Either<Failure, List<Movie>>> getNowPlaying() async {
+    try {
+      final response = await _apiService.getNowPlaying();
+      final movies = response.results
+          .map((model) => model.toDomain())
+          .toList();
+      return right(movies);
+    } on DioError catch (e) {
+      return left(Failure.fromDioError(e));
+    } catch (e) {
+      return left(Failure.unexpected());
+    }
+  }
+  
+  // Other repository methods...
+}
+```
+
+## Testing Structure
+
+Each feature should include tests for all layers, mirroring the structure of the `lib/features` directory:
+
+```
+test/
+└── features/
+    └── [feature_name]/
+        ├── domain/
+        │   └── entities/
+        ├── application/
+        │   └── blocs/
+        ├── infrastructure/
+        │   └── repositories/
+        └── presentation/
+            ├── pages/
+            └── widgets/
+```
+
+1. **Domain Tests**
+   * Unit tests for domain models
+   * Behavior verification
+
+2. **Application Tests**
+   * Unit tests for BLoCs/Cubits
+   * Mock dependencies with mocktail
+
+3. **Infrastructure Tests**
+   * Unit tests for repository implementations
+   * Mock API services and data sources
+
+4. **Presentation Tests**
+   * Widget tests for pages and widgets
+   * Integration tests for complete features
+   * Golden tests for UI verification
+``` 
+</rewritten_file>
