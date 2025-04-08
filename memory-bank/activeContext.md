@@ -1,7 +1,7 @@
 # Active Context
 
 ## Current Focus
-The project is currently in active development, with a focus on implementing the core features and establishing the architectural foundation. The primary focus is on the onboarding feature, which is the first user interaction with the application. Currently, we are refining the UI components of the onboarding screens to match the Figma design and improve code maintainability.
+The project is currently in active development, with a focus on implementing the core features and establishing the architectural foundation. The primary focus is on the onboarding feature, which is the first user interaction with the application. Currently, we are refining the UI components of the onboarding screens to match the Figma design and improve code maintainability. We're also enhancing the design system by implementing a robust color management approach for better consistency across the application.
 
 ## Recent Changes
 1. Set up the project structure following Clean Architecture principles
@@ -15,6 +15,11 @@ The project is currently in active development, with a focus on implementing the
    - Improved color scheme for dot indicators and skip button
    - Enhanced layout with proper spacing and positioning
    - Applied UI improvements based on Figma design
+7. Improved the color system:
+   - Refactored AppColors to use MaterialColor for better shade variations
+   - Standardized color usage across the application
+   - Removed direct color references in favor of AppColors
+   - Added common colors like black, white, and grey as MaterialColors
 
 ## Current Tasks
 1. Complete the onboarding feature implementation

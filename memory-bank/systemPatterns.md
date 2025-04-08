@@ -104,6 +104,13 @@ lib/
 - Type-safe API client generation
 - Request/response interceptors for common operations
 
+### Color System
+- Uses MaterialColor for primary color palettes
+- Centralizes all color definitions in AppColors class
+- Organizes colors by theme (light/dark) and feature
+- Provides shade variations (50-900) for each main color
+- Enforces color consistency by avoiding direct color references
+
 ## Component Communication
 - Primarily through BLoC/Cubit pattern
 - Repository pattern for data access

@@ -923,6 +923,7 @@ lib/
     *   Use `Key` parameters for testing and widget identification.
     *   Get assets via `flutter_gen` (Rule 02) generated code (e.g., `Assets.images.logo.svg()`).
     *   Get localized strings via `slang` (Rule 02) generated code (e.g., `t.login.title`).
+    *   **Use color definitions exclusively from the `AppColors` class (`lib/core/styles/colors/app_colors.dart`). Never use the standard `Colors` class directly.**
 
 ## Naming Conventions
 
@@ -962,6 +963,7 @@ lib/
 
 1.  Layout:
     *   **Strictly use `KSizes` constants and `Gap` widget (Rule 02)** for all dimensions, spacing, padding, margins, font sizes, radii. **No magic numbers.**
+    *   **Use `AppColors` for all color definitions. Never use Flutter's `Colors` class directly.**
     *   Build responsive layouts considering different screen sizes. `flutter_screenutil` can help (Rule 02).
 2.  State Consumption:
     *   Use `BlocBuilder`/`context.watch` only for widgets that need to rebuild based on state changes.
@@ -1007,6 +1009,7 @@ lib/
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart'; // Use Gap for spacing (Rule 02)
+import 'package:ksk_app/core/styles/colors/app_colors.dart'; // Import AppColors
 // Assume KSizes (Rule 02), AuthCubit, AuthState, DataState are defined/imported
 // Assume t (slang Rule 02) is available for localization
 // Assume Assets (flutter_gen Rule 02) is available for assets
@@ -1048,7 +1051,10 @@ class AuthView extends StatelessWidget {
           );
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
-            ..showSnackBar(SnackBar(content: Text(errorMessage)));
+            ..showSnackBar(SnackBar(
+              content: Text(errorMessage),
+              backgroundColor: AppColors.error, // Use AppColors instead of Colors
+            ));
         }
         // Listen for successful login/registration to navigate
         if (state.isLoggedIn) {
@@ -1059,6 +1065,7 @@ class AuthView extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: Text("t.auth.title"), // Localized title
+          backgroundColor: AppColors.primary, // Use AppColors
         ),
         body: Padding(
           padding: EdgeInsets.all(KSizes.p16), // Use KSizes constants
@@ -1068,7 +1075,9 @@ class AuthView extends StatelessWidget {
               builder: (context, state) {
                 // Show loading indicator during login/registration
                 if (state.isLoggingIn || state.isRegistering) {
-                  return const CircularProgressIndicator();
+                  return CircularProgressIndicator(
+                    color: AppColors.primary, // Use AppColors
+                  );
                 }
                 // Show login form (example)
                 return const LoginForm();
@@ -1083,7 +1092,20 @@ class AuthView extends StatelessWidget {
 
   // Helper for showing dialog
   void _showSuccessDialog(BuildContext context, String titleKey) {
-     showDialog(context: context, builder: (_) => AlertDialog(title: Text(titleKey), content: Text("t.auth.successContent"), actions: [TextButton(onPressed: () => Navigator.pop(context), child: Text("t.common.ok"))]));
+     showDialog(
+       context: context, 
+       builder: (_) => AlertDialog(
+         title: Text(titleKey),
+         content: Text("t.auth.successContent"),
+         backgroundColor: AppColors.bgMain, // Use AppColors
+         actions: [
+           TextButton(
+             onPressed: () => Navigator.pop(context),
+             child: Text("t.common.ok", style: TextStyle(color: AppColors.primary)), // Use AppColors
+           )
+         ],
+       ),
+     );
   }
 }
 
@@ -1133,7 +1155,13 @@ class _LoginFormState extends State<LoginForm> {
           TextFormField(
             key: const Key('login_email_field'), // Key for testing
             controller: _emailController,
-            decoration: InputDecoration(labelText: "t.auth.emailLabel"),
+            decoration: InputDecoration(
+              labelText: "t.auth.emailLabel",
+              labelStyle: TextStyle(color: AppColors.textPrimary), // Use AppColors
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: AppColors.primary), // Use AppColors
+              ),
+            ),
             keyboardType: TextInputType.emailAddress,
             validator: (value) {
               if (value == null || value.isEmpty || !value.contains('@')) {
@@ -1147,7 +1175,13 @@ class _LoginFormState extends State<LoginForm> {
           TextFormField(
              key: const Key('login_password_field'), // Key for testing
             controller: _passwordController,
-            decoration: InputDecoration(labelText: "t.auth.passwordLabel"),
+            decoration: InputDecoration(
+              labelText: "t.auth.passwordLabel",
+              labelStyle: TextStyle(color: AppColors.textPrimary), // Use AppColors
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: AppColors.primary), // Use AppColors
+              ),
+            ),
             obscureText: true,
              validator: (value) {
               if (value == null || value.isEmpty || value.length < 6) {
@@ -1166,6 +1200,8 @@ class _LoginFormState extends State<LoginForm> {
             // onPressed: context.watch<AuthCubit>().state.isLoggingIn ? null : _submitLogin,
             onPressed: _submitLogin, // Simpler if button doesn't disable
             style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.primary, // Use AppColors
+              foregroundColor: AppColors.white, // Use AppColors
               minimumSize: Size.fromHeight(KSizes.buttonHeightDefault), // Use KSizes
             ),
             child: Text("t.auth.loginButton"),
@@ -1176,6 +1212,9 @@ class _LoginFormState extends State<LoginForm> {
               // Handle navigation to registration or switch form
                _logger.i('Navigate to register'); // Use logger
             },
+            style: TextButton.styleFrom(
+              foregroundColor: AppColors.primary, // Use AppColors
+            ),
             child: Text("t.auth.registerPrompt"),
           ),
         ],
