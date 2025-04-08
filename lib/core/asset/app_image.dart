@@ -52,9 +52,11 @@ class OnboardingImages {
     AssetGenImage? screen1,
     AssetGenImage? screen2,
     AssetGenImage? screen3,
+    AssetGenImage? logo,
   })  : screen1 = screen1 ?? Assets.images.onboarding.onboarding1,
         screen2 = screen2 ?? Assets.images.onboarding.onboarding2,
-        screen3 = screen3 ?? Assets.images.onboarding.onboarding3;
+        screen3 = screen3 ?? Assets.images.onboarding.onboarding3,
+        logo = logo ?? Assets.images.onboarding.logo;
 
   /// Image for the first onboarding screen
   final AssetGenImage screen1;
@@ -65,8 +67,11 @@ class OnboardingImages {
   /// Image for the third onboarding screen
   final AssetGenImage screen3;
 
+  /// Image for the logo
+  final AssetGenImage logo;
+
   /// Returns all onboarding images as a list
-  List<AssetGenImage> get values => [screen1, screen2, screen3];
+  List<AssetGenImage> get values => [screen1, screen2, screen3, logo];
 }
 
 /// A class that contains all splash screen images

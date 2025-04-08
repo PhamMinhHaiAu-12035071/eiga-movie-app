@@ -35,12 +35,12 @@ class OnboardingDotIndicator extends StatelessWidget {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
       margin: EdgeInsets.symmetric(horizontal: 4.w),
-      height: 8.h,
-      width: isActive ? 24.w : 8.w,
+      height: 7.h,
+      width: isActive ? 14.w : 7.w,
       decoration: BoxDecoration(
         color: isActive
-            ? AppColors.primary
-            : AppColors.onboardingBlue.withAlpha(102), // 0.4 * 255 ≈ 102
+            ? AppColors.onboardingBlue
+            : AppColors.onboardingBlue.withAlpha(102),
         borderRadius: BorderRadius.circular(4.r),
       ),
     );

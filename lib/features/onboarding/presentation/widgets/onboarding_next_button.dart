@@ -26,21 +26,35 @@ class OnboardingNextButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 40.w),
-      child: ElevatedButton(
-        onPressed: onPressed,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primary,
-          foregroundColor: Colors.white,
-          minimumSize: Size(double.infinity, 56.h),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12.r),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12.r),
+          gradient: const LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color(0xFF00B3C6),
+              Color(0xFF5D84B4),
+            ],
           ),
         ),
-        child: Text(
-          text,
-          style: AppTextStyle.heading(
-            color: Colors.white,
-            fontWeight: FontWeight.w500,
+        child: ElevatedButton(
+          onPressed: onPressed,
+          style: ElevatedButton.styleFrom(
+            foregroundColor: AppColors.white,
+            backgroundColor: AppColors.transparent,
+            shadowColor: AppColors.transparent,
+            minimumSize: Size(double.infinity, 56.h),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12.r),
+            ),
+          ),
+          child: Text(
+            text,
+            style: AppTextStyle.heading(
+              color: AppColors.white,
+              fontWeight: FontWeight.w500,
+            ),
           ),
         ),
       ),

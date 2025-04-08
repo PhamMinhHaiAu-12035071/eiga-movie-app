@@ -56,17 +56,16 @@ class OnboardingPageView extends StatelessWidget {
               return Container(
                 height: 260.h,
                 width: 260.w,
-                color: Colors.grey[300],
+                color: AppColors.grey[300],
                 child: Icon(
                   Icons.image_not_supported,
                   size: 80.sp,
-                  color: Colors.grey[600],
+                  color: AppColors.grey[600],
                 ),
               );
             },
           ),
           Gap(28.h),
-
           // Title
           Text(
             slide.title,
@@ -76,13 +75,12 @@ class OnboardingPageView extends StatelessWidget {
             ),
           ),
           Gap(12.h),
-
           // Description
           Text(
             slide.description,
             textAlign: TextAlign.center,
             style: AppTextStyle.body(
-              color: Colors.black,
+              color: AppColors.black,
               fontWeight: FontWeight.w700,
             ),
           ),

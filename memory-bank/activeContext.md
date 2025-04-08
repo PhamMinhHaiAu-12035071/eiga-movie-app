@@ -1,7 +1,7 @@
 # Active Context
 
 ## Current Focus
-The project is currently in active development, with a focus on implementing the core features and establishing the architectural foundation. The primary focus is on the onboarding feature, which is the first user interaction with the application.
+The project is currently in active development, with a focus on implementing the core features and establishing the architectural foundation. The primary focus is on the onboarding feature, which is the first user interaction with the application. Currently, we are refining the UI components of the onboarding screens to match the Figma design and improve code maintainability.
 
 ## Recent Changes
 1. Set up the project structure following Clean Architecture principles
@@ -9,6 +9,12 @@ The project is currently in active development, with a focus on implementing the
 3. Set up the routing system with auto_route
 4. Implemented the theme management system
 5. Created the onboarding feature with domain, application, infrastructure, and presentation layers
+6. Refined the onboarding UI components:
+   - Created a dedicated OnboardingHeader widget for better maintainability
+   - Updated buttons with gradient backgrounds to match design
+   - Improved color scheme for dot indicators and skip button
+   - Enhanced layout with proper spacing and positioning
+   - Applied UI improvements based on Figma design
 
 ## Current Tasks
 1. Complete the onboarding feature implementation

@@ -2,12 +2,14 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gap/gap.dart' show Gap;
 import 'package:ksk_app/core/di/injection.dart';
 import 'package:ksk_app/core/styles/app_text_styles.dart';
 import 'package:ksk_app/core/styles/colors/app_colors.dart';
 import 'package:ksk_app/features/onboarding/application/cubit/onboarding_cubit.dart';
 import 'package:ksk_app/features/onboarding/application/cubit/onboarding_state.dart';
 import 'package:ksk_app/features/onboarding/presentation/widgets/onboarding_dot_indicator.dart';
+import 'package:ksk_app/features/onboarding/presentation/widgets/onboarding_header.dart';
 import 'package:ksk_app/features/onboarding/presentation/widgets/onboarding_next_button.dart';
 import 'package:ksk_app/features/onboarding/presentation/widgets/onboarding_page_view.dart';
 
@@ -47,23 +49,10 @@ class _OnboardingPageState extends State<OnboardingPage> {
             body: SafeArea(
               child: Column(
                 children: [
-                  // Skip button
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: Padding(
-                      padding: EdgeInsets.only(top: 16.h, right: 16.w),
-                      child: TextButton(
-                        onPressed: () => _finishOnboarding(context),
-                        child: Text(
-                          'Skip',
-                          style: AppTextStyle.heading(
-                            color: AppColors.onboardingBlue,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                  Gap(50.h),
+
+                  // Header with logo and app name
+                  const OnboardingHeader(),
 
                   // PageView to display onboarding pages
                   OnboardingPageView(
@@ -73,15 +62,13 @@ class _OnboardingPageState extends State<OnboardingPage> {
                         context.read<OnboardingCubit>().updatePage(index),
                   ),
 
-                  SizedBox(height: 40.h),
-
                   // Dot indicators
                   OnboardingDotIndicator(
                     pageCount: state.slides.length,
                     currentIndex: state.currentPage,
                   ),
 
-                  SizedBox(height: 40.h),
+                  Gap(40.h),
 
                   // Next or Get Started button
                   OnboardingNextButton(
@@ -96,7 +83,20 @@ class _OnboardingPageState extends State<OnboardingPage> {
                     },
                   ),
 
-                  SizedBox(height: 40.h),
+                  Gap(30.h),
+
+                  // Skip button
+                  TextButton(
+                    onPressed: () => _finishOnboarding(context),
+                    child: Text(
+                      'Skip',
+                      style: AppTextStyle.heading(
+                        color: AppColors.skipButtonColor,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                  Gap(40.h),
                 ],
               ),
             ),

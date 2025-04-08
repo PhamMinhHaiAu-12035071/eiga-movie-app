@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:ksk_app/core/env/env_development.dart';
 import 'package:ksk_app/core/router/app_router.dart' show AppRouter;
@@ -12,7 +11,6 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ResponsiveInitializer(
-      designSize: kIsWeb ? const Size(1024, 768) : const Size(375, 812),
       builder: (context) => MaterialApp.router(
         routerConfig: appRouter.config(),
         theme: AppTheme.light(ThemeData.light()).themeData,
