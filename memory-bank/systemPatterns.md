@@ -40,6 +40,7 @@ lib/
 │   ├── asset/                  # Asset management
 │   ├── styles/                 # UI styles definitions (colors, text styles)
 │   ├── sizes/                  # Size and dimension constants
+│   ├── durations/             # Duration constants for animations and transitions
 │   └── themes/                 # Theme management
 ├── features/                   # Feature modules
 │   └── [feature_name]/         
@@ -111,6 +112,13 @@ lib/
 - Organizes colors by theme (light/dark) and feature
 - Provides shade variations (50-900) for each main color
 - Enforces color consistency by avoiding direct color references
+
+### Duration System
+- Centralizes all animation and transition durations in AppDurations class
+- Provides categorized durations (veryShort, short, medium, long, extraLong, oneSecond)
+- Ensures consistent timing across the application
+- Improves maintainability by eliminating hardcoded duration values
+- Makes animation timing adjustments easier by changing values in a single place
 
 ## Component Communication
 - Primarily through BLoC/Cubit pattern

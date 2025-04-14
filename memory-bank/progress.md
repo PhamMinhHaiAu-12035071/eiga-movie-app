@@ -14,6 +14,7 @@
 - ✅ Set up FVM (Flutter Version Management) for consistent Flutter SDK versions
 - ✅ Implemented MaterialColor-based color system for consistent design
 - ✅ Restructured core directory, moving sizes out of styles for cleaner organization
+- ✅ Created centralized duration system for animations and transitions
 
 ### Feature Implementation
 - 🚧 Onboarding Feature (In Progress)

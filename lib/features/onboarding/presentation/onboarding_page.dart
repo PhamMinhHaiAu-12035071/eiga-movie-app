@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart' show Gap;
 import 'package:ksk_app/core/di/injection.dart';
+import 'package:ksk_app/core/durations/app_durations.dart';
 import 'package:ksk_app/core/sizes/app_dimension.dart' show AppDimension;
 import 'package:ksk_app/core/styles/app_text_styles.dart';
 import 'package:ksk_app/core/styles/colors/app_colors.dart';
@@ -117,7 +118,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
     final cubit = context.read<OnboardingCubit>();
 
     _pageController.nextPage(
-      duration: const Duration(milliseconds: 300),
+      duration: AppDurations.medium,
       curve: Curves.easeInOut,
     );
 

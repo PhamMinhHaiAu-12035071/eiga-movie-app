@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ksk_app/core/durations/app_durations.dart';
 import 'package:ksk_app/core/sizes/app_dimension.dart' show AppDimension;
 import 'package:ksk_app/core/styles/colors/app_colors.dart';
 
@@ -33,7 +34,7 @@ class OnboardingDotIndicator extends StatelessWidget {
     final isActive = index == currentIndex;
 
     return AnimatedContainer(
-      duration: const Duration(milliseconds: 300),
+      duration: AppDurations.medium,
       margin: EdgeInsets.symmetric(horizontal: AppDimension.h4),
       height: AppDimension.v8,
       width: isActive ? AppDimension.h16 : AppDimension.h8,

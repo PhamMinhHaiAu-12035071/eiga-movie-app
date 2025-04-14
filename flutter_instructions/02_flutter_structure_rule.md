@@ -26,7 +26,12 @@ lib/
 ├── core/                         # System configuration
 │   ├── di/                      # Dependency Injection (GetIt, Injectable)
 │   ├── router/                  # Navigation (auto_route)
-│   └── env/                     # Environment configuration
+│   ├── env/                     # Environment configuration
+│   ├── asset/                   # Asset management
+│   ├── styles/                  # UI styles definitions (colors, text styles)
+│   ├── sizes/                   # Size and dimension constants
+│   ├── durations/              # Duration constants for animations
+│   └── themes/                  # Theme management
 ├── features/                    # Feature module separation
 │   └── [feature_name]/
 │       ├── domain/              # Business logic and rules
@@ -255,17 +260,17 @@ class UserListPage extends StatelessWidget {
 
 ## 📚 References
 
-- [Clean Architecture – Uncle Bob](mdc:https:/8thlight.com/blog/uncle-bob/2012/08/13/the-clean-architecture.html)
-- [Effective Dart](mdc:https:/dart.dev/guides/language/effective-dart)
-- [Bloc Pattern](mdc:https:/bloclibrary.dev/#)
-- [GRASP Patterns](mdc:https:/en.wikipedia.org/wiki/GRASP_(object-oriented_design))
-- [Very Good Ventures Blog](mdc:https:/verygood.ventures/blog)
-- [slang – Dart i18n made easy](mdc:https:/pub.dev/packages/slang)
-- [Flutter Hooks Documentation](mdc:https:/pub.dev/packages/flutter_hooks)
-- [Logger Package](mdc:https:/pub.dev/packages/logger)
-- [Collection & Meta Packages](mdc:https:/dart.dev/guides/libraries/useful-libraries)
-- [After Layout Documentation](mdc:https:/pub.dev/packages/after_layout)
-- [Envied - Secure Environment Variables](mdc:https:/pub.dev/packages/envied)
+- [Clean Architecture – Uncle Bob](https://8thlight.com/blog/uncle-bob/2012/08/13/the-clean-architecture.html)
+- [Effective Dart](https://dart.dev/guides/language/effective-dart)
+- [Bloc Pattern](https://bloclibrary.dev/#/)
+- [GRASP Patterns](https://en.wikipedia.org/wiki/GRASP_(object-oriented_design))
+- [Very Good Ventures Blog](https://verygood.ventures/blog)
+- [slang – Dart i18n made easy](https://pub.dev/packages/slang)
+- [Flutter Hooks Documentation](https://pub.dev/packages/flutter_hooks)
+- [Logger Package](https://pub.dev/packages/logger)
+- [Collection & Meta Packages](https://dart.dev/guides/libraries/useful-libraries)
+- [After Layout Documentation](https://pub.dev/packages/after_layout)
+- [Envied - Secure Environment Variables](https://pub.dev/packages/envied)
 
 ---
 

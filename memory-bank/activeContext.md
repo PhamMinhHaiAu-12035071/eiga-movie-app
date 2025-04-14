@@ -24,6 +24,11 @@ The project is currently in active development, with a focus on implementing the
    - Moved sizes directory out of styles to be at the same level as other directories in core
    - Updated imports in styles.dart to reference the new location
    - Maintained all existing functionality with a cleaner hierarchy
+9. Implemented centralized duration system:
+   - Created durations directory in core for managing animation timing
+   - Defined AppDurations class with standardized durations (veryShort, short, medium, long, extraLong, oneSecond)
+   - Refactored hardcoded duration values in onboarding feature to use AppDurations
+   - Improved maintainability by centralizing animation timing constants
 
 ## Current Tasks
 1. Complete the onboarding feature implementation
