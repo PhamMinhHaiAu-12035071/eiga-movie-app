@@ -20,6 +20,7 @@ lib/
 │   ├── styles/                  # UI styles definitions
 │   │   ├── colors/             # Color definitions and extensions
 │   │   └── app_text_styles.dart # Text style definitions
+│   ├── sizes/                   # Size and dimension constants
 │   └── themes/                  # Theme management
 │       ├── extensions/         # Theme extensions for assets, colors, etc.
 │       └── app_theme.dart      # Main theme configuration

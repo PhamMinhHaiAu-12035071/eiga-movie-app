@@ -8,7 +8,7 @@ The project is currently in active development, with a focus on implementing the
 2. Implemented the environment configuration system
 3. Set up the routing system with auto_route
 4. Implemented the theme management system
-5. Created the onboarding feature with domain, application, infrastructure, and presentation layers
+5. Implemented the onboarding feature with domain, application, infrastructure, and presentation layers
 6. Refined the onboarding UI components:
    - Created a dedicated OnboardingHeader widget for better maintainability
    - Updated buttons with gradient backgrounds to match design
@@ -20,6 +20,10 @@ The project is currently in active development, with a focus on implementing the
    - Standardized color usage across the application
    - Removed direct color references in favor of AppColors
    - Added common colors like black, white, and grey as MaterialColors
+8. Restructured project organization:
+   - Moved sizes directory out of styles to be at the same level as other directories in core
+   - Updated imports in styles.dart to reference the new location
+   - Maintained all existing functionality with a cleaner hierarchy
 
 ## Current Tasks
 1. Complete the onboarding feature implementation

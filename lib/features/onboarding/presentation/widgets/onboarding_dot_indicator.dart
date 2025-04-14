@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:ksk_app/core/sizes/app_dimension.dart' show AppDimension;
 import 'package:ksk_app/core/styles/colors/app_colors.dart';
-import 'package:ksk_app/core/styles/sizes/app_dimension.dart';
 
 /// Widget that displays dot indicators for page position in onboarding
 class OnboardingDotIndicator extends StatelessWidget {

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart' show Gap;
+import 'package:ksk_app/core/sizes/app_dimension.dart' show AppDimension;
 import 'package:ksk_app/core/styles/app_text_styles.dart';
 import 'package:ksk_app/core/styles/colors/app_colors.dart';
-import 'package:ksk_app/core/styles/sizes/app_dimension.dart';
 import 'package:ksk_app/features/onboarding/domain/models/onboarding_info.dart';
 
 /// Widget that displays a page in the onboarding flow

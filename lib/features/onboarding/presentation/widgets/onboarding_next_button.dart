@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:ksk_app/core/sizes/app_border_radius.dart' show AppBorderRadius;
+import 'package:ksk_app/core/sizes/app_dimension.dart' show AppDimension;
 import 'package:ksk_app/core/styles/app_text_styles.dart';
 import 'package:ksk_app/core/styles/colors/app_colors.dart';
-import 'package:ksk_app/core/styles/sizes/app_border_radius.dart';
-import 'package:ksk_app/core/styles/sizes/app_dimension.dart';
 
 /// Widget for the next button or completion button in onboarding
 class OnboardingNextButton extends StatelessWidget {

@@ -38,7 +38,8 @@ lib/
 │   ├── router/                 # Navigation
 │   ├── env/                    # Environment configuration
 │   ├── asset/                  # Asset management
-│   ├── styles/                 # UI styles definitions
+│   ├── styles/                 # UI styles definitions (colors, text styles)
+│   ├── sizes/                  # Size and dimension constants
 │   └── themes/                 # Theme management
 ├── features/                   # Feature modules
 │   └── [feature_name]/         
