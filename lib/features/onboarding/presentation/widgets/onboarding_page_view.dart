@@ -48,19 +48,18 @@ class OnboardingPageView extends StatelessWidget {
         children: [
           // Illustration image
           slide.image.image(
-            height: AppDimension.v64 * 4, // Approximate of 260.h
-            width: AppDimension.h64 * 4, // Approximate of 260.w
+            height: AppDimension.v260,
+            width: AppDimension.h260,
             fit: BoxFit.contain,
             errorBuilder: (context, error, stackTrace) {
               // Display placeholder if image is not found
               return Container(
-                height: AppDimension.v64 * 4, // Approximate of 260.h
-                width: AppDimension.h64 * 4, // Approximate of 260.w
+                height: AppDimension.v260,
+                width: AppDimension.h260,
                 color: AppColors.grey[300],
                 child: Icon(
                   Icons.image_not_supported,
-                  size: AppDimension.r64 +
-                      AppDimension.r16, // Approximate of 80.sp
+                  size: AppDimension.r80,
                   color: AppColors.grey[600],
                 ),
               );

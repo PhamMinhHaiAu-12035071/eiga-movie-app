@@ -69,4 +69,29 @@ class AppDimension {
   static final r64 = 64.r;
   static final v64 = 64.h;
   static final h64 = 64.w;
+
+  // 80 pixel variations
+  static final r80 = 80.r;
+  static final v80 = 80.h;
+  static final h80 = 80.w;
+
+  // 128 pixel variations
+  static final r128 = 128.r;
+  static final v128 = 128.h;
+  static final h128 = 128.w;
+
+  // 192 pixel variations
+  static final r192 = 192.r;
+  static final v192 = 192.h;
+  static final h192 = 192.w;
+
+  // 256 pixel variations
+  static final r256 = 256.r;
+  static final v256 = 256.h;
+  static final h256 = 256.w;
+
+  // 260 pixel variations (specific for onboarding image size)
+  static final r260 = 260.r;
+  static final v260 = 260.h;
+  static final h260 = 260.w;
 }
