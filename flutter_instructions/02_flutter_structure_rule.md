@@ -28,6 +28,7 @@ lib/
 │   ├── router/                  # Navigation (auto_route)
 │   ├── env/                     # Environment configuration
 │   ├── asset/                   # Asset management
+│   ├── services/                # Service abstractions and implementations
 │   ├── styles/                  # UI styles definitions (colors, text styles)
 │   ├── sizes/                   # Size and dimension constants
 │   ├── durations/              # Duration constants for animations
@@ -172,6 +173,7 @@ class UserListPage extends StatelessWidget {
 | Principle           | Goals & Notes |
 |---------------------|---------------|
 | **SOLID**           | 5 core OOP principles – scalable architecture |
+| **Dependency Inversion** | Depend on abstractions not implementations; use service interfaces |
 | **DRY**             | Avoid code duplication – use common helpers/widgets |
 | **KISS**            | Keep code as simple as possible |
 | **YAGNI**           | Only build what is needed |
@@ -198,6 +200,7 @@ class UserListPage extends StatelessWidget {
 | **Strategy** | Change themes, change strategy handlers |
 | **Observer** | Bloc/Cubit → UI updates |
 | **Repository** | Separate interface/data implementation |
+| **Service Abstraction** | Decouple from external dependencies with interfaces |
 
 ---
 
@@ -355,10 +358,10 @@ lib/features/onboarding/
 │   ├── models/
 │   │   └── onboarding_info.dart       # Data model for onboarding slides
 │   └── repositories/
-│       └── i_onboarding_repository.dart # Repository interface
+│       └── onboarding_repository.dart # Repository interface
 ├── infrastructure/
 │   └── repositories/
-│       └── onboarding_repository.dart  # Repository implementation
+│       └── onboarding_repository_impl.dart  # Repository implementation
 ├── application/
 │   └── cubit/
 │       ├── onboarding_cubit.dart      # State management
@@ -405,6 +408,21 @@ lib/features/onboarding/
 - Error handling for asset loading
 - Responsive design using ScreenUtil
 - Clean separation between data, logic, and UI
+
+### Service Layer
+- Place service abstractions in `core/services` directory
+- Define interfaces for external dependencies (e.g., `LocalStorageService`)
+- Implement concrete services that fulfill these interfaces
+- Inject services via DI instead of direct dependencies
+- Follow naming convention: Interface (`ServiceName`), Implementation (`ServiceNameImpl`)
+- Benefits: testability, swappable implementations, adherence to SOLID
+
+### Persistence
+- Storage abstracted through `LocalStorageService` interface
+- Primary implementation via `SharedPreferencesStorageService` for simple data
+- More complex data structures may use SQLite or Hive
+- All storage operations follow the interface contract
+- Features depend on the abstraction, not concrete implementations
 
 ---
 

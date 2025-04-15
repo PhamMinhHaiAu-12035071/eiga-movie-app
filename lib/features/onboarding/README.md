@@ -14,12 +14,12 @@ This feature follows Clean Architecture principles with a complete separation of
   - `OnboardingInfo`: Represents each slide with image path, title, and description
   
 - **Repository Interfaces**: 
-  - `IOnboardingRepository`: Defines methods to check and save onboarding completion status
+  - `OnboardingRepository`: Defines methods to check and save onboarding completion status
 
 ### Infrastructure Layer
 
 - **Repository Implementation**: 
-  - `OnboardingRepository`: Implements the onboarding repository interface using SharedPreferences for persistence
+  - `OnboardingRepositoryImpl`: Implements the onboarding repository interface using SharedPreferences for persistence
 
 ### Application Layer
 

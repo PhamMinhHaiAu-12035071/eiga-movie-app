@@ -3,7 +3,7 @@ import 'package:injectable/injectable.dart';
 import 'package:ksk_app/core/asset/app_image.dart';
 import 'package:ksk_app/features/onboarding/application/cubit/onboarding_state.dart';
 import 'package:ksk_app/features/onboarding/domain/models/onboarding_info.dart';
-import 'package:ksk_app/features/onboarding/domain/repositories/i_onboarding_repository.dart';
+import 'package:ksk_app/features/onboarding/domain/repositories/onboarding_repository.dart';
 
 /// Manages the state and logic of the onboarding feature
 @injectable
@@ -35,7 +35,7 @@ class OnboardingCubit extends Cubit<OnboardingState> {
         );
 
   /// Repository that handles onboarding state persistence
-  final IOnboardingRepository _repository;
+  final OnboardingRepository _repository;
 
   /// Updates the current page when user swipes or taps buttons
   void updatePage(int page) {

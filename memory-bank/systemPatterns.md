@@ -38,6 +38,7 @@ lib/
 │   ├── router/                 # Navigation
 │   ├── env/                    # Environment configuration
 │   ├── asset/                  # Asset management
+│   ├── services/               # Service abstractions and implementations
 │   ├── styles/                 # UI styles definitions (colors, text styles)
 │   ├── sizes/                  # Size and dimension constants
 │   ├── durations/             # Duration constants for animations and transitions
@@ -58,6 +59,9 @@ lib/
 
 ### Repository Pattern
 - Abstracts data sources behind interfaces
+- Uses clear naming convention (no "I" prefix for interfaces, "Impl" suffix for implementations)
+- Repository interfaces defined in domain layer (e.g., `FeatureRepository`)
+- Repository implementations in infrastructure layer (e.g., `FeatureRepositoryImpl`)
 - Allows for easy swapping of implementations
 - Facilitates testing via mock repositories
 
@@ -80,6 +84,13 @@ lib/
 - Used in the infrastructure layer to adapt external data to domain models
 - Isolates data transformation logic
 
+### Service Abstraction
+- Core services defined as interfaces to decouple from specific implementations
+- Services reside in `core/services` directory
+- Enables swapping implementations without affecting consumers
+- Examples include `LocalStorageService` for abstracting persistence operations
+- Follows Dependency Inversion principle from SOLID
+
 ## Specific Implementation Patterns
 
 ### Navigation
@@ -98,8 +109,11 @@ lib/
 - User-friendly error messages via UI
 
 ### Persistence
-- Local storage with `shared_preferences` for simple data
+- Storage abstracted through `LocalStorageService` interface
+- Primary implementation via `SharedPreferencesStorageService` for simple data
 - More complex data structures may use SQLite or Hive
+- All storage operations follow the interface contract
+- Features depend on the abstraction, not concrete implementations
 
 ### Networking
 - HTTP requests via `dio` and `chopper`

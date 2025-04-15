@@ -1,5 +1,5 @@
 /// Interface defining operations related to Onboarding
-abstract class IOnboardingRepository {
+abstract class OnboardingRepository {
   /// Checks if the user has seen the onboarding
   ///
   /// Returns true if seen, false if not seen

@@ -17,6 +17,7 @@ lib/
 │   ├── router/                  # Navigation (auto_route)
 │   ├── env/                     # Environment configuration
 │   ├── asset/                   # Asset management
+│   ├── services/                # Service abstractions and implementations
 │   ├── styles/                  # UI styles definitions
 │   │   ├── colors/             # Color definitions and extensions
 │   │   └── app_text_styles.dart # Text style definitions
@@ -48,10 +49,10 @@ The onboarding feature provides new users with an introduction to the app's key 
 
 - **Domain Layer**: Defines the core business logic and entities
   - Models: `OnboardingInfo` representing each onboarding slide
-  - Repository interfaces: `IOnboardingRepository` for persistence
+  - Repository interfaces: `OnboardingRepository` for persistence
 
 - **Infrastructure Layer**: Implements data access logic
-  - Repository implementation using SharedPreferences for state persistence
+  - Repository implementation (`OnboardingRepositoryImpl`) using abstractions for storage operations
 
 - **Application Layer**: Manages state and business logic
   - `OnboardingCubit` for state management with slides information
@@ -250,6 +251,8 @@ Text(t.auth.welcome(name: 'David'));
 
 - [ ] Class/file/variable names follow standard conventions: PascalCase, snake_case, camelCase
 - [ ] Each class has a single responsibility (Single Responsibility)
+- [ ] Follow Dependency Inversion by depending on abstractions, not implementations
+- [ ] Use service abstractions in `core/services` to decouple from third-party libraries
 - [ ] Clearly comment important class/function/logic
 - [ ] Do not let classes exceed 300 lines, methods exceed 40 lines
 - [ ] Use `const`, `final` wherever possible to improve performance

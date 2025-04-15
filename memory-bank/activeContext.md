@@ -29,11 +29,22 @@ The project is currently in active development, with a focus on implementing the
    - Defined AppDurations class with standardized durations (veryShort, short, medium, long, extraLong, oneSecond)
    - Refactored hardcoded duration values in onboarding feature to use AppDurations
    - Improved maintainability by centralizing animation timing constants
+10. Updated repository naming conventions:
+    - Removed "I" prefix from repository interfaces (e.g., changed `IFeatureRepository` to `FeatureRepository`)
+    - Added "Impl" suffix to repository implementations (e.g., changed `FeatureRepository` to `FeatureRepositoryImpl`)
+    - Updated all references throughout the codebase to reflect new naming convention
+    - Regenerated dependency injection code to maintain functionality
+11. Implemented abstraction for local storage:
+    - Created `LocalStorageService` interface in core/services to abstract storage operations
+    - Implemented `SharedPreferencesStorageService` as a concrete implementation
+    - Updated `OnboardingRepositoryImpl` to depend on the abstraction instead of directly on SharedPreferences
+    - Improved compliance with SOLID principles (Dependency Inversion)
+    - Enhanced testability by making it easier to mock storage dependencies
 
 ## Current Tasks
 1. Complete the onboarding feature implementation
    - Finalize UI design and animations
-   - Implement persistence of onboarding status
+   - ✅ Implement persistence of onboarding status
    - Add comprehensive unit and widget tests
    
 2. Prepare for the next feature implementation (Order Entry)
@@ -44,6 +55,7 @@ The project is currently in active development, with a focus on implementing the
 3. Improve development infrastructure
    - Enhance CI/CD pipeline
    - Add linting rules and code quality checks
+   - ✅ Apply SOLID principles through abstractions
    - Set up automated testing
 
 ## Active Decisions and Considerations
