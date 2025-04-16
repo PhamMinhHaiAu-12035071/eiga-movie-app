@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart' show Gap;
 import 'package:ksk_app/core/di/injection.dart';
 import 'package:ksk_app/core/durations/app_durations.dart';
+import 'package:ksk_app/core/router/app_router.gr.dart' show LoginRoute;
 import 'package:ksk_app/core/sizes/app_dimension.dart' show AppDimension;
 import 'package:ksk_app/core/styles/app_text_styles.dart';
 import 'package:ksk_app/core/styles/colors/app_colors.dart';
@@ -130,7 +131,9 @@ class _OnboardingPageState extends State<OnboardingPage> {
     final cubit = context.read<OnboardingCubit>();
     await cubit.completeOnboarding();
 
-    // Navigate to main screen (will be implemented later)
-    // context.router.replace(const HomeRoute());
+    // Navigate to login screen
+    if (context.mounted) {
+      await context.router.replace(const LoginRoute());
+    }
   }
 }

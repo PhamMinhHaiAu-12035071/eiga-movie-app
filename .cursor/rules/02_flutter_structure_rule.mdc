@@ -3,6 +3,11 @@ description:
 globs: 
 alwaysApply: false
 ---
+---
+description: 
+globs: 
+alwaysApply: false
+---
 # 📌 CursorRule: Flutter Project Structure & Coding Standards (Ultimate Guide - EN)
 
 > 🧠 This is a technical guideline for **Cursor AI** and all Flutter developers to ensure the source code adheres to standard architecture, is readable, maintainable, extensible, and supports automation through AI. It includes Clean Architecture, Clean Code, Design Patterns, Commenting Rule, Naming, Formatting, Testing, and more than 15 professional software development principles.
@@ -26,7 +31,13 @@ lib/
 ├── core/                         # System configuration
 │   ├── di/                      # Dependency Injection (GetIt, Injectable)
 │   ├── router/                  # Navigation (auto_route)
-│   └── env/                     # Environment configuration
+│   ├── env/                     # Environment configuration
+│   ├── asset/                   # Asset management
+│   ├── services/                # Service abstractions and implementations
+│   ├── styles/                  # UI styles definitions (colors, text styles)
+│   ├── sizes/                   # Size and dimension constants
+│   ├── durations/              # Duration constants for animations
+│   └── themes/                  # Theme management
 ├── features/                    # Feature module separation
 │   └── [feature_name]/
 │       ├── domain/              # Business logic and rules
@@ -167,6 +178,7 @@ class UserListPage extends StatelessWidget {
 | Principle           | Goals & Notes |
 |---------------------|---------------|
 | **SOLID**           | 5 core OOP principles – scalable architecture |
+| **Dependency Inversion** | Depend on abstractions not implementations; use service interfaces |
 | **DRY**             | Avoid code duplication – use common helpers/widgets |
 | **KISS**            | Keep code as simple as possible |
 | **YAGNI**           | Only build what is needed |
@@ -193,6 +205,7 @@ class UserListPage extends StatelessWidget {
 | **Strategy** | Change themes, change strategy handlers |
 | **Observer** | Bloc/Cubit → UI updates |
 | **Repository** | Separate interface/data implementation |
+| **Service Abstraction** | Decouple from external dependencies with interfaces |
 
 ---
 
@@ -255,17 +268,17 @@ class UserListPage extends StatelessWidget {
 
 ## 📚 References
 
-- [Clean Architecture – Uncle Bob](mdc:https:/8thlight.com/blog/uncle-bob/2012/08/13/the-clean-architecture.html)
-- [Effective Dart](mdc:https:/dart.dev/guides/language/effective-dart)
-- [Bloc Pattern](mdc:https:/bloclibrary.dev/#)
-- [GRASP Patterns](mdc:https:/en.wikipedia.org/wiki/GRASP_(object-oriented_design))
-- [Very Good Ventures Blog](mdc:https:/verygood.ventures/blog)
-- [slang – Dart i18n made easy](mdc:https:/pub.dev/packages/slang)
-- [Flutter Hooks Documentation](mdc:https:/pub.dev/packages/flutter_hooks)
-- [Logger Package](mdc:https:/pub.dev/packages/logger)
-- [Collection & Meta Packages](mdc:https:/dart.dev/guides/libraries/useful-libraries)
-- [After Layout Documentation](mdc:https:/pub.dev/packages/after_layout)
-- [Envied - Secure Environment Variables](mdc:https:/pub.dev/packages/envied)
+- [Clean Architecture – Uncle Bob](https://8thlight.com/blog/uncle-bob/2012/08/13/the-clean-architecture.html)
+- [Effective Dart](https://dart.dev/guides/language/effective-dart)
+- [Bloc Pattern](https://bloclibrary.dev/#/)
+- [GRASP Patterns](https://en.wikipedia.org/wiki/GRASP_(object-oriented_design))
+- [Very Good Ventures Blog](https://verygood.ventures/blog)
+- [slang – Dart i18n made easy](https://pub.dev/packages/slang)
+- [Flutter Hooks Documentation](https://pub.dev/packages/flutter_hooks)
+- [Logger Package](https://pub.dev/packages/logger)
+- [Collection & Meta Packages](https://dart.dev/guides/libraries/useful-libraries)
+- [After Layout Documentation](https://pub.dev/packages/after_layout)
+- [Envied - Secure Environment Variables](https://pub.dev/packages/envied)
 
 ---
 
@@ -350,10 +363,10 @@ lib/features/onboarding/
 │   ├── models/
 │   │   └── onboarding_info.dart       # Data model for onboarding slides
 │   └── repositories/
-│       └── i_onboarding_repository.dart # Repository interface
+│       └── onboarding_repository.dart # Repository interface
 ├── infrastructure/
 │   └── repositories/
-│       └── onboarding_repository.dart  # Repository implementation
+│       └── onboarding_repository_impl.dart  # Repository implementation
 ├── application/
 │   └── cubit/
 │       ├── onboarding_cubit.dart      # State management
@@ -400,6 +413,21 @@ lib/features/onboarding/
 - Error handling for asset loading
 - Responsive design using ScreenUtil
 - Clean separation between data, logic, and UI
+
+### Service Layer
+- Place service abstractions in `core/services` directory
+- Define interfaces for external dependencies (e.g., `LocalStorageService`)
+- Implement concrete services that fulfill these interfaces
+- Inject services via DI instead of direct dependencies
+- Follow naming convention: Interface (`ServiceName`), Implementation (`ServiceNameImpl`)
+- Benefits: testability, swappable implementations, adherence to SOLID
+
+### Persistence
+- Storage abstracted through `LocalStorageService` interface
+- Primary implementation via `SharedPreferencesStorageService` for simple data
+- More complex data structures may use SQLite or Hive
+- All storage operations follow the interface contract
+- Features depend on the abstraction, not concrete implementations
 
 ---
 
