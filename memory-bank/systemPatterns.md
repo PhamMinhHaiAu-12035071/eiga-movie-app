@@ -445,70 +445,162 @@ class MockBuilder {
 
 ## Testing Patterns
 
-### Widget Testing
-1. Test File Structure
-   ```dart
-   void main() {
-     late MockDependency mockDep;
-     
-     setUp(() {
-       // Initialize mocks
-       // Setup mock behavior
-       // Register with GetIt
-     });
-     
-     tearDown(() {
-       GetIt.I.reset();
-     });
-     
-     Widget buildTestWidget({required parameters}) {
-       return MaterialApp(
-         home: Scaffold(
-           body: WidgetUnderTest(
-             parameters: parameters,
-           ),
-         ),
-       );
-     }
-     
-     group('WidgetName', () {
-       // Test cases
-     });
-   }
-   ```
+### Widget Testing Best Practices
 
-2. Test Categories
-   - Basic Functionality
-   - Edge Cases
-   - Style Properties
-   - Layout Properties
-   - Dependency Injection
+1. **Mock Dependencies**
+   - Use Mocktail for mocking dependencies
+   - Create mock classes with specific implementations for required methods
+   - Register mocks with GetIt for dependency injection
 
-3. Mock Setup
-   - Use mocktail for mocking
-   - Proper type matching (e.g., MaterialColor for theme colors)
-   - Register mocks with GetIt
-   - Clean up in tearDown
+```dart
+class MockAppColors extends Mock implements AppColors {
+  @override
+  MaterialColor get white => const MaterialColor(
+    0xFFFFFFFF,
+    <int, Color>{
+      50: Color(0xFFFFFFFF),
+      // ... other shades
+    },
+  );
+}
+```
 
-4. Test Case Organization
-   - Descriptive test names
-   - Clear arrange-act-assert structure
-   - Comprehensive assertions
-   - Edge case coverage
+2. **Test Setup**
+   - Use `setUp` for common test initialization
+   - Register mocks in setUp
+   - Use `tearDown` to clean up GetIt registry
+   - Create helper methods for building test widgets
 
-### Dependency Injection
-1. GetIt Pattern
-   ```dart
-   // Registration
-   GetIt.I.registerSingleton<Interface>(MockImplementation());
-   
-   // Cleanup
-   tearDown(() {
-     GetIt.I.reset();
-   });
-   ```
+```dart
+setUp(() {
+  mockDependency = MockDependency();
+  GetIt.I.registerSingleton<Dependency>(mockDependency);
+});
 
-2. Mock Dependencies
-   - Create mock classes with mocktail
-   - Setup behavior in setUp
-   - Verify interactions when needed
+tearDown(() {
+  GetIt.I.reset();
+});
+```
+
+3. **Widget Building**
+   - Wrap test widgets in MaterialApp for proper context
+   - Use helper functions for consistent widget building
+   - Include all necessary providers/dependencies
+
+```dart
+Widget buildTestWidget({
+  required VoidCallback onPressed,
+  required String text,
+  bool someFlag = false,
+}) {
+  return MaterialApp(
+    home: Scaffold(
+      body: YourWidget(
+        onPressed: onPressed,
+        text: text,
+        someFlag: someFlag,
+      ),
+    ),
+  );
+}
+```
+
+4. **Finding Widgets**
+   - Use specific finders to avoid ambiguity
+   - For nested widgets, use `find.descendant()`
+   - When multiple instances exist, use first/last/at as appropriate
+   - Always verify widget existence before testing properties
+
+```dart
+final specificWidget = find.descendant(
+  of: find.byType(ParentWidget),
+  matching: find.byType(ChildWidget),
+).first;
+```
+
+5. **Testing Styles and Decorations**
+   - Use null-safe assertions for nullable properties
+   - Cast decorations explicitly when needed
+   - Test gradient colors and other visual properties thoroughly
+   - Verify all style properties including colors, sizes, and fonts
+
+```dart
+final decoration = container.decoration! as BoxDecoration;
+expect(decoration.gradient, isNotNull);
+expect(
+  (decoration.gradient! as LinearGradient).colors,
+  [expectedColor1, expectedColor2],
+);
+```
+
+6. **Testing Callbacks**
+   - Use variables to track callback execution
+   - Prefer `var` over explicit `bool` for callback flags
+   - Test both positive and negative cases
+
+```dart
+var callbackExecuted = false;
+await tester.tap(find.byType(ButtonWidget));
+expect(callbackExecuted, isTrue);
+```
+
+7. **Code Style in Tests**
+   - Follow consistent formatting
+   - Add trailing commas for better git diffs
+   - Use descriptive test names
+   - Group related tests together
+
+### Test Coverage Requirements
+
+1. **Widget Tests**
+   - Must cover all constructor parameters
+   - Must test all callback functions
+   - Must verify all visual properties
+   - Must test edge cases and conditional rendering
+   - Target 100% code coverage
+
+2. **Integration Tests**
+   - Must cover main user flows
+   - Must test widget interactions
+   - Must verify state management
+   - Must test navigation flows
+
+3. **Unit Tests**
+   - Must cover all business logic
+   - Must test all edge cases
+   - Must verify error handling
+   - Must test async operations
+
+## Error Handling Patterns
+
+1. **Null Safety**
+   - Use null assertion operator (!) only when certain about non-null values
+   - Provide meaningful error messages for null checks
+   - Handle null cases gracefully in UI
+
+2. **Exception Handling**
+   - Catch specific exceptions rather than using catch-all
+   - Provide user-friendly error messages
+   - Log errors appropriately for debugging
+
+3. **State Management**
+   - Handle loading, success, and error states
+   - Provide feedback for user actions
+   - Maintain consistent state across widget tree
+
+## Code Organization
+
+1. **Feature Structure**
+   - Organize by feature first, then by layer
+   - Keep related files close together
+   - Use index files for cleaner imports
+
+2. **Test Structure**
+   - Mirror source code directory structure
+   - Group tests logically
+   - Keep test files focused and manageable
+
+3. **Dependency Management**
+   - Use GetIt for dependency injection
+   - Register dependencies at app startup
+   - Use proper scoping for dependencies
