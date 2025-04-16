@@ -42,7 +42,16 @@
     - ✅ "Book movie tickets anytime, anywhere with just a few taps"
   - 🚧 Adding animations and transitions (In Progress)
   - ✅ Implemented persistence of onboarding status with SharedPreferences
-  - ❌ Writing tests for the feature
+  - 🚧 Writing tests for the feature
+    - ✅ OnboardingDotIndicator widget tests (100% coverage)
+      - ✅ Basic functionality tests
+      - ✅ Edge case handling
+      - ✅ Style and layout verification
+    - ❌ OnboardingHeader widget tests
+    - ❌ OnboardingNextButton widget tests
+    - ❌ OnboardingPageView widget tests
+    - ❌ OnboardingCubit tests
+    - ❌ OnboardingRepository tests
 
 - 🚧 Login Feature (In Progress)
   - ✅ Created feature directory structure following Clean Architecture

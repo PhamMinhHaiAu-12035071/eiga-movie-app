@@ -442,3 +442,73 @@ class MockBuilder {
    - Track memory usage
    - Monitor frame drops
    - Test with large datasets
+
+## Testing Patterns
+
+### Widget Testing
+1. Test File Structure
+   ```dart
+   void main() {
+     late MockDependency mockDep;
+     
+     setUp(() {
+       // Initialize mocks
+       // Setup mock behavior
+       // Register with GetIt
+     });
+     
+     tearDown(() {
+       GetIt.I.reset();
+     });
+     
+     Widget buildTestWidget({required parameters}) {
+       return MaterialApp(
+         home: Scaffold(
+           body: WidgetUnderTest(
+             parameters: parameters,
+           ),
+         ),
+       );
+     }
+     
+     group('WidgetName', () {
+       // Test cases
+     });
+   }
+   ```
+
+2. Test Categories
+   - Basic Functionality
+   - Edge Cases
+   - Style Properties
+   - Layout Properties
+   - Dependency Injection
+
+3. Mock Setup
+   - Use mocktail for mocking
+   - Proper type matching (e.g., MaterialColor for theme colors)
+   - Register mocks with GetIt
+   - Clean up in tearDown
+
+4. Test Case Organization
+   - Descriptive test names
+   - Clear arrange-act-assert structure
+   - Comprehensive assertions
+   - Edge case coverage
+
+### Dependency Injection
+1. GetIt Pattern
+   ```dart
+   // Registration
+   GetIt.I.registerSingleton<Interface>(MockImplementation());
+   
+   // Cleanup
+   tearDown(() {
+     GetIt.I.reset();
+   });
+   ```
+
+2. Mock Dependencies
+   - Create mock classes with mocktail
+   - Setup behavior in setUp
+   - Verify interactions when needed
