@@ -272,20 +272,20 @@ class UserListPage extends StatelessWidget {
 
 ## 📖 References
 
-- [Clean Architecture – Uncle Bob](https://8thlight.com/blog/uncle-bob/2012/08/13/the-clean-architecture.html)
-- [Effective Dart](https://dart.dev/guides/language/effective-dart)
-- [Bloc Pattern](https://bloclibrary.dev/#/)
-- [GRASP Patterns](https://en.wikipedia.org/wiki/GRASP_(object-oriented_design))
-- [Very Good Ventures Blog](https://verygood.ventures/blog)
-- [slang – Dart i18n made easy](https://pub.dev/packages/slang)
-- [Flutter Hooks Documentation](https://pub.dev/packages/flutter_hooks)
-- [Logger Package](https://pub.dev/packages/logger)
-- [Collection & Meta Packages](https://dart.dev/guides/libraries/useful-libraries)
-- [After Layout Documentation](https://pub.dev/packages/after_layout)
-- [Envied - Secure Environment Variables](https://pub.dev/packages/envied)
-- [Showcaseview - Feature Highlighting](https://pub.dev/packages/showcaseview)
-- [fpdart - Functional Programming in Dart](https://pub.dev/packages/fpdart)
-- [Google Fonts for Flutter](https://pub.dev/packages/google_fonts)
+- [Clean Architecture – Uncle Bob](mdc:https:/8thlight.com/blog/uncle-bob/2012/08/13/the-clean-architecture.html)
+- [Effective Dart](mdc:https:/dart.dev/guides/language/effective-dart)
+- [Bloc Pattern](mdc:https:/bloclibrary.dev/#)
+- [GRASP Patterns](mdc:https:/en.wikipedia.org/wiki/GRASP_(object-oriented_design))
+- [Very Good Ventures Blog](mdc:https:/verygood.ventures/blog)
+- [slang – Dart i18n made easy](mdc:https:/pub.dev/packages/slang)
+- [Flutter Hooks Documentation](mdc:https:/pub.dev/packages/flutter_hooks)
+- [Logger Package](mdc:https:/pub.dev/packages/logger)
+- [Collection & Meta Packages](mdc:https:/dart.dev/guides/libraries/useful-libraries)
+- [After Layout Documentation](mdc:https:/pub.dev/packages/after_layout)
+- [Envied - Secure Environment Variables](mdc:https:/pub.dev/packages/envied)
+- [Showcaseview - Feature Highlighting](mdc:https:/pub.dev/packages/showcaseview)
+- [fpdart - Functional Programming in Dart](mdc:https:/pub.dev/packages/fpdart)
+- [Google Fonts for Flutter](mdc:https:/pub.dev/packages/google_fonts)
 
 ---
 

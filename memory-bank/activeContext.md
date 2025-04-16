@@ -1,7 +1,7 @@
 # Active Context
 
 ## Current Focus
-The project is currently in active development, with a focus on implementing the core features and establishing the architectural foundation. The primary focus is on the onboarding feature and the newly added login feature, which represent the first user interactions with the application. Currently, we are refining the UI components of the onboarding screens to match the Figma design and improve code maintainability, while also implementing a simple login screen that appears after the onboarding flow. We're also enhancing the design system by implementing a robust color management approach for better consistency across the application.
+The project is currently in active development, with a focus on implementing the core features and establishing the architectural foundation for the EIGA movie app. The primary focus is on the onboarding feature and the newly added login feature, which represent the first user interactions with the application. Currently, we are refining the UI components of the onboarding screens to match the Figma design and improve code maintainability, while also implementing a simple login screen that appears after the onboarding flow. We're also enhancing the design system by implementing a robust color management approach for better consistency across the application.
 
 ## Recent Changes
 1. Set up the project structure following Clean Architecture principles
@@ -15,6 +15,11 @@ The project is currently in active development, with a focus on implementing the
    - Improved color scheme for dot indicators and skip button
    - Enhanced layout with proper spacing and positioning
    - Applied UI improvements based on Figma design
+   - Added movie-themed content and messaging
+     - "EIGA" branding in header
+     - "Choose movies, watch trailers, take tickets" messaging
+     - "Find Your Favorite Movies" feature highlight
+     - "Book movie tickets anytime, anywhere" feature highlight
 7. Improved the color system:
    - Refactored AppColors to use MaterialColor for better shade variations
    - Standardized color usage across the application
@@ -47,6 +52,7 @@ The project is currently in active development, with a focus on implementing the
     - Created LoginCubit for handling login screen state
     - Developed LoginPage with proper styling and responsiveness
     - Built LoginView to display welcome message following design guidelines
+    - Added "Welcome to EIGA!" and "Your movie journey begins here" messaging
     - Added detailed feature documentation in README.md
 13. Created storage feature:
     - Implemented a dedicated storage feature with domain, infrastructure layers
@@ -67,12 +73,18 @@ The project is currently in active development, with a focus on implementing the
     - Ensured all tests pass with the new structure
     - Improved test organization by consolidating helper classes into appropriate test files
     - Regenerated dependency injection code to maintain functionality
+    - Updated environment configuration for movie app API endpoints (eigamovie.com)
 16. Fixed dependency injection test failure:
     - Fixed incorrect test for unregistered dependency resolution in `test/core/di/injection_test.dart`
     - The original test was trying to test that GetIt directly would throw when requesting an unregistered dependency
     - Corrected to properly use a function expression to check that trying to resolve an unregistered dependency throws
     - Updated test to use `expect(() => getIt<UnregisteredDependency>(), throwsA(anything))` pattern
     - Ensures that the test now accurately verifies that GetIt properly throws when trying to resolve unregistered dependencies
+17. Rebranded the application from a generic order data input app to the EIGA Movie App:
+    - Updated app name and branding throughout the codebase
+    - Refocused application purpose on cinema ticket booking experience
+    - Modified onboarding content to highlight movie-related features
+    - Adjusted login screen to reflect the movie app experience
 
 ## Current Tasks
 1. Complete the onboarding feature implementation
@@ -98,10 +110,11 @@ The project is currently in active development, with a focus on implementing the
    - ✅ Reorganize and enhance tests
    - ✅ Ensure all tests pass with the new structure
 
-5. Prepare for the next feature implementation (Order Entry)
-   - Define domain models and repository interfaces
-   - Design UI components and user flow
-   - Plan API integration
+5. Prepare for the movie listing feature implementation
+   - Define domain models for movies and related entities
+   - Design repository interfaces for movie data access
+   - Plan UI components for movie browsing and details view
+   - Design API integration for fetching movie data
 
 6. Improve development infrastructure
    - Enhance CI/CD pipeline
@@ -129,6 +142,8 @@ The project is currently in active development, with a focus on implementing the
 
 3. **Code Generation**: Heavily relying on code generation for immutable models, JSON serialization, routing, and dependency injection, which impacts the development workflow.
 
+4. **API Integration**: Need to design robust movie data fetching and caching strategies for optimal performance.
+
 ### Design Considerations
 1. **Responsive Design**: Ensuring the UI works well on various device sizes using flutter_screenutil.
 
@@ -136,15 +151,19 @@ The project is currently in active development, with a focus on implementing the
 
 3. **Localization**: Implementing localization support from the beginning to avoid refactoring later.
 
+4. **Movie-Specific UI Patterns**: Implementing effective movie browsing, filtering, and ticket booking UI patterns that follow industry standards while maintaining uniqueness.
+
 ## Next Steps
 1. Complete the onboarding feature
 2. Expand the login feature with full authentication
-3. Begin implementation of the order entry feature
-4. Set up comprehensive testing infrastructure
-5. Enhance the CI/CD pipeline for automated testing and deployment
+3. Begin implementation of the movie listing feature
+4. Plan and design the ticket booking feature
+5. Set up comprehensive testing infrastructure
+6. Enhance the CI/CD pipeline for automated testing and deployment
 
 ## Blockers and Challenges
-1. Need to finalize API specifications for authentication and order data
-2. Determining the best approach for handling offline capabilities
+1. Need to finalize API specifications for movie data and authentication
+2. Determining the best approach for handling offline movie browsing
 3. Ensuring consistent design across different platforms
-4. Optimizing performance for devices with limited resources 
+4. Optimizing performance for devices with limited resources
+5. Implementing an efficient and intuitive seat selection interface for the ticket booking feature 

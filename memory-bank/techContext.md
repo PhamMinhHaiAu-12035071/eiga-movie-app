@@ -172,6 +172,7 @@ fvm flutter test test/features/env/
    - Minimize app startup time (<2s)
    - Smooth animations (60fps)
    - Efficient memory usage
+   - Fast movie list scrolling with image caching
 
 2. **Compatibility**:
    - Android API level 21+ (Android 5.0+)
@@ -182,12 +183,14 @@ fvm flutter test test/features/env/
    - Must work with intermittent connectivity
    - Graceful handling of API failures
    - Data synchronization when connectivity is restored
+   - Movie poster and trailer caching for offline viewing
 
 4. **Security**:
    - Secure storage of sensitive information
    - API authentication
    - Input validation
    - Environment variable obfuscation
+   - Secure payment information handling
 
 5. **Accessibility**:
    - Support for screen readers
@@ -228,6 +231,7 @@ The project uses a standardized approach to tracking and generating code coverag
    - Uses envied for secure access to environment variables
    - Clean Architecture with domain and infrastructure layers
    - Comprehensive test coverage
+   - Configured for movie app API endpoints (eigamovie.com)
 
 2. **Storage Feature** (100% Complete):
    - Provides abstraction for local storage operations
@@ -236,12 +240,29 @@ The project uses a standardized approach to tracking and generating code coverag
    - Comprehensive test coverage
 
 3. **Onboarding Feature** (92% Complete):
-   - Handles user onboarding flow
+   - Handles user onboarding flow with movie-themed content
+   - "Choose movies, watch trailers, take tickets" messaging
+   - "Find Your Favorite Movies" feature highlight
+   - "Book movie tickets anytime, anywhere" feature highlight
    - Persists onboarding status
    - UI components based on design specifications
    - Tests in progress
 
 4. **Login Feature** (35% Complete):
-   - Basic welcome screen implemented
+   - Basic welcome screen implemented with EIGA branding
+   - "Welcome to EIGA!" welcome message
+   - "Your movie journey begins here" subtitle
    - State management setup
    - Authentication logic in planning
+
+5. **Movie Listing Feature** (0% Complete):
+   - Planning phase - not yet implemented
+   - Will display popular and upcoming movies
+   - Will include search and filtering functionality
+   - Domain models and repositories in design
+
+6. **Ticket Booking Feature** (0% Complete):
+   - Planning phase - not yet implemented
+   - Will include seat selection interface
+   - Will handle theater, date, and time selection
+   - Domain models in early design
