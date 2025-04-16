@@ -15,7 +15,6 @@ lib/
 ├── core/                         # Common system configurations
 │   ├── di/                      # Dependency Injection (GetIt, Injectable)
 │   ├── router/                  # Navigation (auto_route)
-│   ├── env/                     # Environment configuration
 │   ├── asset/                   # Asset management
 │   ├── services/                # Service abstractions and implementations
 │   ├── styles/                  # UI styles definitions
@@ -27,8 +26,15 @@ lib/
 │       ├── extensions/         # Theme extensions for assets, colors, etc.
 │       └── app_theme.dart      # Main theme configuration
 ├── features/                    # Separate functionalities (feature-first)
+│   ├── env/                    # Environment configuration feature
+│   │   ├── domain/            # Environment repository interface
+│   │   ├── infrastructure/    # Environment repository implementation 
+│   │   └── env_development.dart # Environment variables and configuration
 │   └── [feature_name]/          
-│       └── presentation/        # UI Widgets, Pages, Route bindings
+│       ├── domain/             # Business entities and repository interfaces
+│       ├── application/        # State management, use cases
+│       ├── infrastructure/     # Repository implementations
+│       └── presentation/       # UI Widgets, Pages, Route bindings
 ├── shared/                      # Shared components
 │   └── widgets/                 # Reusable widgets
 ├── generated/                   # Generated code (assets, translations)
@@ -154,22 +160,25 @@ fvm flutter run --flavor production --target lib/main_production.dart
 
 ## 🔐 Environment Configuration
 
-The project uses `envied` for secure environment variable handling. Environment variables are stored in `.env` files and accessed through generated Dart code.
+The project uses `envied` for secure environment variable handling. Environment variables are stored in `.env` files and accessed through generated Dart code following Clean Architecture principles.
 
 ### 📁 Environment Files Structure
 
 ```
-lib/assets/env/
-├── .env.dev     # Development environment variables
-├── .env.stg     # Staging environment variables
-└── .env.prod    # Production environment variables
+lib/features/env/
+├── domain/                 # Environment repository interface
+│   └── env_config_repository.dart
+├── infrastructure/         # Environment repository implementation
+│   └── env_config_repository_impl.dart
+├── .env.dev                # Development environment variables 
+└── env_development.dart    # Generated environment code for development
 ```
 
 ### 🛠️ Environment Setup
 
 1. Create environment class:
 ```dart
-@Envied(path: 'lib/assets/env/.env.dev', obfuscate: true)
+@Envied(path: 'lib/features/env/.env.dev', obfuscate: true)
 abstract class EnvDev {
   @EnviedField(varName: 'API_URL')
   static String apiUrl = _EnvDev.apiUrl;

@@ -1,17 +1,16 @@
 import 'package:envied/envied.dart';
-import 'package:ksk_app/core/env/domain/env_config_repository.dart'
-    show EnvConfigRepository;
+import 'package:ksk_app/features/env/domain/env_config_repository.dart';
 
 part 'env_development.g.dart';
 
 /// Environment configuration for development environment.
 /// This class serves as an interface to access environment variables
-/// securely using the envied package with obfuscation enabled.ss
+/// securely using the envied package with obfuscation enabled.
 ///
 /// The implementation uses the `.env.dev` file for development-specific
 /// configuration values. Never access these values directly in features.
 /// Instead, inject the [EnvConfigRepository] through DI.
-@Envied(path: 'lib/core/env/.env.dev', obfuscate: true)
+@Envied(path: 'lib/features/env/.env.dev', obfuscate: true)
 abstract class EnvDev {
   /// Base API URL for backend communication.
   /// This is the primary endpoint for all API requests.

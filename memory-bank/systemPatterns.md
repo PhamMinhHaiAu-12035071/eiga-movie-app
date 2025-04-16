@@ -36,15 +36,18 @@ lib/
 ├── core/                       # Common system configurations
 │   ├── di/                     # Dependency Injection
 │   ├── router/                 # Navigation
-│   ├── env/                    # Environment configuration
 │   ├── asset/                  # Asset management
 │   ├── services/               # Service abstractions and implementations
 │   ├── styles/                 # UI styles definitions (colors, text styles)
 │   ├── sizes/                  # Size and dimension constants
-│   ├── durations/             # Duration constants for animations and transitions
+│   ├── durations/              # Duration constants for animations and transitions
 │   └── themes/                 # Theme management
 ├── features/                   # Feature modules
-│   └── [feature_name]/         
+│   ├── env/                    # Environment configuration
+│   │   ├── domain/             # Environment repository interface
+│   │   ├── infrastructure/     # Environment repository implementation
+│   │   └── env_development.dart # Environment variables and configuration
+│   └── [other_feature_name]/   
 │       ├── domain/             # Entities, repository interfaces
 │       ├── application/        # State management, use cases
 │       ├── infrastructure/     # Repository implementations
@@ -72,6 +75,19 @@ lib/features/login/
 │   └── widgets/
 │       └── login_view.dart     # Main UI component
 └── README.md                   # Feature documentation
+```
+
+### Environment Feature Structure
+The environment feature provides configuration based on the running environment:
+
+```
+lib/features/env/
+├── domain/
+│   └── env_config_repository.dart   # Repository interface
+├── infrastructure/
+│   └── env_config_repository_impl.dart  # Repository implementation
+├── env_development.dart         # Development environment configuration
+└── .env.dev                     # Environment variables file
 ```
 
 ## Key Design Patterns
@@ -220,14 +236,16 @@ The project is organized around features rather than layers, which keeps related
 ```
 lib/
 ├── core/                  # Core utilities and shared functionality
-│   ├── env/              # Environment configuration
 │   ├── theme/            # Application theming
 │   ├── router/           # Navigation routing
 │   ├── di/               # Dependency injection setup
 │   ├── styles/           # Shared style definitions
-│   └── sizes/            # Standardized sizing constants
+│   ├── sizes/            # Standardized sizing constants
 │   └── durations/        # Animation duration constants
 ├── features/             # Application features
+│   ├── env/              # Environment configuration feature
+│   │   ├── domain/       # Environment repository interface
+│   │   └── infrastructure/ # Environment repository implementation
 │   ├── onboarding/       # Onboarding feature
 │   │   ├── domain/       # Domain layer for onboarding
 │   │   ├── application/  # Application layer for onboarding
@@ -243,6 +261,27 @@ lib/
 │       └── infrastructure/ # Infrastructure layer for storage
 └── main.dart             # Application entry point
 ```
+
+### Environment Feature Architecture
+
+The Environment feature provides environment-specific configuration and constants using the envied package. It follows Clean Architecture principles:
+
+1. **Domain Layer**:
+   - `EnvConfigRepository` interface: Defines contract for accessing environment values
+   - Provides getters for common configuration values (apiUrl, appName, environmentName)
+
+2. **Infrastructure Layer**:
+   - `EnvConfigRepositoryImpl`: Implements repository interface by accessing EnvDev
+   - Registered as a lazySingleton in the dependency injection container
+   
+3. **Configuration**:
+   - `EnvDev` class: Uses the envied package to securely access and obfuscate environment variables
+   - `.env.dev` file: Stores actual environment variables (not committed to version control)
+
+4. **Testing**:
+   - Comprehensive tests for both domain and infrastructure layers
+   - Mock implementations for testing different scenarios
+   - Test helpers for validating environment values
 
 ### Storage Feature Architecture
 

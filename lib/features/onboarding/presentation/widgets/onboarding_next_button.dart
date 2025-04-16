@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:ksk_app/core/sizes/app_border_radius.dart' show AppBorderRadius;
-import 'package:ksk_app/core/sizes/app_dimension.dart' show AppDimension;
+import 'package:get_it/get_it.dart';
+import 'package:ksk_app/core/sizes/app_sizes.dart';
 import 'package:ksk_app/core/styles/app_text_styles.dart';
 import 'package:ksk_app/core/styles/colors/app_colors.dart';
 
@@ -23,13 +23,16 @@ class OnboardingNextButton extends StatelessWidget {
   /// Whether this is the last page button
   final bool isLastPage;
 
+  /// Access app sizes
+  AppSizes get _sizes => GetIt.I<AppSizes>();
+
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: AppDimension.h40),
+      padding: EdgeInsets.symmetric(horizontal: _sizes.h40),
       child: Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(AppBorderRadius.md),
+          borderRadius: BorderRadius.circular(_sizes.borderRadiusMd),
           gradient: const LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
@@ -45,9 +48,9 @@ class OnboardingNextButton extends StatelessWidget {
             foregroundColor: AppColors.white,
             backgroundColor: AppColors.transparent,
             shadowColor: AppColors.transparent,
-            minimumSize: Size(double.infinity, AppDimension.v56),
+            minimumSize: Size(double.infinity, _sizes.v56),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(AppBorderRadius.md),
+              borderRadius: BorderRadius.circular(_sizes.borderRadiusMd),
             ),
           ),
           child: Text(

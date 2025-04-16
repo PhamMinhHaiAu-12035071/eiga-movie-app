@@ -23,32 +23,33 @@ alwaysApply: false
 
 ```plaintext
 lib/
-├── core/                         # System configuration
-│   ├── di/                      # Dependency Injection (GetIt, Injectable)
-│   ├── router/                  # Navigation (auto_route)
-│   ├── env/                     # Environment configuration
-│   ├── asset/                   # Asset management
-│   ├── services/                # Service abstractions and implementations
-│   ├── styles/                  # UI styles definitions (colors, text styles)
-│   ├── sizes/                   # Size and dimension constants
-│   ├── durations/              # Duration constants for animations
-│   └── themes/                  # Theme management
-├── features/                    # Feature module separation
-│   └── [feature_name]/
-│       ├── domain/              # Business logic and rules
-│       │   ├── models/          # Business entities/models
-│       │   └── repositories/    # Repository interfaces
-│       ├── infrastructure/      # Implementation of repositories
-│       │   └── repositories/    # Repository implementations
-│       ├── application/         # State management and use cases
-│       │   └── cubit/           # Cubits/BLoCs
-│       └── presentation/        # UI, page, widget, router
-│           └── widgets/         # Reusable UI components
-├── shared/                      # Reusable resources
-│   └── widgets/                 # Shared widgets
-├── generated/                   # Generated code (assets, translations)
-├── app.dart                     # Main application widget
-├── bootstrap.dart               # Application initialization
+├── core/                      # Core framework and utilities
+│   ├── di/                    # Dependency injection setup
+│   ├── error/                 # Error handling
+│   ├── logger/                # Logging functionality
+│   ├── navigator/             # Navigation system
+│   └── theme/                 # Theme configuration
+├── features/                  # Application features
+│   ├── auth/                  # Authentication feature
+│   │   ├── domain/           # Business logic and entities
+│   │   ├── application/      # Use cases and state management
+│   │   ├── infrastructure/   # Repositories and data sources
+│   │   └── presentation/     # UI components
+│   ├── env/                   # Environment configuration
+│   │   ├── domain/           # Environment repository interface
+│   │   ├── infrastructure/   # Environment repository implementation
+│   │   └── env_development.dart # Environment variables and configuration
+│   └── home/                  # Home screen feature
+│       ├── domain/           # Business logic and entities
+│       ├── application/      # Use cases and state management
+│       ├── infrastructure/   # Repositories and data sources
+│       └── presentation/     # UI components
+├── shared/                    # Shared components and utilities
+│   ├── widgets/              # Reusable widgets
+│   ├── extensions/           # Dart extensions
+│   └── utils/                # Utility functions
+├── generated/                 # Generated code (translations, etc.)
+├── main.dart                   # Main entry point
 ├── main_development.dart        # Entry point for development environment
 ├── main_staging.dart            # Entry point for staging environment
 └── main_production.dart         # Entry point for production environment
@@ -263,7 +264,7 @@ class UserListPage extends StatelessWidget {
 - [ ] Variable, class, file names follow naming conventions
 - [ ] No warnings from `flutter analyze`
 - [ ] Clear separation between UI components
-- [ ] Environment configuration is properly set up in `core/env/`
+- [ ] Environment configuration is properly set up in `features/env/`
 - [ ] Assets are properly managed through the generated code in `generated/`
 
 ---
@@ -291,7 +292,7 @@ class UserListPage extends StatelessWidget {
 
 ### 📁 Directory Structure
 ```
-lib/core/env/
+lib/features/env/
 ├── domain/                 # Environment repository interface
 │   └── env_config_repository.dart
 ├── infrastructure/         # Environment repository implementation
@@ -302,7 +303,7 @@ lib/core/env/
 ### 🛡️ Security Guidelines
 
 1. **Environment Files**
-   - Store `.env` files in `lib/assets/env/`
+   - Store `.env` files in `lib/features/env/`
    - Never commit `.env` files to version control
    - Provide `.env.example` templates
 
@@ -326,7 +327,7 @@ abstract class EnvConfigRepository {
 }
 
 // 2. Create environment class
-@Envied(path: 'lib/assets/env/.env.dev', obfuscate: true)
+@Envied(path: 'lib/features/env/.env.dev', obfuscate: true)
 abstract class EnvDev {
   @EnviedField(varName: 'API_URL')
   static String apiUrl = _EnvDev.apiUrl;

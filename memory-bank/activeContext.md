@@ -59,6 +59,14 @@ The project is currently in active development, with a focus on implementing the
     - Simplified Makefile by removing specialized test and coverage commands
     - Updated coverage generation commands for better clarity
     - Streamlined the project command structure
+15. Refactored environment configuration from core module to feature-based architecture:
+    - Moved environment configuration from `core/env` to `features/env` directory
+    - Reorganized according to Clean Architecture principles with domain and infrastructure layers
+    - Consolidated test files to match the implementation structure
+    - Fixed failing dependency injection tests
+    - Ensured all tests pass with the new structure
+    - Improved test organization by consolidating helper classes into appropriate test files
+    - Regenerated dependency injection code to maintain functionality
 
 ## Current Tasks
 1. Complete the onboarding feature implementation
@@ -78,12 +86,18 @@ The project is currently in active development, with a focus on implementing the
    - ✅ Add comprehensive unit tests with 100% coverage
    - ✅ Ensure proper error handling for storage operations
 
-4. Prepare for the next feature implementation (Order Entry)
+4. ✅ Refactor environment configuration to follow feature-based architecture
+   - ✅ Move from core/env to features/env
+   - ✅ Update import paths throughout the codebase
+   - ✅ Reorganize and enhance tests
+   - ✅ Ensure all tests pass with the new structure
+
+5. Prepare for the next feature implementation (Order Entry)
    - Define domain models and repository interfaces
    - Design UI components and user flow
    - Plan API integration
 
-5. Improve development infrastructure
+6. Improve development infrastructure
    - Enhance CI/CD pipeline
    - Add linting rules and code quality checks
    - ✅ Apply SOLID principles through abstractions
@@ -98,6 +112,8 @@ The project is currently in active development, with a focus on implementing the
 2. **State Management**: Using BLoC pattern for state management to ensure unidirectional data flow and predictable state changes.
 
 3. **Dependency Injection**: Using get_it and injectable for dependency injection to facilitate testing and decouple components.
+
+4. **Feature-First Organization**: Moving core functionality like environment configuration to feature-based modules to improve cohesion and maintainability.
 
 ### Technical Considerations
 1. **Performance**: Need to ensure smooth animations and transitions, especially in the onboarding feature.

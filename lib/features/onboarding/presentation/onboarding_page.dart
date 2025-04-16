@@ -5,7 +5,7 @@ import 'package:gap/gap.dart' show Gap;
 import 'package:ksk_app/core/di/injection.dart';
 import 'package:ksk_app/core/durations/app_durations.dart';
 import 'package:ksk_app/core/router/app_router.gr.dart' show LoginRoute;
-import 'package:ksk_app/core/sizes/app_dimension.dart' show AppDimension;
+import 'package:ksk_app/core/sizes/app_sizes.dart';
 import 'package:ksk_app/core/styles/app_text_styles.dart';
 import 'package:ksk_app/core/styles/colors/app_colors.dart';
 import 'package:ksk_app/features/onboarding/application/cubit/onboarding_cubit.dart';
@@ -28,6 +28,9 @@ class OnboardingPage extends StatefulWidget {
 class _OnboardingPageState extends State<OnboardingPage> {
   /// Page controller that manages swiping between pages
   late PageController _pageController;
+
+  /// Access app sizes
+  AppSizes get _sizes => getIt<AppSizes>();
 
   @override
   void initState() {
@@ -53,10 +56,10 @@ class _OnboardingPageState extends State<OnboardingPage> {
                 decoration: const BoxDecoration(
                   color: AppColors.onboardingBackground,
                 ),
-                padding: EdgeInsets.symmetric(horizontal: AppDimension.h24),
+                padding: EdgeInsets.symmetric(horizontal: _sizes.h24),
                 child: Column(
                   children: [
-                    Gap(AppDimension.v48),
+                    Gap(_sizes.v48),
 
                     // Header with logo and app name
                     const OnboardingHeader(),
@@ -75,7 +78,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                       currentIndex: state.currentPage,
                     ),
 
-                    Gap(AppDimension.v40),
+                    Gap(_sizes.v40),
 
                     // Next or Get Started button
                     OnboardingNextButton(
@@ -90,7 +93,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                       },
                     ),
 
-                    Gap(AppDimension.v32),
+                    Gap(_sizes.v32),
 
                     // Skip button
                     TextButton(
@@ -103,7 +106,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                         ),
                       ),
                     ),
-                    Gap(AppDimension.v40),
+                    Gap(_sizes.v40),
                   ],
                 ),
               ),
@@ -119,7 +122,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
     final cubit = context.read<OnboardingCubit>();
 
     _pageController.nextPage(
-      duration: AppDurations.medium,
+      duration: getIt<AppDurations>().medium,
       curve: Curves.easeInOut,
     );
 

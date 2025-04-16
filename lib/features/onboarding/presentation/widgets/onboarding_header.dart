@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart' show Gap;
+import 'package:get_it/get_it.dart';
 import 'package:ksk_app/core/asset/app_image.dart' show AppImage;
-import 'package:ksk_app/core/sizes/app_dimension.dart' show AppDimension;
+import 'package:ksk_app/core/sizes/app_sizes.dart';
 import 'package:ksk_app/core/styles/app_text_styles.dart';
 import 'package:ksk_app/core/styles/colors/app_colors.dart';
 
@@ -11,19 +12,22 @@ class OnboardingHeader extends StatelessWidget {
   /// Constructor
   const OnboardingHeader({super.key});
 
+  /// Access app sizes
+  AppSizes get _sizes => GetIt.I<AppSizes>();
+
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: AppDimension.h32),
+      padding: EdgeInsets.symmetric(horizontal: _sizes.h32),
       child: Row(
         children: [
           SizedBox(
-            height: AppDimension.v56,
+            height: _sizes.v56,
             child: AppImage.of(context).onboarding.logo.image(
                   fit: BoxFit.contain,
                 ),
           ),
-          Gap(AppDimension.h16),
+          Gap(_sizes.h16),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:ksk_app/core/env/env_development.dart';
+import 'package:ksk_app/features/env/env_development.dart';
 
 void main() {
   group('EnvDevelopment', () {

@@ -1,9 +1,8 @@
-// lib/core/env/infrastructure/env_config_repository_impl.dart
+// lib/features/env/infrastructure/env_config_repository_impl.dart
 
 import 'package:injectable/injectable.dart';
-import 'package:ksk_app/core/env/domain/env_config_repository.dart'
-    show EnvConfigRepository;
-import 'package:ksk_app/core/env/env_development.dart';
+import 'package:ksk_app/features/env/domain/env_config_repository.dart';
+import 'package:ksk_app/features/env/env_development.dart';
 
 /// Implementation of the [EnvConfigRepository] interface for
 /// accessing environment configuration variables.

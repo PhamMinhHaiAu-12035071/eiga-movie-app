@@ -1,5 +1,3 @@
-// lib/core/env/domain/env_config_repository.dart
-
 /// Repository interface for environment configuration.
 ///
 /// This interface defines the contract for accessing environment configuration

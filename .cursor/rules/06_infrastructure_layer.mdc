@@ -186,7 +186,7 @@ abstract class FeatureConstants {
 }
 
 // infrastructure/feature_repository_impl.dart
-import 'package:app/core/env/env_config_repository.dart'; // Access env vars
+import 'package:app/features/env/env_config_repository.dart'; // Access env vars
 import 'package:app/features/feature_name/domain/feature_repository.dart'; // No 'i_' prefix
 import 'package:app/features/feature_name/domain/models/feature_model.dart';
 import 'package:app/features/feature_name/infrastructure/dtos/feature_dto.dart';
