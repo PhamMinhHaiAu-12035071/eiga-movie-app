@@ -453,123 +453,154 @@ class MockBuilder {
    - Register mocks with GetIt for dependency injection
 
 ```dart
-class MockAppColors extends Mock implements AppColors {
+class MockAppSizes extends Mock implements AppSizes {
   @override
-  MaterialColor get white => const MaterialColor(
-    0xFFFFFFFF,
-    <int, Color>{
-      50: Color(0xFFFFFFFF),
-      // ... other shades
-    },
+  double get h32 => 32;  // Use explicit values
+}
+
+class MockAppColors extends Mock implements AppColors {
+  static final MaterialColor _blue = MaterialColor(  // Use proper color types
+    0xFF2196F3,
+    <int, Color>{500: Colors.blue},
   );
+  @override
+  MaterialColor get onboardingBlue => _blue;
+}
+
+class MockAssetGenImage extends Mock implements AssetGenImage {
+  @override
+  Image image({
+    Key? key,
+    double? width,
+    double? height,
+    BoxFit? fit,
+    ImageErrorWidgetBuilder? errorBuilder,
+    // Make boolean parameters nullable
+    bool? excludeFromSemantics,
+    // Use proper type aliases
+    ImageFrameBuilder? frameBuilder,
+  }) {
+    return Image.asset(
+      'test_path.png',
+      excludeFromSemantics: excludeFromSemantics ?? false,  // Provide defaults
+    );
+  }
 }
 ```
 
-2. **Test Setup**
-   - Use `setUp` for common test initialization
-   - Register mocks in setUp
-   - Use `tearDown` to clean up GetIt registry
-   - Create helper methods for building test widgets
-
+2. **Test Structure**
 ```dart
-setUp(() {
-  mockDependency = MockDependency();
-  GetIt.I.registerSingleton<Dependency>(mockDependency);
-});
+void main() {
+  late Type mockDependency;
+  late List<Type> testData;
+  
+  setUp(() {
+    GetIt.I.reset();
+    // Initialize mocks
+    // Register dependencies
+    // Setup test data
+  });
 
-tearDown(() {
-  GetIt.I.reset();
-});
-```
+  tearDown(() {
+    // Cleanup resources
+    GetIt.I.reset();
+  });
 
-3. **Widget Building**
-   - Wrap test widgets in MaterialApp for proper context
-   - Use helper functions for consistent widget building
-   - Include all necessary providers/dependencies
+  group('Component Tests', () {
+    testWidgets('test description', (tester) async {
+      // ARRANGE
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: TestedWidget(),
+          ),
+        ),
+      );
 
-```dart
-Widget buildTestWidget({
-  required VoidCallback onPressed,
-  required String text,
-  bool someFlag = false,
-}) {
-  return MaterialApp(
-    home: Scaffold(
-      body: YourWidget(
-        onPressed: onPressed,
-        text: text,
-        someFlag: someFlag,
-      ),
-    ),
-  );
+      // ACT
+      await tester.tap(find.byType(Button));
+      await tester.pumpAndSettle();
+
+      // ASSERT
+      expect(find.text('Expected'), findsOneWidget);
+    });
+  });
 }
 ```
 
-4. **Finding Widgets**
-   - Use specific finders to avoid ambiguity
-   - For nested widgets, use `find.descendant()`
-   - When multiple instances exist, use first/last/at as appropriate
-   - Always verify widget existence before testing properties
+3. **Coverage Requirements**
+- Basic Rendering
+  - Widget tree structure
+  - Initial state display
+  - Style and layout verification
 
+- User Interactions
+  - Tap/click handling
+  - Drag/swipe gestures
+  - Input validation
+
+- Error Handling
+  - Error state display
+  - Error recovery
+  - Fallback behavior
+
+- Edge Cases
+  - Empty states
+  - Boundary conditions
+  - Rapid interactions
+
+### Integration Testing
+
+1. Feature Flow Testing
 ```dart
-final specificWidget = find.descendant(
-  of: find.byType(ParentWidget),
-  matching: find.byType(ChildWidget),
-).first;
+void main() {
+  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+
+  group('Feature Flow Tests', () {
+    testWidgets('complete flow', (tester) async {
+      // Setup
+      // Execute flow steps
+      // Verify outcomes
+    });
+  });
+}
 ```
 
-5. **Testing Styles and Decorations**
-   - Use null-safe assertions for nullable properties
-   - Cast decorations explicitly when needed
-   - Test gradient colors and other visual properties thoroughly
-   - Verify all style properties including colors, sizes, and fonts
+2. Coverage Areas
+- Full feature flows
+- Cross-component interactions
+- State persistence
+- Navigation paths
 
-```dart
-final decoration = container.decoration! as BoxDecoration;
-expect(decoration.gradient, isNotNull);
-expect(
-  (decoration.gradient! as LinearGradient).colors,
-  [expectedColor1, expectedColor2],
-);
+## Best Practices
+
+1. Test File Organization
+```
+test/
+  features/
+    feature_name/
+      presentation/
+        widgets/
+          widget_test.dart
+      application/
+        cubit/
+          cubit_test.dart
+      domain/
+        models/
+          model_test.dart
 ```
 
-6. **Testing Callbacks**
-   - Use variables to track callback execution
-   - Prefer `var` over explicit `bool` for callback flags
-   - Test both positive and negative cases
+2. Naming Conventions
+- Test files: `*_test.dart`
+- Test groups: Describe component/feature
+- Test cases: Describe behavior being tested
 
-```dart
-var callbackExecuted = false;
-await tester.tap(find.byType(ButtonWidget));
-expect(callbackExecuted, isTrue);
-```
-
-7. **Code Style in Tests**
-   - Follow consistent formatting
-   - Add trailing commas for better git diffs
-   - Use descriptive test names
-   - Group related tests together
-
-### Test Coverage Requirements
-
-1. **Widget Tests**
-   - Must cover all constructor parameters
-   - Must test all callback functions
-   - Must verify all visual properties
-   - Must test edge cases and conditional rendering
-   - Target 100% code coverage
-
-2. **Integration Tests**
-   - Must cover main user flows
-   - Must test widget interactions
-   - Must verify state management
-   - Must test navigation flows
-
-3. **Unit Tests**
-   - Must cover all business logic
-   - Must test all edge cases
-   - Must verify error handling
-   - Must test async operations
+3. Code Style
+- Use explicit types for callbacks
+- Make boolean parameters nullable
+- Provide default values via null coalescing
+- Use proper type hierarchies
+- Add trailing commas for better git diffs
 
 ## Error Handling Patterns
 
