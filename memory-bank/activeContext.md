@@ -3,6 +3,8 @@
 ## Current Focus
 The project is currently in active development, with a focus on implementing the core features and establishing the architectural foundation for the EIGA movie app. The primary focus is on the onboarding feature and the newly added login feature, which represent the first user interactions with the application. Currently, we are refining the UI components of the onboarding screens to match the Figma design and improve code maintainability, while also implementing a simple login screen that appears after the onboarding flow. We're also enhancing the design system by implementing a robust color management approach for better consistency across the application.
 
+**Recent refactor:** The themes module in `lib/core/themes` was refactored to match the structure of the styles module, introducing an `extensions/extensions.dart` index and updating all relevant imports. A new test directory for themes was created, and 100% unit test coverage was achieved for `AppAssetExtension`. Next steps include extending this coverage to `AppColorExtension` and `AppTheme`.
+
 ## Recent Changes
 1. Set up the project structure following Clean Architecture principles
 2. Implemented the environment configuration system

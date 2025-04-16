@@ -24,7 +24,9 @@ lib/
 │   ├── durations/              # Duration constants for animations and transitions
 │   └── themes/                  # Theme management
 │       ├── extensions/         # Theme extensions for assets, colors, etc.
-│       └── app_theme.dart      # Main theme configuration
+│       │   └── extensions.dart # Barrel file for all theme extensions
+│       ├── app_theme.dart      # Main theme configuration
+│       └── themes.dart         # Barrel file for all theme exports
 ├── features/                    # Separate functionalities (feature-first)
 │   ├── env/                    # Environment configuration feature
 │   │   ├── domain/            # Environment repository interface
@@ -258,6 +260,8 @@ Generate coverage report:
 genhtml coverage/lcov.info -o coverage/
 open coverage/index.html
 ```
+
+- The test suite now includes `test/core/themes/extensions/app_asset_extension_test.dart` with 100% coverage. Coverage for `AppColorExtension` and `AppTheme` is in progress.
 
 ## 🌐 Localization
 

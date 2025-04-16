@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ksk_app/core/router/app_router.dart' show AppRouter;
-import 'package:ksk_app/core/themes/app_theme.dart';
+import 'package:ksk_app/core/themes/themes.dart';
 import 'package:ksk_app/shared/widgets/responsive_initializer.dart';
 
 class App extends StatelessWidget {

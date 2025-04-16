@@ -21,6 +21,8 @@
 - ✅ Set up test coverage reporting with lcov integration
 - ✅ Refactored environment configuration from core to feature-based architecture
 - ✅ Rebranded application to "EIGA Movie App" for cinema ticket booking
+- ✅ Refactored themes module to match styles structure (added extensions index, updated imports)
+- ✅ Created test/core/themes directory and achieved 100% unit test coverage for AppAssetExtension
 
 ### Feature Implementation
 - 🚧 Onboarding Feature (In Progress)
@@ -89,6 +91,8 @@
   - ✅ Corrected test for unregistered dependency resolution
   - ✅ Improved error checking pattern with proper function expression syntax
   - ✅ Enhanced reliability of dependency injection tests
+- ✅ Created test/core/themes/extensions/app_asset_extension_test.dart with 100% coverage
+- 🚧 Next: Extend themes test coverage to AppColorExtension and AppTheme
 
 ### CI/CD
 - ✅ Set up basic project structure
