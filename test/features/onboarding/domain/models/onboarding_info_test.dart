@@ -56,44 +56,57 @@ void main() {
     });
 
     test('Instances with same properties should be equal', () {
-      // Assert: Check for equality using == operator (Equatable handles this via props)
+      // Assert: Check for equality using == operator
+      //(Equatable handles this via props)
       expect(onboardingInfo1 == onboardingInfo1Duplicate, isTrue);
       // Also check hashCode consistency
-      expect(onboardingInfo1.hashCode == onboardingInfo1Duplicate.hashCode,
-          isTrue);
+      expect(
+        onboardingInfo1.hashCode == onboardingInfo1Duplicate.hashCode,
+        isTrue,
+      );
     });
 
     test(
-        'Instances with different image should have different props list but may compare equal due to mock limitations',
-        () {
+        'Instances with different image should have different props list '
+        'but may compare equal due to mock limitations', () {
       // Assert: Check that the instances themselves are different
       expect(identical(mockImage1, mockImage2), isFalse);
 
       // Assert: Check that the props lists reflect the different image mocks
-      expect(onboardingInfo1.props, [mockImage1, title1, description1]);
-      expect(onboardingInfo2DifferentImage.props,
-          [mockImage2, title1, description1]);
+      expect(
+        onboardingInfo1.props,
+        [mockImage1, title1, description1],
+      );
+      expect(
+        onboardingInfo2DifferentImage.props,
+        [mockImage2, title1, description1],
+      );
 
       // We acknowledge that mockImage1 == mockImage2 might incorrectly be true,
-      // thus onboardingInfo1 == onboardingInfo2DifferentImage might also be true.
+      // thus onboardingInfo1 == onboardingInfo2DifferentImage
+      //might also be true.
       // So, we don't assert inequality of the OnboardingInfo instances here.
-      // The important part is that the props list contains the different mock instance.
+      // The important part is that the props
+      //list contains the different mock instance.
     });
 
     test('Instances with different title should not be equal', () {
       // Assert: Check for inequality
       expect(onboardingInfo1 == onboardingInfo3DifferentTitle, isFalse);
-      expect(onboardingInfo1.hashCode == onboardingInfo3DifferentTitle.hashCode,
-          isFalse);
+      expect(
+        onboardingInfo1.hashCode == onboardingInfo3DifferentTitle.hashCode,
+        isFalse,
+      );
     });
 
     test('Instances with different description should not be equal', () {
       // Assert: Check for inequality
       expect(onboardingInfo1 == onboardingInfo4DifferentDescription, isFalse);
       expect(
-          onboardingInfo1.hashCode ==
-              onboardingInfo4DifferentDescription.hashCode,
-          isFalse);
+        onboardingInfo1.hashCode ==
+            onboardingInfo4DifferentDescription.hashCode,
+        isFalse,
+      );
     });
   });
 }
