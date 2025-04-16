@@ -154,7 +154,8 @@ void main() {
 
     test('should throw when trying to resolve unregistered dependency', () {
       // Act & Assert
-      expect(getIt, throwsA(anything));
+      final resolveUnregistered = getIt.get<UnregisteredDependency>;
+      expect(resolveUnregistered, throwsA(anything));
     });
   });
 
