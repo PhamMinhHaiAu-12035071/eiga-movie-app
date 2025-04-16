@@ -165,6 +165,9 @@ class UserListPage extends StatelessWidget {
 - Add `@required` and other annotations from `meta` to improve code clarity.
 - Use `after_layout` for post-layout initialization and measurements.
 - Manage environment variables securely with `envied` instead of hardcoding.
+- Implement `showcaseview` to highlight and explain new features to users.
+- Apply functional programming principles with `fpdart` for error handling and domain modeling.
+- Use `google_fonts` for consistent typography across the application.
 
 ---
 
@@ -188,6 +191,7 @@ class UserListPage extends StatelessWidget {
 | **CoC (Convention > Config)** | Easier to read and set up quickly |
 | **Information Expert** | Assign responsibilities to the place that understands the data best |
 | **Protected Variations** | Place abstraction where changes are likely |
+| **Functional Programming** | Use fpdart for immutability, Either/Option types, and pure functions |
 
 ---
 
@@ -243,6 +247,9 @@ class UserListPage extends StatelessWidget {
 | `logger` | Pretty, easy to use and extensible logger |
 | `after_layout` | Execute code after first widget layout |
 | `envied` | Type-safe environment variables handling |
+| `showcaseview` | Highlight and showcase app features with interactive tutorial |
+| `fpdart` | Functional programming utilities for error handling |
+| `google_fonts` | Easy access to Google Fonts library |
 
 ---
 
@@ -261,7 +268,7 @@ class UserListPage extends StatelessWidget {
 
 ---
 
-## 📚 References
+## 📖 References
 
 - [Clean Architecture – Uncle Bob](https://8thlight.com/blog/uncle-bob/2012/08/13/the-clean-architecture.html)
 - [Effective Dart](https://dart.dev/guides/language/effective-dart)
@@ -274,6 +281,9 @@ class UserListPage extends StatelessWidget {
 - [Collection & Meta Packages](https://dart.dev/guides/libraries/useful-libraries)
 - [After Layout Documentation](https://pub.dev/packages/after_layout)
 - [Envied - Secure Environment Variables](https://pub.dev/packages/envied)
+- [Showcaseview - Feature Highlighting](https://pub.dev/packages/showcaseview)
+- [fpdart - Functional Programming in Dart](https://pub.dev/packages/fpdart)
+- [Google Fonts for Flutter](https://pub.dev/packages/google_fonts)
 
 ---
 
@@ -423,6 +433,148 @@ lib/features/onboarding/
 - More complex data structures may use SQLite or Hive
 - All storage operations follow the interface contract
 - Features depend on the abstraction, not concrete implementations
+
+### Feature Showcasing
+
+For implementing feature showcases and interactive tutorials:
+
+- Use `showcaseview` package to create guided user experiences
+- Highlight key UI elements with configurable overlays
+- Implement step-by-step walkthroughs for complex features
+- Store user progress to avoid showing tutorials multiple times
+- Create an abstraction layer for showcase management:
+
+```dart
+abstract class ShowcaseService {
+  /// Initialize showcase features
+  Future<void> initialize();
+  
+  /// Check if a specific showcase was completed
+  Future<bool> isShowcaseCompleted(String showcaseKey);
+  
+  /// Mark a showcase as completed
+  Future<void> completeShowcase(String showcaseKey);
+  
+  /// Reset all showcases (for testing)
+  Future<void> resetAllShowcases();
+}
+```
+
+Example implementation for a screen:
+
+```dart
+class HomeScreen extends StatefulWidget {
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  // Showcase keys for each feature
+  final GlobalKey _menuKey = GlobalKey();
+  final GlobalKey _searchKey = GlobalKey();
+  final GlobalKey _profileKey = GlobalKey();
+  
+  // Showcase builder reference
+  ShowCaseWidget? showcaseWidget;
+  
+  @override
+  void initState() {
+    super.initState();
+    // Check if we should show the showcase
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _checkAndShowShowcase();
+    });
+  }
+  
+  Future<void> _checkAndShowShowcase() async {
+    final showcaseService = getIt<ShowcaseService>();
+    final isCompleted = await showcaseService.isShowcaseCompleted('home_screen');
+    
+    if (!isCompleted) {
+      ShowCaseWidget.of(context)?.startShowCase([_menuKey, _searchKey, _profileKey]);
+      await showcaseService.completeShowcase('home_screen');
+    }
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Home'),
+        actions: [
+          Showcase(
+            key: _searchKey,
+            description: 'Tap to search for items',
+            child: IconButton(
+              icon: const Icon(Icons.search),
+              onPressed: () {},
+            ),
+          ),
+        ],
+      ),
+      drawer: Showcase(
+        key: _menuKey,
+        description: 'Open the menu to access more options',
+        child: Drawer(...),
+      ),
+      // More UI with showcase elements
+    );
+  }
+}
+
+---
+
+## 🧠 Functional Programming with fpdart
+
+Functional programming using `fpdart` enables safer error handling and more explicit domain modeling:
+
+### Core Functional Types
+
+| Type           | Purpose                                               | Example Use Case                              |
+|----------------|-------------------------------------------------------|-----------------------------------------------|
+| `Either<L, R>` | Represent success (Right) or failure (Left) outcomes  | API calls, validations, operations that may fail |
+| `Option<A>`    | Represent presence (Some) or absence (None) of values | Nullable values, search results              |
+| `Task<A>`      | Represent asynchronous computations                   | Async operations with better composability    |
+
+### Example Usage
+
+```dart
+// Repository method using Either for error handling
+Future<Either<Failure, User>> getUserById(String id) async {
+  try {
+    final response = await _apiClient.get('/users/$id');
+    
+    if (response.statusCode == 200) {
+      return right(User.fromJson(response.data));
+    } else {
+      return left(ServerFailure('Failed to fetch user: ${response.statusCode}'));
+    }
+  } catch (e) {
+    return left(NetworkFailure(e.toString()));
+  }
+}
+
+// Using Option for values that might be absent
+Option<User> findUserByUsername(String username) {
+  final user = _users.firstWhereOrNull((u) => u.username == username);
+  return optionOf(user); // Returns Some(user) or None()
+}
+```
+
+### Benefits of Functional Approach
+
+1. **Explicit Error Handling**: No more unexpected exceptions or null checks
+2. **Improved Type Safety**: Compiler enforces proper handling of all cases
+3. **Better Composability**: Chain operations with map, flatMap, getOrElse, etc.
+4. **Predictable Code**: Pure functions with no side effects
+5. **Self-Documenting**: Types document possible outcomes
+
+### Usage in Clean Architecture
+
+- **Domain Layer**: Define failure types and repository methods returning Either
+- **Infrastructure Layer**: Implement error handling with Either in repositories
+- **Application Layer**: Use flatMap for chaining operations, mapLeft for error transformation
+- **Presentation Layer**: Handle Either results from use cases in Cubit/Bloc
 
 ---
 

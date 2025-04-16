@@ -39,6 +39,7 @@ dependencies:
   path_provider: ^2.1.5
   rxdart: ^0.28.0
   shared_preferences: ^2.5.3
+  showcaseview: ^4.0.1
   slang: ^4.6.0
   slang_flutter: ^4.6.0
 

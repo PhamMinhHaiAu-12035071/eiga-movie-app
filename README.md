@@ -64,6 +64,73 @@ The onboarding feature provides new users with an introduction to the app's key 
 
 The onboarding flow presents users with information about key app features, with smooth page transitions, progress indicators, and options to skip or move to the next screen.
 
+### 🔍 Feature Showcasing
+
+The app uses the `showcaseview` package to provide interactive tutorials highlighting key features. This helps users discover and understand the app's functionality:
+
+- **Interactive guides**: Step-by-step walkthroughs for complex features
+- **Targeted highlights**: Focus user attention on specific UI elements
+- **Persistent state**: Track which tutorials users have already seen
+- **Configurable appearance**: Customize the look and feel of showcase elements
+
+Implementation follows the repository pattern for tracking showcase completion:
+
+- **Domain Layer**: Defines the `ShowcaseRepository` interface
+- **Infrastructure Layer**: Implements persistence of showcase state
+- **Application Layer**: Manages when and how showcases are triggered
+- **Presentation Layer**: UI components with showcase annotations
+
+### 🧮 Functional Programming
+
+The app leverages the `fpdart` library to implement functional programming concepts that improve error handling and domain modeling:
+
+- **Either type**: Represents operations that can succeed or fail with explicit error types
+- **Option type**: Replaces nullable values with a more type-safe approach
+- **Task type**: Manages asynchronous operations with better composability
+
+Benefits of using functional programming in the app:
+
+- **Explicit error handling**: All potential failure cases are encoded in the type system
+- **Type safety**: Compiler ensures all error cases are properly handled
+- **Cleaner domain models**: More expressive and self-documenting code
+- **Predictable execution**: Function composition and immutable data structures
+
+Typical usage pattern:
+
+```dart
+// Repository method returning Either type
+Future<Either<Failure, List<Product>>> getProducts() async {
+  try {
+    final result = await _apiClient.get('/products');
+    return right(result.map((json) => Product.fromJson(json)).toList());
+  } on NetworkException catch (e) {
+    return left(NetworkFailure(e.message));
+  } on ServerException catch (e) {
+    return left(ServerFailure(e.message));
+  } catch (e) {
+    return left(UnexpectedFailure(e.toString()));
+  }
+}
+
+// Cubit handling Either results
+Future<void> loadProducts() async {
+  emit(state.copyWith(status: ProductStatus.loading));
+  
+  final result = await _productRepository.getProducts();
+  
+  result.fold(
+    (failure) => emit(state.copyWith(
+      status: ProductStatus.error,
+      errorMessage: failure.message,
+    )),
+    (products) => emit(state.copyWith(
+      status: ProductStatus.loaded, 
+      products: products,
+    )),
+  );
+}
+```
+
 ## 🚀 Getting Started
 
 The project consists of 3 configuration environments:
@@ -156,6 +223,9 @@ class EnvConfigRepositoryImpl implements EnvConfigRepository {
 | **logger**                  | Pretty, easy to use and extensible logger |
 | **after_layout**           | Execute code after first widget layout |
 | **envied**                 | Type-safe environment variables handling |
+| **showcaseview**           | Highlight and showcase app features with an interactive overlay |
+| **fpdart**                 | Functional programming with Either, Option types for error handling |
+| **google_fonts**           | Easy access to Google Fonts for consistent typography |
 
 ### 🔧 Code Generation
 
