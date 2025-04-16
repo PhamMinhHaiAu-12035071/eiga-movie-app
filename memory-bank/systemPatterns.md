@@ -305,27 +305,140 @@ The Storage feature implements persistent data storage capabilities using Shared
    - Tests for all failure and success scenarios
    - Uses mocktail for mocking dependencies
 
-### Testing Approach
+## Testing Architecture
 
-The project implements a comprehensive testing strategy:
+### Test Organization
+```
+test/
+├── domain/
+│   ├── entities/
+│   ├── value_objects/
+│   └── use_cases/
+├── application/
+│   ├── blocs/
+│   └── services/
+├── infrastructure/
+│   └── repositories/
+├── presentation/
+│   ├── widgets/
+│   └── screens/
+├── integration/
+│   └── features/
+├── helpers/
+│   ├── test_helpers.dart
+│   ├── mock_helpers.dart
+│   └── robot_helpers.dart
+└── fixtures/
+    └── mock_data/
+```
 
-1. **Unit Testing**
-   - Tests for domain entities and application logic
-   - Tests for repositories and services
-   - Uses fpdart's Either for testing error scenarios
-   - Mock dependencies using mocktail
+### Testing Patterns
 
-2. **Widget Testing**
-   - Tests for UI components in isolation
-   - Tests for screen flows and interactions
-   - Uses flutter_test framework
+#### 1. Robot Pattern
+Used for widget and integration tests to encapsulate test actions and assertions:
+```dart
+class LoginRobot {
+  Future<void> enterEmail(String email) => ...
+  Future<void> enterPassword(String password) => ...
+  Future<void> tapLoginButton() => ...
+  Future<void> verifyErrorMessage(String message) => ...
+}
+```
 
-3. **Integration Testing**
-   - Tests for feature workflows
-   - Tests for navigation between screens
-   - Tests for end-to-end functionality
+#### 2. Test Data Factories
+Consistent mock data generation using factory pattern:
+```dart
+class UserFactory {
+  static User createDefault() => ...
+  static User createWithRole(UserRole role) => ...
+  static List<User> createMany(int count) => ...
+}
+```
 
-4. **Test Coverage**
-   - Uses lcov for generating coverage reports
-   - Customized Makefile commands for running tests and viewing coverage
-   - Target of 80%+ code coverage 
+#### 3. Golden Testing
+Visual regression testing setup:
+```dart
+goldenTest(
+  'renders correctly',
+  builder: () => MyWidget(),
+  goldenFile: 'my_widget.png',
+  customPump: (tester, widget) async {
+    await tester.binding.setSurfaceSize(Size(400, 800));
+    await tester.pumpWidget(widget);
+  },
+);
+```
+
+#### 4. BLoC Test Pattern
+Standard structure for testing BLoCs:
+```dart
+blocTest<LoginBloc, LoginState>(
+  'emits [loading, success] when login succeeds',
+  build: () => LoginBloc(authRepository: mockAuthRepo),
+  act: (bloc) => bloc.add(LoginSubmitted()),
+  expect: () => [
+    LoginState.loading(),
+    LoginState.success(),
+  ],
+);
+```
+
+### Test Helpers
+
+#### 1. Widget Test Helpers
+```dart
+extension PumpApp on WidgetTester {
+  Future<void> pumpApp(Widget widget) async {
+    await pumpWidget(
+      MaterialApp(
+        home: widget,
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+      ),
+    );
+  }
+}
+```
+
+#### 2. Mock Helpers
+```dart
+class MockBuilder {
+  static MockAuthRepository buildAuthRepository() {
+    final mock = MockAuthRepository();
+    when(() => mock.login(any(), any()))
+        .thenAnswer((_) async => const Right(unit));
+    return mock;
+  }
+}
+```
+
+### Testing Guidelines
+
+1. **Unit Tests**
+   - One test file per class
+   - Follow Arrange-Act-Assert pattern
+   - Mock external dependencies
+   - Test edge cases and error scenarios
+
+2. **Widget Tests**
+   - Use robot pattern for complex widgets
+   - Test user interactions
+   - Verify widget state changes
+   - Include accessibility testing
+
+3. **Integration Tests**
+   - Focus on critical user flows
+   - Use mock data consistently
+   - Implement retry mechanisms
+   - Log test steps for debugging
+   - Test complete feature flows end-to-end
+   - Verify API integrations
+   - Test database operations
+   - Validate navigation flows
+   - Check error handling
+
+4. **Performance Tests**
+   - Measure widget build times
+   - Track memory usage
+   - Monitor frame drops
+   - Test with large datasets
