@@ -27,6 +27,8 @@ class OnboardingPageView extends StatelessWidget {
 
   /// Access app sizes
   AppSizes get _sizes => GetIt.I<AppSizes>();
+  AppTextStyles get _textStyles => GetIt.I<AppTextStyles>();
+  AppColors get _colors => GetIt.I<AppColors>();
 
   @override
   Widget build(BuildContext context) {
@@ -60,11 +62,11 @@ class OnboardingPageView extends StatelessWidget {
               return Container(
                 height: _sizes.v260,
                 width: _sizes.h260,
-                color: AppColors.grey[300],
+                color: _colors.grey[300],
                 child: Icon(
                   Icons.image_not_supported,
                   size: _sizes.r80,
-                  color: AppColors.grey[600],
+                  color: _colors.grey[600],
                 ),
               );
             },
@@ -73,8 +75,8 @@ class OnboardingPageView extends StatelessWidget {
           // Title
           Text(
             slide.title,
-            style: AppTextStyle.headingLg(
-              color: AppColors.onboardingBlue,
+            style: _textStyles.headingLg(
+              color: _colors.onboardingBlue,
               fontWeight: FontWeight.w900,
             ),
           ),
@@ -83,8 +85,8 @@ class OnboardingPageView extends StatelessWidget {
           Text(
             slide.description,
             textAlign: TextAlign.center,
-            style: AppTextStyle.body(
-              color: AppColors.black,
+            style: _textStyles.body(
+              color: _colors.black,
               fontWeight: FontWeight.w700,
             ),
           ),

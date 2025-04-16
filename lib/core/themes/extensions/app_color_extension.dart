@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:ksk_app/core/styles/colors/app_colors.dart';
 
 /// Mở rộng theme với các màu sắc tùy chỉnh
@@ -14,23 +15,25 @@ class AppColorExtension extends ThemeExtension<AppColorExtension> {
 
   /// Factory để tạo instance cho dark theme
   factory AppColorExtension.dark() {
-    return const AppColorExtension(
-      primary: AppColors.primaryDark,
-      secondary: AppColors.secondaryDark,
-      accent: AppColors.accentDark,
-      textPrimary: AppColors.textPrimaryDark,
-      textSecondary: AppColors.textSecondaryDark,
+    final colors = GetIt.I<AppColors>();
+    return AppColorExtension(
+      primary: colors.primaryDark,
+      secondary: colors.secondaryDark,
+      accent: colors.accentDark,
+      textPrimary: colors.textPrimaryDark,
+      textSecondary: colors.textSecondaryDark,
     );
   }
 
   /// Factory để tạo instance cho light theme
   factory AppColorExtension.light() {
-    return const AppColorExtension(
-      primary: AppColors.primary,
-      secondary: AppColors.secondary,
-      accent: AppColors.accent,
-      textPrimary: AppColors.textPrimary,
-      textSecondary: AppColors.textSecondary,
+    final colors = GetIt.I<AppColors>();
+    return AppColorExtension(
+      primary: colors.primary,
+      secondary: colors.secondary,
+      accent: colors.accent,
+      textPrimary: colors.textPrimary,
+      textSecondary: colors.textSecondary,
     );
   }
   final Color primary;

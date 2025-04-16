@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:ksk_app/core/di/injection.dart';
 import 'package:ksk_app/core/durations/app_durations.dart';
 import 'package:ksk_app/core/sizes/app_sizes.dart';
@@ -22,6 +23,9 @@ class OnboardingDotIndicator extends StatelessWidget {
   /// Access app sizes
   AppSizes get _sizes => getIt<AppSizes>();
 
+  /// Access app colors
+  AppColors get _colors => GetIt.I<AppColors>();
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -44,8 +48,8 @@ class OnboardingDotIndicator extends StatelessWidget {
       width: isActive ? _sizes.h16 : _sizes.h8,
       decoration: BoxDecoration(
         color: isActive
-            ? AppColors.onboardingBlue
-            : AppColors.onboardingBlue.withAlpha(102),
+            ? _colors.onboardingBlue
+            : _colors.onboardingBlue.withAlpha(102),
         borderRadius: BorderRadius.circular(_sizes.r4),
       ),
     );

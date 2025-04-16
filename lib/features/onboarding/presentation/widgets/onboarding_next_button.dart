@@ -26,6 +26,12 @@ class OnboardingNextButton extends StatelessWidget {
   /// Access app sizes
   AppSizes get _sizes => GetIt.I<AppSizes>();
 
+  /// Access app text styles
+  AppTextStyles get _textStyles => GetIt.I<AppTextStyles>();
+
+  /// Access app colors
+  AppColors get _colors => GetIt.I<AppColors>();
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -33,21 +39,21 @@ class OnboardingNextButton extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(_sizes.borderRadiusMd),
-          gradient: const LinearGradient(
+          gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              AppColors.onboardingGradientStart,
-              AppColors.onboardingGradientEnd,
+              _colors.onboardingGradientStart,
+              _colors.onboardingGradientEnd,
             ],
           ),
         ),
         child: ElevatedButton(
           onPressed: onPressed,
           style: ElevatedButton.styleFrom(
-            foregroundColor: AppColors.white,
-            backgroundColor: AppColors.transparent,
-            shadowColor: AppColors.transparent,
+            foregroundColor: _colors.white,
+            backgroundColor: _colors.transparent,
+            shadowColor: _colors.transparent,
             minimumSize: Size(double.infinity, _sizes.v56),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(_sizes.borderRadiusMd),
@@ -55,8 +61,8 @@ class OnboardingNextButton extends StatelessWidget {
           ),
           child: Text(
             text,
-            style: AppTextStyle.heading(
-              color: AppColors.white,
+            style: _textStyles.heading(
+              color: _colors.white,
               fontWeight: FontWeight.w500,
             ),
           ),

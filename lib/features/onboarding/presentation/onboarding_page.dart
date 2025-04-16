@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart' show Gap;
+import 'package:get_it/get_it.dart';
 import 'package:ksk_app/core/di/injection.dart';
 import 'package:ksk_app/core/durations/app_durations.dart';
 import 'package:ksk_app/core/router/app_router.gr.dart' show LoginRoute;
@@ -31,6 +32,8 @@ class _OnboardingPageState extends State<OnboardingPage> {
 
   /// Access app sizes
   AppSizes get _sizes => getIt<AppSizes>();
+  AppTextStyles get _textStyles => GetIt.I<AppTextStyles>();
+  AppColors get _colors => GetIt.I<AppColors>();
 
   @override
   void initState() {
@@ -53,8 +56,8 @@ class _OnboardingPageState extends State<OnboardingPage> {
           return Scaffold(
             body: SafeArea(
               child: Container(
-                decoration: const BoxDecoration(
-                  color: AppColors.onboardingBackground,
+                decoration: BoxDecoration(
+                  color: _colors.onboardingBackground,
                 ),
                 padding: EdgeInsets.symmetric(horizontal: _sizes.h24),
                 child: Column(
@@ -100,8 +103,8 @@ class _OnboardingPageState extends State<OnboardingPage> {
                       onPressed: () => _finishOnboarding(context),
                       child: Text(
                         'Skip',
-                        style: AppTextStyle.heading(
-                          color: AppColors.skipButtonColor,
+                        style: _textStyles.heading(
+                          color: _colors.skipButtonColor,
                           fontWeight: FontWeight.w700,
                         ),
                       ),

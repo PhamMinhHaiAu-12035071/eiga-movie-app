@@ -16,10 +16,10 @@ Future<void> configureDependencies() async {
   await getIt.init();
 }
 
-/// Đăng ký các dependencies không thể inject bằng annotation
+/// Register module for dependencies
 @module
 abstract class RegisterModule {
-  /// Đăng ký SharedPreferences instance
+  /// Register SharedPreferences instance
   @preResolve
   Future<SharedPreferences> get prefs => SharedPreferences.getInstance();
 }

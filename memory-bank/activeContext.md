@@ -67,6 +67,12 @@ The project is currently in active development, with a focus on implementing the
     - Ensured all tests pass with the new structure
     - Improved test organization by consolidating helper classes into appropriate test files
     - Regenerated dependency injection code to maintain functionality
+16. Fixed dependency injection test failure:
+    - Fixed incorrect test for unregistered dependency resolution in `test/core/di/injection_test.dart`
+    - The original test was trying to test that GetIt directly would throw when requesting an unregistered dependency
+    - Corrected to properly use a function expression to check that trying to resolve an unregistered dependency throws
+    - Updated test to use `expect(() => getIt<UnregisteredDependency>(), throwsA(anything))` pattern
+    - Ensures that the test now accurately verifies that GetIt properly throws when trying to resolve unregistered dependencies
 
 ## Current Tasks
 1. Complete the onboarding feature implementation
@@ -103,6 +109,7 @@ The project is currently in active development, with a focus on implementing the
    - ✅ Apply SOLID principles through abstractions
    - ✅ Set up automated testing with Makefile commands
    - ✅ Improve Makefile for better development workflow
+   - ✅ Fix failing tests in dependency injection module
 
 ## Active Decisions and Considerations
 

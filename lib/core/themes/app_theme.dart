@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ksk_app/core/styles/app_text_styles.dart';
 import 'package:ksk_app/core/styles/colors/app_colors.dart';
@@ -10,10 +11,11 @@ import 'package:ksk_app/core/themes/extensions/app_color_extension.dart';
 class AppTheme {
   /// Tạo theme dark cho ứng dụng
   factory AppTheme.dark(ThemeData themeData) {
+    final colors = GetIt.I<AppColors>();
     final data = themeData.copyWith(
-      scaffoldBackgroundColor: AppColors.bgMainDark,
-      appBarTheme: const AppBarTheme(
-        backgroundColor: AppColors.bgMainDark,
+      scaffoldBackgroundColor: colors.bgMainDark,
+      appBarTheme: AppBarTheme(
+        backgroundColor: colors.bgMainDark,
         surfaceTintColor: Colors.transparent,
         centerTitle: false,
       ),
@@ -33,10 +35,11 @@ class AppTheme {
 
   /// Tạo theme light cho ứng dụng
   factory AppTheme.light(ThemeData themeData) {
+    final colors = GetIt.I<AppColors>();
     final data = themeData.copyWith(
-      scaffoldBackgroundColor: AppColors.bgMain,
-      appBarTheme: const AppBarTheme(
-        backgroundColor: AppColors.bgMain,
+      scaffoldBackgroundColor: colors.bgMain,
+      appBarTheme: AppBarTheme(
+        backgroundColor: colors.bgMain,
         surfaceTintColor: Colors.transparent,
         centerTitle: false,
       ),
@@ -59,6 +62,8 @@ class AppTheme {
   /// ThemeData cơ bản của ứng dụng
   final ThemeData themeData;
 
+  static final AppTextStyles _textStyles = GetIt.I<AppTextStyles>();
+
   /// Xây dựng ThemeData với các thiết lập cụ thể
   static ThemeData _buildThemeData({
     required ThemeData themeData,
@@ -70,46 +75,46 @@ class AppTheme {
         extensions: extensions,
         textTheme:
             GoogleFonts.montserratTextTheme(themeData.textTheme).copyWith(
-          displaySmall: AppTextStyle.heading3Xl(
+          displaySmall: _textStyles.heading3Xl(
             color: themeData.textTheme.displaySmall?.color,
           ),
-          headlineLarge: AppTextStyle.heading2Xl(
+          headlineLarge: _textStyles.heading2Xl(
             color: themeData.textTheme.headlineLarge?.color,
           ),
-          headlineMedium: AppTextStyle.headingXl(
+          headlineMedium: _textStyles.headingXl(
             color: themeData.textTheme.headlineMedium?.color,
           ),
-          headlineSmall: AppTextStyle.headingLg(
+          headlineSmall: _textStyles.headingLg(
             color: themeData.textTheme.headlineSmall?.color,
           ),
-          titleLarge: AppTextStyle.heading(
+          titleLarge: _textStyles.heading(
             color: themeData.textTheme.titleLarge?.color,
           ),
-          titleMedium: AppTextStyle.headingSm(
+          titleMedium: _textStyles.headingSm(
             color: themeData.textTheme.titleMedium?.color,
           ),
-          titleSmall: AppTextStyle.headingXs(
+          titleSmall: _textStyles.headingXs(
             color: themeData.textTheme.titleSmall?.color,
           ),
-          labelLarge: AppTextStyle.bodyLg(
+          labelLarge: _textStyles.bodyLg(
             fontWeight: FontWeight.w700,
             color: themeData.textTheme.labelLarge?.color,
           ),
-          labelMedium: AppTextStyle.body(
+          labelMedium: _textStyles.body(
             fontWeight: FontWeight.w700,
             color: themeData.textTheme.labelMedium?.color,
           ),
-          labelSmall: AppTextStyle.bodySm(
+          labelSmall: _textStyles.bodySm(
             fontWeight: FontWeight.w700,
             color: themeData.textTheme.labelSmall?.color,
           ),
-          bodyLarge: AppTextStyle.bodyLg(
+          bodyLarge: _textStyles.bodyLg(
             color: themeData.textTheme.bodyLarge?.color,
           ),
-          bodyMedium: AppTextStyle.body(
+          bodyMedium: _textStyles.body(
             color: themeData.textTheme.bodyMedium?.color,
           ),
-          bodySmall: AppTextStyle.bodySm(
+          bodySmall: _textStyles.bodySm(
             color: themeData.textTheme.bodySmall?.color,
           ),
         ),

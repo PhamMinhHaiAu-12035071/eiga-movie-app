@@ -14,6 +14,8 @@ class OnboardingHeader extends StatelessWidget {
 
   /// Access app sizes
   AppSizes get _sizes => GetIt.I<AppSizes>();
+  AppTextStyles get _textStyles => GetIt.I<AppTextStyles>();
+  AppColors get _colors => GetIt.I<AppColors>();
 
   @override
   Widget build(BuildContext context) {
@@ -33,16 +35,16 @@ class OnboardingHeader extends StatelessWidget {
             children: [
               Text(
                 'EIGA',
-                style: AppTextStyle.headingXl(
+                style: _textStyles.headingXl(
                   fontWeight: FontWeight.w900,
-                  color: AppColors.skipButtonColor,
+                  color: _colors.skipButtonColor,
                 ),
               ),
               Text(
                 'CINEMA UI KIT.',
-                style: AppTextStyle.headingSm(
+                style: _textStyles.headingSm(
                   fontWeight: FontWeight.w500,
-                  color: AppColors.skipButtonColor,
+                  color: _colors.skipButtonColor,
                 ),
               ),
             ],

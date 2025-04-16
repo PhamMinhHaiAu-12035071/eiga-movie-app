@@ -15,6 +15,8 @@ class LoginView extends StatelessWidget {
 
   /// Access app sizes
   AppSizes get _sizes => GetIt.I<AppSizes>();
+  AppTextStyles get _textStyles => GetIt.I<AppTextStyles>();
+  AppColors get _colors => GetIt.I<AppColors>();
 
   @override
   Widget build(BuildContext context) {
@@ -28,8 +30,8 @@ class LoginView extends StatelessWidget {
               children: [
                 Text(
                   state.welcomeMessage,
-                  style: AppTextStyle.headingXl(
-                    color: AppColors.textPrimary,
+                  style: _textStyles.headingXl(
+                    color: _colors.textPrimary,
                     fontWeight: FontWeight.bold,
                   ),
                   textAlign: TextAlign.center,
@@ -37,8 +39,8 @@ class LoginView extends StatelessWidget {
                 Gap(_sizes.v24),
                 Text(
                   'Your movie journey begins here.',
-                  style: AppTextStyle.bodyLg(
-                    color: AppColors.textSecondary,
+                  style: _textStyles.bodyLg(
+                    color: _colors.textSecondary,
                   ),
                   textAlign: TextAlign.center,
                 ),

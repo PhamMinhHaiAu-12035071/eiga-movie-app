@@ -154,7 +154,7 @@ void main() {
 
     test('should throw when trying to resolve unregistered dependency', () {
       // Act & Assert
-      expect(getIt, throwsA(anything));
+      expect(() => getIt<UnregisteredDependency>(), throwsA(anything));
     });
   });
 
