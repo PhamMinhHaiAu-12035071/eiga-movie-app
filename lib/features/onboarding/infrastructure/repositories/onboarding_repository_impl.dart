@@ -1,6 +1,7 @@
+import 'package:fpdart/fpdart.dart';
 import 'package:injectable/injectable.dart';
-import 'package:ksk_app/core/services/local_storage_service.dart';
 import 'package:ksk_app/features/onboarding/domain/repositories/onboarding_repository.dart';
+import 'package:ksk_app/features/storage/storage.dart';
 
 /// Key to store onboarding state in local storage
 const String _onboardingSeenKey = 'onboarding_seen';
@@ -15,12 +16,17 @@ class OnboardingRepositoryImpl implements OnboardingRepository {
   final LocalStorageService _storageService;
 
   @override
-  Future<bool> checkIfOnboardingSeen() async {
-    return _storageService.getBool(_onboardingSeenKey);
+  Future<Either<StorageFailure, bool>> checkIfOnboardingSeen() async {
+    // Get the value from storage service
+    final result = await _storageService.getBool(_onboardingSeenKey);
+
+    // Map the result, handling null case with default value false
+    return result.map((value) => value ?? false);
   }
 
   @override
-  Future<void> markOnboardingAsSeen() async {
-    await _storageService.setBool(_onboardingSeenKey, value: true);
+  Future<Either<StorageFailure, bool>> markOnboardingAsSeen() {
+    // No need for async/await since we're just passing through the Either
+    return _storageService.setBool(_onboardingSeenKey, value: true);
   }
 }

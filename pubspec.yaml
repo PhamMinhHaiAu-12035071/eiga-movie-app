@@ -24,6 +24,7 @@ dependencies:
   flutter_hooks: ^0.21.2
   flutter_native_splash: ^2.4.5
   flutter_screenutil: ^5.9.3
+  fpdart: ^1.1.1
   freezed: ^3.0.4
   freezed_annotation: ^3.0.0
   gap: ^3.0.1
@@ -52,6 +53,7 @@ dev_dependencies:
     sdk: flutter
   injectable_generator: ^2.7.0
   json_serializable: ^6.9.4
+  mockito: ^5.4.5
   mocktail: ^1.0.4
   pretty_chopper_logger: ^1.2.2
   slang_build_runner: ^4.6.0

@@ -7,6 +7,7 @@ class OnboardingState extends Equatable {
   const OnboardingState({
     required this.slides,
     this.currentPage = 0,
+    this.error,
   });
 
   /// List of onboarding information slides
@@ -15,6 +16,9 @@ class OnboardingState extends Equatable {
   /// Current page being displayed
   final int currentPage;
 
+  /// Error message, if any
+  final String? error;
+
   /// Check if this is the last page
   bool get isLastPage => currentPage == slides.length - 1;
 
@@ -22,13 +26,15 @@ class OnboardingState extends Equatable {
   OnboardingState copyWith({
     List<OnboardingInfo>? slides,
     int? currentPage,
+    String? error,
   }) {
     return OnboardingState(
       slides: slides ?? this.slides,
       currentPage: currentPage ?? this.currentPage,
+      error: error ?? this.error,
     );
   }
 
   @override
-  List<Object?> get props => [slides, currentPage];
+  List<Object?> get props => [slides, currentPage, error];
 }

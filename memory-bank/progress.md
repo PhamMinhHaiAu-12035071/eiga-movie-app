@@ -17,6 +17,8 @@
 - ✅ Created centralized duration system for animations and transitions
 - ✅ Standardized repository naming conventions (removing "I" prefix, adding "Impl" suffix)
 - ✅ Created abstraction layer for local storage with LocalStorageService
+- ✅ Streamlined and improved Makefile for better development workflow
+- ✅ Set up test coverage reporting with lcov integration
 
 ### Feature Implementation
 - 🚧 Onboarding Feature (In Progress)
@@ -33,8 +35,35 @@
   - ✅ Implemented persistence of onboarding status with SharedPreferences
   - ❌ Writing tests for the feature
 
+- 🚧 Login Feature (In Progress)
+  - ✅ Created feature directory structure following Clean Architecture
+  - ✅ Set up navigation flow from onboarding to login
+  - ✅ Implemented application layer with Cubit and State
+  - ✅ Built UI for welcome screen
+    - ✅ Created LoginPage with proper routing
+    - ✅ Implemented LoginView with welcome message
+    - ✅ Applied styling consistent with app design
+  - ❌ Adding authentication form
+  - ❌ Implementing authentication logic
+  - ❌ Writing tests for the feature
+
+- ✅ Storage Feature (Completed)
+  - ✅ Created domain models and repository interfaces
+    - ✅ Implemented StorageFailure class using freezed
+    - ✅ Defined LocalStorageService interface
+  - ✅ Implemented infrastructure layer
+    - ✅ Created SharedPreferencesStorageService implementation
+    - ✅ Registered services in the dependency injection container
+  - ✅ Added comprehensive unit tests with 100% code coverage
+    - ✅ Tests for StorageFailure class
+    - ✅ Tests for SharedPreferencesStorageService implementation
+    - ✅ Created test mocks with mocktail
+
 ### CI/CD
 - ✅ Set up basic project structure
+- ✅ Enhanced development workflow with improved Makefile
+  - ✅ Streamlined test coverage commands
+  - ✅ Added proper OS detection for browser-based report viewing
 - 🚧 Continuous Integration setup (In Progress)
 - ❌ Continuous Deployment setup
 
@@ -46,12 +75,23 @@
    - ✅ Implementing persistence of onboarding status
    - Adding animations and transitions
 
-2. Setting up testing infrastructure
-   - Unit tests for domain and application layers
+2. Expanding the login feature
+   - Designing login form UI
+   - Implementing form validation
+   - Adding authentication logic
+
+3. ✅ Creating a dedicated storage feature
+   - ✅ Implementing proper abstractions for storage operations
+   - ✅ Ensuring comprehensive test coverage
+   - ✅ Following Clean Architecture principles
+
+4. Setting up testing infrastructure
+   - ✅ Unit tests with comprehensive coverage reporting
    - Widget tests for UI components
    - Integration tests for key user flows
 
-3. Enhancing the development workflow
+5. Enhancing the development workflow
+   - ✅ Improving Makefile for better developer experience
    - Improving code generation scripts
    - Adding more static analysis rules
    - Documenting architecture and patterns
@@ -59,8 +99,8 @@
 ## Planned Work
 
 ### Upcoming Features
-1. Authentication Feature
-   - User login/logout
+1. Authentication Feature (Expanded from initial login)
+   - User login/logout with backend integration
    - Token management
    - Session handling
 
@@ -83,9 +123,11 @@
 ## Status and Metrics
 
 ### Project Status
-- **Overall Progress**: 28%
+- **Overall Progress**: 38%
 - **Onboarding Feature**: 92% complete
-- **Test Coverage**: Currently low (<10%)
+- **Login Feature**: 35% complete
+- **Storage Feature**: 100% complete
+- **Test Coverage**: Improving (100% for Storage, <10% overall)
 - **Known Issues**: 3 open issues
 
 ### Key Metrics
@@ -105,6 +147,7 @@
 |-----------|-------------|--------|
 | Project Setup | Completed | ✅ |
 | Onboarding Feature | In Progress | 🚧 |
+| Login Feature | In Progress | 🚧 |
 | Authentication Feature | Not Started | ❌ |
 | Order Entry Feature | Not Started | ❌ |
 | Order Management Feature | Not Started | ❌ |

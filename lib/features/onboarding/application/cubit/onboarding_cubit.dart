@@ -51,11 +51,29 @@ class OnboardingCubit extends Cubit<OnboardingState> {
 
   /// Marks onboarding as seen and navigates to the main screen
   Future<void> completeOnboarding() async {
-    await _repository.markOnboardingAsSeen();
+    final result = await _repository.markOnboardingAsSeen();
+
+    // Handle potential failure
+    result.fold(
+      (failure) =>
+          emit(state.copyWith(error: 'Failed to save onboarding status')),
+      (_) => null, // Success case doesn't need state change
+    );
   }
 
   /// Checks if onboarding has been seen
+  /// Returns true if onboarding is seen, false otherwise
+  /// In case of failure, returns false (default behavior)
   Future<bool> checkIfOnboardingSeen() async {
-    return _repository.checkIfOnboardingSeen();
+    final result = await _repository.checkIfOnboardingSeen();
+
+    return result.fold(
+      (failure) {
+        // Handle failure by emitting error state and returning default value
+        emit(state.copyWith(error: 'Failed to retrieve onboarding status'));
+        return false;
+      },
+      (seen) => seen, // Return the value from repository
+    );
   }
 }

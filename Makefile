@@ -10,7 +10,6 @@ DART = fvm dart
 FLUTTER_TEST = $(FLUTTER) test
 COVERAGE_FOLDER = coverage/
 COVERAGE_REPORT = $(COVERAGE_FOLDER)lcov.info
-ENV_COVERAGE_PATH = $(COVERAGE_FOLDER)env/
 LCOV = lcov
 GENHTML = genhtml
 OS := $(shell uname)
@@ -79,24 +78,20 @@ test:
 
 # Generate coverage for all tests and open reports
 coverage: install-lcov
-	@mkdir -p $(ENV_COVERAGE_PATH)
+	@mkdir -p $(COVERAGE_FOLDER)html
 	$(FLUTTER_TEST) --coverage
-	@echo "Filtering coverage data for env module..."
-	$(LCOV) --extract $(COVERAGE_REPORT) "*lib/core/env*" -o $(ENV_COVERAGE_PATH)lcov.info
-	$(GENHTML) $(ENV_COVERAGE_PATH)lcov.info -o $(ENV_COVERAGE_PATH)html
 	$(GENHTML) $(COVERAGE_REPORT) -o $(COVERAGE_FOLDER)html
-	@echo "Coverage reports generated at:"
-	@echo "  - $(COVERAGE_FOLDER)html/index.html (all code)"
-	@echo "  - $(ENV_COVERAGE_PATH)html/index.html (env module only)"
-	@echo "Coverage summary for env module:"
-	$(LCOV) --summary $(ENV_COVERAGE_PATH)lcov.info
-	@echo "Opening coverage reports in browser..."
+	
+	@echo "Coverage report generated at:"
+	@echo "  - $(COVERAGE_FOLDER)html/index.html"
+	@echo "Coverage summary:"
+	$(LCOV) --summary $(COVERAGE_REPORT)
+	
+	@echo "Opening coverage report in browser..."
 	@if [ "$(OS)" = "Darwin" ]; then \
 		open $(COVERAGE_FOLDER)html/index.html; \
-		open $(ENV_COVERAGE_PATH)html/index.html; \
 	elif [ "$(OS)" = "Linux" ]; then \
 		xdg-open $(COVERAGE_FOLDER)html/index.html; \
-		xdg-open $(ENV_COVERAGE_PATH)html/index.html; \
 	else \
 		echo "Automatic browser opening not supported on this OS."; \
 		echo "Please open the reports manually."; \

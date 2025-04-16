@@ -154,3 +154,33 @@ genhtml coverage/lcov.info -o coverage/
    - Support for screen readers
    - Color contrast compliance
    - Keyboard navigation support 
+
+## Development Tools
+
+### Testing Tools
+- **Flutter Test**: Core testing framework for Flutter
+- **Mocktail**: Mocking library for creating test doubles
+- **FPDart**: Functional programming library used for handling errors with Either
+- **LCOV**: Coverage reporting tool integrated with Makefile
+- **GoldenToolkit**: For screenshot/UI testing (planned)
+
+### Code Coverage Process
+The project uses a standardized approach to tracking and generating code coverage:
+
+1. **Running Tests with Coverage**:
+   - Use `make test` to run all tests
+   - Use `make coverage` to generate and view coverage reports
+
+2. **Coverage Reports**:
+   - Generate HTML reports using lcov and genhtml
+   - Reports show line coverage percentages
+   - Easily viewable in browser
+
+3. **Coverage Targets**:
+   - Overall project: 80%+ (target)
+   - Storage Feature: 100% (achieved)
+   - Core Modules: 90%+ (target)
+
+## Build and Deployment
+
+// ... existing code ... 

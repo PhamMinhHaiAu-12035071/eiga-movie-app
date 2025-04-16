@@ -55,6 +55,25 @@ lib/
 └── bootstrap.dart              # Application initialization
 ```
 
+## Feature Structure Example
+
+### Login Feature Structure
+This is a typical structure for a feature, exemplified by the login feature:
+
+```
+lib/features/login/
+├── application/
+│   └── cubit/
+│       ├── login_cubit.dart    # State management
+│       └── login_state.dart    # State definition
+├── presentation/
+│   ├── pages/
+│   │   └── login_page.dart     # Route page with @RoutePage annotation
+│   └── widgets/
+│       └── login_view.dart     # Main UI component
+└── README.md                   # Feature documentation
+```
+
 ## Key Design Patterns
 
 ### Repository Pattern
@@ -95,13 +114,17 @@ lib/
 
 ### Navigation
 - Uses `auto_route` for type-safe routing
-- Centralized route definitions
+- Centralized route definitions in `app_router.dart`
+- Route pages annotated with `@RoutePage()`
+- Navigation implemented using `context.router.replace()` or `context.router.push()`
 - Support for nested routes and guards
 
 ### State Management
 - Uses `flutter_bloc` for state management
 - Separate state classes for each feature
-- Immutable state objects with `freezed`
+- Immutable state objects with `freezed` or `equatable`
+- State providers injected using BlocProvider
+- Consumption with BlocBuilder or BlocConsumer
 
 ### Error Handling
 - Centralized error handling through repositories
@@ -134,13 +157,136 @@ lib/
 - Improves maintainability by eliminating hardcoded duration values
 - Makes animation timing adjustments easier by changing values in a single place
 
+### Styling System
+- Text styles defined in AppTextStyle class
+- Size constants defined in AppDimension class
+- Colors defined in AppColors class
+- Consistent usage throughout the application
+- Responsive design with ScreenUtil
+
 ## Component Communication
 - Primarily through BLoC/Cubit pattern
 - Repository pattern for data access
 - Event-based communication for cross-feature interactions
+
+## Feature Implementation Patterns
+### Minimal Feature
+- Start with a simple state class (using Equatable or Freezed)
+- Create a basic Cubit with minimal functionality
+- Implement UI with proper routing and navigation
+- Follow the app's design guidelines for consistent UI
+
+### Full Feature
+- Domain layer with entities and repository interfaces
+- Infrastructure layer with repository implementations
+- Application layer with state management
+- Presentation layer with UI components
+- Comprehensive documentation in README.md
 
 ## Testing Strategy
 - Unit tests for domain and application layers
 - Widget tests for presentation layer
 - Integration tests for key user flows
 - Mock repositories and services for isolated testing 
+
+## Architectural Patterns
+
+### Clean Architecture
+The application is structured according to Clean Architecture principles, with a clear separation of concerns through layers:
+
+1. **Domain Layer**
+   - Contains business logic, entities, and repository interfaces
+   - Has no dependencies on other layers or external frameworks
+   - Includes use cases that encapsulate business rules
+
+2. **Application Layer**
+   - Contains state management (BLoC/Cubit)
+   - Orchestrates flow of data between domain and presentation
+   - Depends only on the domain layer
+
+3. **Infrastructure Layer**
+   - Implements repository interfaces from the domain layer
+   - Handles external data sources (API, database, local storage)
+   - Contains adapters to convert external data models to domain entities
+
+4. **Presentation Layer**
+   - Contains UI components (widgets, pages)
+   - Consumes state from application layer
+   - Handles user interactions and delegates to application layer
+
+### Feature-First Organization
+The project is organized around features rather than layers, which keeps related code together and improves maintainability:
+
+```
+lib/
+├── core/                  # Core utilities and shared functionality
+│   ├── env/              # Environment configuration
+│   ├── theme/            # Application theming
+│   ├── router/           # Navigation routing
+│   ├── di/               # Dependency injection setup
+│   ├── styles/           # Shared style definitions
+│   └── sizes/            # Standardized sizing constants
+│   └── durations/        # Animation duration constants
+├── features/             # Application features
+│   ├── onboarding/       # Onboarding feature
+│   │   ├── domain/       # Domain layer for onboarding
+│   │   ├── application/  # Application layer for onboarding
+│   │   ├── infrastructure/ # Infrastructure layer for onboarding
+│   │   └── presentation/ # Presentation layer for onboarding
+│   ├── login/            # Login feature
+│   │   ├── domain/       # Domain layer for login
+│   │   ├── application/  # Application layer for login
+│   │   ├── infrastructure/ # Infrastructure layer for login
+│   │   └── presentation/ # Presentation layer for login
+│   └── storage/          # Storage feature
+│       ├── domain/       # Domain layer for storage
+│       └── infrastructure/ # Infrastructure layer for storage
+└── main.dart             # Application entry point
+```
+
+### Storage Feature Architecture
+
+The Storage feature implements persistent data storage capabilities using SharedPreferences as its underlying mechanism. It follows Clean Architecture principles and includes:
+
+1. **Domain Layer**:
+   - `StorageFailure` class: Represents different types of storage operation failures
+     - Uses freezed for immutable implementation
+     - Provides specific failure types: storageError, keyNotFound, typeMismatch
+   - `LocalStorageService` interface: Defines contract for storage operations
+     - Uses Either<StorageFailure, T> return type for functional error handling
+     - Provides methods for CRUD operations (getBool, setBool, containsKey, remove, clear)
+
+2. **Infrastructure Layer**:
+   - `SharedPreferencesStorageService`: Implements LocalStorageService using SharedPreferences
+     - Handles exceptions and converts them to appropriate StorageFailure types
+     - Registered as a lazySingleton in the dependency injection container
+
+3. **Testing**:
+   - 100% code coverage with comprehensive unit tests
+   - Tests for all failure and success scenarios
+   - Uses mocktail for mocking dependencies
+
+### Testing Approach
+
+The project implements a comprehensive testing strategy:
+
+1. **Unit Testing**
+   - Tests for domain entities and application logic
+   - Tests for repositories and services
+   - Uses fpdart's Either for testing error scenarios
+   - Mock dependencies using mocktail
+
+2. **Widget Testing**
+   - Tests for UI components in isolation
+   - Tests for screen flows and interactions
+   - Uses flutter_test framework
+
+3. **Integration Testing**
+   - Tests for feature workflows
+   - Tests for navigation between screens
+   - Tests for end-to-end functionality
+
+4. **Test Coverage**
+   - Uses lcov for generating coverage reports
+   - Customized Makefile commands for running tests and viewing coverage
+   - Target of 80%+ code coverage 
