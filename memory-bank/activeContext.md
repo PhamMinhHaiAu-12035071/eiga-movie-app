@@ -4,6 +4,7 @@
 - Unit testing for onboarding feature
 - Widget testing patterns established
 - Fixing deprecated API usage in test files
+- Refactoring widgetbook to match main app structure
 
 ## Recent Changes
 - Implemented comprehensive test coverage for OnboardingPageView widget
@@ -16,6 +17,11 @@
   - Replaced `color.red`, `color.green`, `color.blue` with `color.r.toInt()`, `color.g.toInt()`, `color.b.toInt()`
   - Replaced `color.value` with `color.toARGB32()`
   - Improved mock implementations with proper typing
+- Refactored widgetbook structure to match main app structure:
+  - Created bootstrap.dart with similar structure to main app bootstrap
+  - Added environment-specific entry points (main_development.dart, main_staging.dart, main_production.dart)
+  - Updated widgetbook app.dart to use ResponsiveInitializer
+  - Aligned initialization flow with main app patterns
 
 ## Testing Patterns Established
 1. Mock Dependencies:
@@ -78,6 +84,11 @@
 2. Implement integration tests for full onboarding flow
 
 3. Document test patterns for team reference
+
+4. Complete remaining widgetbook integration:
+   - Add additional component showcases
+   - Ensure consistent styling between app and widgetbook
+   - Document widget usage patterns in widgetbook
 
 ## Active Decisions
 1. Testing Standards:

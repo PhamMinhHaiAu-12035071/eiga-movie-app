@@ -6,11 +6,14 @@ Widgetbook là một thư viện giúp trình diễn và kiểm thử các widge
 
 ```
 widgetbook/
-├── main.dart                  # Entry point (điểm khởi chạy)
-├── app.dart                   # WidgetbookApp component
-├── directories.dart           # Tổng hợp tất cả WidgetbookComponent
-├── README.md                  # Tài liệu hướng dẫn (file này)
-├── components/                # Chứa các component được tổ chức theo feature
+├── bootstrap.dart              # Application initialization similar to main app
+├── main_development.dart       # Entry point for development environment
+├── main_staging.dart           # Entry point for staging environment
+├── main_production.dart        # Entry point for production environment
+├── app.dart                    # WidgetbookApp component
+├── directories.dart            # Tổng hợp tất cả WidgetbookComponent
+├── README.md                   # Tài liệu hướng dẫn (file này)
+├── components/                 # Chứa các component được tổ chức theo feature
 │   ├── onboarding/
 │   │   ├── onboarding_component.dart
 │   │   └── dot_indicator_component.dart
@@ -25,11 +28,35 @@ widgetbook/
 
 ## Cách chạy
 
-Để chạy widgetbook:
+Để chạy widgetbook cho các môi trường khác nhau:
 
 ```bash
-flutter run -t lib/widgetbook/main.dart
+# Development
+flutter run -t lib/widgetbook/main_development.dart
+
+# Staging
+flutter run -t lib/widgetbook/main_staging.dart
+
+# Production
+flutter run -t lib/widgetbook/main_production.dart
 ```
+
+## Kiến trúc
+
+Widgetbook được thiết kế để phản ánh cấu trúc của ứng dụng chính:
+
+1. **bootstrap.dart**
+   - Khởi tạo ứng dụng, cấu hình xử lý lỗi và observer bloc
+   - Cấu hình dependency injection (DI)
+   - Tương tự như bootstrap.dart của ứng dụng chính
+
+2. **app.dart**
+   - Định nghĩa WidgetbookApp với ResponsiveInitializer
+   - Tổ chức UI theo cùng một pattern như ứng dụng chính
+
+3. **Môi trường**
+   - Các môi trường (`development`, `staging`, `production`) được tách biệt 
+   - Mỗi môi trường có entry point riêng (main_*.dart)
 
 ## Thêm component mới
 

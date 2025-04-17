@@ -23,6 +23,11 @@
 - ✅ Rebranded application to "EIGA Movie App" for cinema ticket booking
 - ✅ Refactored themes module to match styles structure (added extensions index, updated imports)
 - ✅ Created test/core/themes directory and achieved 100% unit test coverage for AppAssetExtension
+- ✅ Refactored widgetbook to match main app structure:
+  - ✅ Created bootstrap.dart with similar initialization flow
+  - ✅ Added environment-specific entry points (main_development.dart, main_staging.dart, main_production.dart)
+  - ✅ Updated widgetbook app to be wrapped with ResponsiveInitializer
+  - ✅ Aligned code structure with main app patterns for consistency
 
 ### Feature Implementation
 - 🚧 Onboarding Feature (In Progress)
