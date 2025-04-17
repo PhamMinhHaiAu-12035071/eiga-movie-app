@@ -26,6 +26,46 @@ widgetbook/
     └── material_theme_addon.dart
 ```
 
+## Addons được sử dụng
+
+Widgetbook hiện tại sử dụng các addon sau để nâng cao trải nghiệm kiểm thử và trình diễn:
+
+- **MaterialThemeAddon**: Cho phép chuyển đổi giữa light/dark theme.
+- **TextScaleAddon**: Thay đổi tỉ lệ chữ để kiểm thử khả năng thích ứng của UI với các kích thước chữ khác nhau.
+- **DeviceFrameAddon**: Xem trước widget trên nhiều loại thiết bị phổ biến (iPhone SE, iPhone 12, iPhone 13, Samsung Galaxy S20, Note20 Ultra, ...).
+- **ScreenUtil (BuilderAddon)**: Khởi tạo ScreenUtil để kiểm thử responsive layout, đảm bảo các widget hiển thị đúng trên nhiều kích thước màn hình khác nhau.
+
+### Ví dụ cấu hình addons trong app.dart:
+
+```dart
+addons: [
+  getMaterialThemeAddon(),
+  TextScaleAddon(),
+  DeviceFrameAddon(
+    devices: [
+      Devices.ios.iPhoneSE,
+      Devices.ios.iPhone12,
+      Devices.ios.iPhone13,
+      Devices.android.samsungGalaxyS20,
+      Devices.android.samsungGalaxyNote20Ultra,
+    ],
+  ),
+  BuilderAddon(
+    name: 'ScreenUtil',
+    builder: (context, child) {
+      return ScreenUtilInit(
+        designSize: const Size(375, 812),
+        minTextAdapt: true,
+        splitScreenMode: true,
+        useInheritedMediaQuery: true,
+        builder: (context, child) => child!,
+        child: child,
+      );
+    },
+  ),
+],
+```
+
 ## Cách chạy
 
 Để chạy widgetbook cho các môi trường khác nhau:
