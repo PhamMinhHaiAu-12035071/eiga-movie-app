@@ -22,6 +22,9 @@
   - Added environment-specific entry points (main_development.dart, main_staging.dart, main_production.dart)
   - Updated widgetbook app.dart to use ResponsiveInitializer
   - Aligned initialization flow with main app patterns
+- Enhanced widgetbook developer experience:
+  - Added InspectorAddon, GridAddon, AlignmentAddon, ZoomAddon for advanced layout/debugging
+  - Greatly expanded DeviceFrameAddon list: now covers a wide range of iOS/Android phones and tablets (including iPhone12Mini, iPhone12ProMax, iPadAir4, iPadPro11Inches, iPad12InchesGen2/4, Samsung Galaxy A50, Sony Xperia 1 II, and generic small/medium/large devices)
 
 ## Testing Patterns Established
 1. Mock Dependencies:

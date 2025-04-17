@@ -32,8 +32,17 @@ Widgetbook hiện tại sử dụng các addon sau để nâng cao trải nghi�
 
 - **MaterialThemeAddon**: Cho phép chuyển đổi giữa light/dark theme.
 - **TextScaleAddon**: Thay đổi tỉ lệ chữ để kiểm thử khả năng thích ứng của UI với các kích thước chữ khác nhau.
-- **DeviceFrameAddon**: Xem trước widget trên nhiều loại thiết bị phổ biến (iPhone SE, iPhone 12, iPhone 13, Samsung Galaxy S20, Note20 Ultra, ...).
-- **ScreenUtil (BuilderAddon)**: Khởi tạo ScreenUtil để kiểm thử responsive layout, đảm bảo các widget hiển thị đúng trên nhiều kích thước màn hình khác nhau.
+- **InspectorAddon**: Xem và debug cây widget, layout, properties trực tiếp trên UI.
+- **GridAddon**: Hiển thị grid overlay để kiểm tra alignment, spacing, layout.
+- **AlignmentAddon**: Thay đổi alignment của widget để kiểm thử các trường hợp căn lề khác nhau.
+- **ZoomAddon**: Phóng to/thu nhỏ UI để kiểm thử chi tiết pixel-perfect.
+- **DeviceFrameAddon**: Xem trước widget trên nhiều loại thiết bị phổ biến (iOS/Android phones, tablets, generic sizes).
+
+### Danh sách thiết bị test (DeviceFrameAddon)
+
+- **iOS**: iPhone12Mini, iPhone12, iPhone12ProMax, iPhone13Mini, iPhone13, iPhone13ProMax, iPhoneSE, iPad, iPadAir4, iPadPro11Inches, iPad12InchesGen2, iPad12InchesGen4
+- **Android**: samsungGalaxyS20, samsungGalaxyNote20, samsungGalaxyNote20Ultra, samsungGalaxyA50, onePlus8Pro, sonyXperia1II
+- **Generic**: smallPhone, mediumPhone, bigPhone, smallTablet, mediumTablet, largeTablet
 
 ### Ví dụ cấu hình addons trong app.dart:
 
@@ -41,27 +50,40 @@ Widgetbook hiện tại sử dụng các addon sau để nâng cao trải nghi�
 addons: [
   getMaterialThemeAddon(),
   TextScaleAddon(),
+  InspectorAddon(),
+  GridAddon(100),
+  AlignmentAddon(),
+  ZoomAddon(),
   DeviceFrameAddon(
     devices: [
-      Devices.ios.iPhoneSE,
+      // iOS
+      Devices.ios.iPhone12Mini,
       Devices.ios.iPhone12,
+      Devices.ios.iPhone12ProMax,
+      Devices.ios.iPhone13Mini,
       Devices.ios.iPhone13,
+      Devices.ios.iPhone13ProMax,
+      Devices.ios.iPhoneSE,
+      Devices.ios.iPad,
+      Devices.ios.iPadAir4,
+      Devices.ios.iPadPro11Inches,
+      Devices.ios.iPad12InchesGen2,
+      Devices.ios.iPad12InchesGen4,
+      // Android
       Devices.android.samsungGalaxyS20,
+      Devices.android.samsungGalaxyNote20,
       Devices.android.samsungGalaxyNote20Ultra,
+      Devices.android.samsungGalaxyA50,
+      Devices.android.onePlus8Pro,
+      Devices.android.sonyXperia1II,
+      // Generic
+      Devices.android.smallPhone,
+      Devices.android.mediumPhone,
+      Devices.android.bigPhone,
+      Devices.android.smallTablet,
+      Devices.android.mediumTablet,
+      Devices.android.largeTablet,
     ],
-  ),
-  BuilderAddon(
-    name: 'ScreenUtil',
-    builder: (context, child) {
-      return ScreenUtilInit(
-        designSize: const Size(375, 812),
-        minTextAdapt: true,
-        splitScreenMode: true,
-        useInheritedMediaQuery: true,
-        builder: (context, child) => child!,
-        child: child,
-      );
-    },
   ),
 ],
 ```
