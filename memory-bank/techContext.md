@@ -34,6 +34,7 @@
 
 ### Storage
 - **shared_preferences**: Persistent key-value storage
+- **flutter_secure_storage**: Secure key-value storage
 
 ### Environment Configuration
 - **envied**: Type-safe environment variables with obfuscation
@@ -54,6 +55,19 @@
 - **package_info_plus**: Access to app package information
 - **device_info_plus**: Access to device information
 - **path_provider**: Access to file system locations
+
+### UI/UX Technologies
+- **Material Design 3**: Design principles and components
+- **Responsive Design**: flutter_screenutil
+- **Animations**: flutter_animate, lottie
+- **SVG Support**: flutter_svg
+- **Image Handling**: cached_network_image
+- **Custom Theming**: Theme extensions
+
+### Modern API Usage
+- **Color API**: Using modern component accessors (r, g, b, a) instead of deprecated properties
+- **Material 3 Components**: Using latest widget patterns
+- **Null Safety**: Fully implemented throughout the codebase
 
 ## Development Setup
 

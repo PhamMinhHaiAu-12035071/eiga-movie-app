@@ -434,6 +434,7 @@
 - ✅ Created mock implementations for core dependencies
 - ✅ Set up test file organization structure
 - ✅ Implemented test coverage requirements
+- ✅ Fixed deprecated API usage in test files
 
 ### Onboarding Feature Tests
 - ✅ OnboardingPageView widget tests
@@ -443,10 +444,18 @@
   - Style verification
   - Edge cases
 - ✅ Mock implementations
-  - AppSizes
+  - AppSizes (all size properties properly implemented)
   - AppTextStyles
-  - AppColors
+  - AppColors (using modern color API)
   - AssetGenImage
+
+### API Modernization
+- ✅ Updated color property access
+  - Replaced deprecated `color.red/green/blue` with `color.r/g/b.toInt()`
+  - Replaced deprecated `color.value` with `color.toARGB32()`
+- ✅ Fixed type conversion issues
+  - Proper casting between double and int for color components
+  - Correct typing for mock implementations
 
 ## In Progress
 - 🔄 OnboardingHeader widget tests

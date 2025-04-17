@@ -3,6 +3,7 @@
 ## Current Focus
 - Unit testing for onboarding feature
 - Widget testing patterns established
+- Fixing deprecated API usage in test files
 
 ## Recent Changes
 - Implemented comprehensive test coverage for OnboardingPageView widget
@@ -11,13 +12,17 @@
   - Named parameters for boolean values
   - Correct mock implementations for AssetGenImage
   - Proper MaterialColor usage in color mocks
+- Fixed deprecated color properties in test files:
+  - Replaced `color.red`, `color.green`, `color.blue` with `color.r.toInt()`, `color.g.toInt()`, `color.b.toInt()`
+  - Replaced `color.value` with `color.toARGB32()`
+  - Improved mock implementations with proper typing
 
 ## Testing Patterns Established
 1. Mock Dependencies:
    ```dart
    - AppSizes: Explicit numeric values for dimensions
    - AppTextStyles: Basic style implementations
-   - AppColors: MaterialColor implementations
+   - AppColors: MaterialColor implementations with proper color component access
    - AssetGenImage: Full mock with error handling
    ```
 

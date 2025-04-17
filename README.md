@@ -1,10 +1,10 @@
-# 📦 KSK App
+# 📦 EIGA Movie App
 
 ![coverage][coverage_badge]
 [![style: very good analysis][very_good_analysis_badge]][very_good_analysis_link]
 [![License: MIT][license_badge]][license_link]
 
-A Flutter app that allows workers to easily input order data using a modern, high-performance, and maintainable architecture.
+A Flutter app that allows users to browse movies, watch trailers, and book tickets using a modern, high-performance, and maintainable architecture.
 
 ## 📦 Project Structure (Clean Architecture)
 
@@ -49,68 +49,66 @@ lib/
 
 Each feature may come with a `README.md` file describing its functionality, main logic, and related APIs.
 
-## 🚀 Features
+## 🚀 Implemented Features
 
-### 🌟 Onboarding
+### 🌟 Onboarding (92% Complete)
 
-The onboarding feature provides new users with an introduction to the app's key features. It follows Clean Architecture principles with a complete separation of concerns:
+The onboarding feature provides new users with an introduction to the app's key features:
 
-- **Domain Layer**: Defines the core business logic and entities
-  - Models: `OnboardingInfo` representing each onboarding slide
-  - Repository interfaces: `OnboardingRepository` for persistence
-
-- **Infrastructure Layer**: Implements data access logic
-  - Repository implementation (`OnboardingRepositoryImpl`) using abstractions for storage operations
-
-- **Application Layer**: Manages state and business logic
-  - `OnboardingCubit` for state management with slides information
-  - `OnboardingState` to track current page and slide data
-
-- **Presentation Layer**: UI components
+- **Domain Layer**: `OnboardingInfo` model and `OnboardingRepository` interface
+- **Infrastructure Layer**: `OnboardingRepositoryImpl` for persistence with SharedPreferences
+- **Application Layer**: `OnboardingCubit` for state management
+- **Presentation Layer**: 
   - `OnboardingPage`: Main screen with page navigation
-  - Reusable widgets: `OnboardingPageView`, `OnboardingDotIndicator`, `OnboardingNextButton`
+  - Reusable widgets: `OnboardingPageView`, `OnboardingDotIndicator`, `OnboardingHeader`, `OnboardingNextButton`
 
-The onboarding flow presents users with information about key app features, with smooth page transitions, progress indicators, and options to skip or move to the next screen.
+The onboarding showcases key app features:
+- "Choose movies, watch trailers, take tickets"
+- "Find Your Favorite Movies"
+- "Book movie tickets anytime, anywhere with just a few taps"
 
-### 🔍 Feature Showcasing
+### 🔐 Environment (100% Complete)
 
-The app uses the `showcaseview` package to provide interactive tutorials highlighting key features. This helps users discover and understand the app's functionality:
+Provides configuration based on the running environment:
 
-- **Interactive guides**: Step-by-step walkthroughs for complex features
-- **Targeted highlights**: Focus user attention on specific UI elements
-- **Persistent state**: Track which tutorials users have already seen
-- **Configurable appearance**: Customize the look and feel of showcase elements
+- Uses `envied` for secure access to environment variables
+- Clean Architecture with domain and infrastructure layers
+- Comprehensive test coverage
+- Configured for movie app API endpoints
 
-Implementation follows the repository pattern for tracking showcase completion:
+### 💾 Storage (100% Complete)
 
-- **Domain Layer**: Defines the `ShowcaseRepository` interface
-- **Infrastructure Layer**: Implements persistence of showcase state
-- **Application Layer**: Manages when and how showcases are triggered
-- **Presentation Layer**: UI components with showcase annotations
+Provides abstraction for local storage operations:
 
-### 🧮 Functional Programming
+- Uses `SharedPreferences` for persistent storage
+- Implements functional error handling with `fpdart`
+- Comprehensive test coverage
+- Follows Clean Architecture principles
 
-The app leverages the `fpdart` library to implement functional programming concepts that improve error handling and domain modeling:
+### 🔍 Login (35% Complete)
+
+Currently includes:
+- Basic welcome screen with EIGA branding
+- "Welcome to EIGA!" welcome message
+- "Your movie journey begins here" subtitle
+- State management setup with Cubit
+
+## 🧮 Functional Programming
+
+The app leverages the `fpdart` library to implement functional programming concepts:
 
 - **Either type**: Represents operations that can succeed or fail with explicit error types
 - **Option type**: Replaces nullable values with a more type-safe approach
 - **Task type**: Manages asynchronous operations with better composability
 
-Benefits of using functional programming in the app:
-
-- **Explicit error handling**: All potential failure cases are encoded in the type system
-- **Type safety**: Compiler ensures all error cases are properly handled
-- **Cleaner domain models**: More expressive and self-documenting code
-- **Predictable execution**: Function composition and immutable data structures
-
-Typical usage pattern:
+Example usage pattern:
 
 ```dart
 // Repository method returning Either type
-Future<Either<Failure, List<Product>>> getProducts() async {
+Future<Either<Failure, List<Movie>>> getMovies() async {
   try {
-    final result = await _apiClient.get('/products');
-    return right(result.map((json) => Product.fromJson(json)).toList());
+    final result = await _apiClient.get('/movies');
+    return right(result.map((json) => Movie.fromJson(json)).toList());
   } on NetworkException catch (e) {
     return left(NetworkFailure(e.message));
   } on ServerException catch (e) {
@@ -121,19 +119,19 @@ Future<Either<Failure, List<Product>>> getProducts() async {
 }
 
 // Cubit handling Either results
-Future<void> loadProducts() async {
-  emit(state.copyWith(status: ProductStatus.loading));
+Future<void> loadMovies() async {
+  emit(state.copyWith(status: MovieStatus.loading));
   
-  final result = await _productRepository.getProducts();
+  final result = await _movieRepository.getMovies();
   
   result.fold(
     (failure) => emit(state.copyWith(
-      status: ProductStatus.error,
+      status: MovieStatus.error,
       errorMessage: failure.message,
     )),
-    (products) => emit(state.copyWith(
-      status: ProductStatus.loaded, 
-      products: products,
+    (movies) => emit(state.copyWith(
+      status: MovieStatus.loaded, 
+      movies: movies,
     )),
   );
 }
@@ -207,7 +205,7 @@ class EnvConfigRepositoryImpl implements EnvConfigRepository {
 }
 ```
 
-## 📦 Dependencies
+## 📦 Key Dependencies
 
 | Package                     | Role in the project                           |
 |-----------------------------|-----------------------------------------------|
@@ -252,16 +250,28 @@ Run unit & widget tests:
 
 ```bash
 fvm flutter test --coverage --test-randomize-ordering-seed random
+# or
+make test
 ```
 
 Generate coverage report:
 
 ```bash
 genhtml coverage/lcov.info -o coverage/
-open coverage/index.html
+# or
+make coverage
 ```
 
-- The test suite now includes `test/core/themes/extensions/app_asset_extension_test.dart` with 100% coverage. Coverage for `AppColorExtension` and `AppTheme` is in progress.
+### Testing Standards
+- **Widget Testing**: Comprehensive testing for UI components
+- **Mock Dependencies**: Properly typed mock implementations
+- **Test Data Factories**: Reusable test data creation
+- **Color API Usage**: Using modern color component accessors (r, g, b, a) instead of deprecated properties
+- **Test Coverage Targets**:
+  - Overall project: 80%+ (target)
+  - Storage Feature: 100% (achieved)
+  - Environment Feature: 100% (achieved)
+  - Core Modules: 90%+ (target)
 
 ## 🌐 Localization
 
@@ -329,6 +339,7 @@ Text(t.auth.welcome(name: 'David'));
 - [ ] Run code generation (`build_runner`) whenever adding a model or dependency
 - [ ] Write basic tests when adding a new feature
 - [ ] Update localization whenever adding or modifying text in the UI
+- [ ] Use modern Flutter APIs (avoid deprecated color properties)
 
 ## 🧠 Best Practices Checklist (Advanced)
 
@@ -351,6 +362,7 @@ Text(t.auth.welcome(name: 'David'));
 - [ ] Leverage platform utilities: `path_provider`, `device_info_plus`, `package_info_plus`
 - [ ] Use `after_layout` for widget initialization that requires measurements
 - [ ] Secure sensitive data using `envied` for environment variables
+- [ ] Apply modern color API methods (r, g, b, a) instead of deprecated properties (red, green, blue)
 
 ## 📖 References
 
@@ -365,9 +377,9 @@ Text(t.auth.welcome(name: 'David'));
 - [Collection & Meta Packages](https://dart.dev/guides/libraries/useful-libraries)
 - [After Layout Documentation](https://pub.dev/packages/after_layout)
 - [Envied - Secure Environment Variables](https://pub.dev/packages/envied)
-- [Vibe Coding Tutorial Weather App](https://github.com/erkansahin/vibe_coding_tutorial_weather_app)
-- [Smart App Monorepo by Banua Coder](https://github.com/banua-coder/smart-app)
-- [Storage App by Draphonix](https://github.com/draphonix/storage)
+- [Showcaseview - Feature Highlighting](https://pub.dev/packages/showcaseview)
+- [fpdart - Functional Programming in Dart](https://pub.dev/packages/fpdart)
+- [Google Fonts - Typography](https://pub.dev/packages/google_fonts)
 
 ---
 

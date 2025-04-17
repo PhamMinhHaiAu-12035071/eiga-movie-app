@@ -635,3 +635,35 @@ test/
    - Use GetIt for dependency injection
    - Register dependencies at app startup
    - Use proper scoping for dependencies
+
+## Testing Patterns
+
+### Test Organization
+
+1. **Feature-Based Tests**
+   - Test files mirror feature structure
+   - Each feature has its own test directory
+   - Tests are organized by layer (domain, application, infrastructure, presentation)
+
+2. **Widget Testing**
+   - Comprehensive widget testing for each UI component
+   - Verify rendering, callbacks, and user interactions
+   - Test different states (loading, error, success)
+   - Validate visual properties and layouts
+
+3. **Test Data Factories**
+   - Create reusable test data factories
+   - Generate consistent test data across test files
+   - Support custom data variations for edge cases
+
+### Test Implementation
+
+1. **Mock Implementation**
+   - Use mocktail for creating mocks
+   - Implement explicit property getters for required properties
+   - Always use up-to-date APIs, avoiding deprecated methods
+   - Properly type all return values
+   - For color properties:
+     - Use modern accessors (r, g, b, a) instead of deprecated ones (red, green, blue)
+     - Apply proper type conversion for color components (toInt() for r/g/b when needed)
+     - Use toARGB32() instead of deprecated value property for color integer representation
