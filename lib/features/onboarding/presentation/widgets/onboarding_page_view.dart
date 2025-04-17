@@ -51,43 +51,50 @@ class OnboardingPageView extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: _sizes.h32),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
         children: [
-          // Illustration image
-          slide.image.image(
-            height: _sizes.v260,
-            width: _sizes.h260,
-            fit: BoxFit.contain,
-            errorBuilder: (context, error, stackTrace) {
-              // Display placeholder if image is not found
-              return Container(
-                height: _sizes.v260,
-                width: _sizes.h260,
-                color: _colors.grey[300],
-                child: Icon(
-                  Icons.image_not_supported,
-                  size: _sizes.r80,
-                  color: _colors.grey[600],
-                ),
-              );
-            },
+          Flexible(
+            flex: 3,
+            child: slide.image.image(
+              height: _sizes.v260,
+              width: _sizes.h260,
+              fit: BoxFit.contain,
+              errorBuilder: (context, error, stackTrace) {
+                // Display placeholder if image is not found
+                return Container(
+                  height: _sizes.v260,
+                  width: _sizes.h260,
+                  color: _colors.grey[300],
+                  child: Icon(
+                    Icons.image_not_supported,
+                    size: _sizes.r80,
+                    color: _colors.grey[600],
+                  ),
+                );
+              },
+            ),
           ),
           Gap(_sizes.v24),
-          // Title
-          Text(
-            slide.title,
-            style: _textStyles.headingLg(
-              color: _colors.onboardingBlue,
-              fontWeight: FontWeight.w900,
+          Flexible(
+            child: Text(
+              slide.title,
+              style: _textStyles.headingLg(
+                color: _colors.onboardingBlue,
+                fontWeight: FontWeight.w900,
+              ),
+              textAlign: TextAlign.center,
             ),
           ),
           Gap(_sizes.v12),
-          // Description
-          Text(
-            slide.description,
-            textAlign: TextAlign.center,
-            style: _textStyles.body(
-              color: _colors.black,
-              fontWeight: FontWeight.w700,
+          Flexible(
+            flex: 2,
+            child: Text(
+              slide.description,
+              textAlign: TextAlign.center,
+              style: _textStyles.body(
+                color: _colors.black,
+                fontWeight: FontWeight.w700,
+              ),
             ),
           ),
         ],
