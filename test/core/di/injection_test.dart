@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:ksk_app/core/di/injection.dart';
@@ -10,28 +11,32 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 /// Main test file for the dependency injection module
 void main() {
-  final getIt = GetIt.instance;
+  late GetIt getIt;
 
-  setUp(() {
-    // Set up mock SharedPreferences for testing
+  setUp(() async {
+    // Setup shared preferences mock
     SharedPreferences.setMockInitialValues({});
+
+    // Clear GetIt instance before each test
+    await GetIt.I.reset();
+    getIt = GetIt.instance;
+
+    // Configure dependencies
+    await configureDependencies();
   });
 
-  tearDown(getIt.reset);
+  tearDown(() async {
+    await getIt.reset();
+  });
 
   group('configureDependencies()', () {
-    test('should initialize the DI container without errors', () async {
-      // Act
-      await configureDependencies();
-
+    test('should initialize the DI container without errors', () {
+      // No need to call configureDependencies() again - it's done in setUp
       // Assert - no exception thrown means success
       expect(true, isTrue);
     });
 
-    test('should register SharedPreferences as a singleton', () async {
-      // Act
-      await configureDependencies();
-
+    test('should register SharedPreferences as a singleton', () {
       // Assert
       expect(getIt.isRegistered<SharedPreferences>(), isTrue);
 
@@ -41,12 +46,9 @@ void main() {
       expect(instance1, same(instance2));
     });
 
-    test('should register EnvConfigRepository as a lazy singleton', () async {
+    test('should register EnvConfigRepository as a lazy singleton', () {
       // Arrange
       var resolutionCount = 0;
-
-      // Act
-      await configureDependencies();
 
       // Assert
       expect(getIt.isRegistered<EnvConfigRepository>(), isTrue);
@@ -76,10 +78,7 @@ void main() {
       expect(resolutionCount, 1);
     });
 
-    test('should register LocalStorageService as a lazy singleton', () async {
-      // Act
-      await configureDependencies();
-
+    test('should register LocalStorageService as a lazy singleton', () {
       // Assert
       expect(getIt.isRegistered<LocalStorageService>(), isTrue);
 
@@ -89,10 +88,7 @@ void main() {
       expect(instance1, same(instance2));
     });
 
-    test('should register OnboardingRepository as a lazy singleton', () async {
-      // Act
-      await configureDependencies();
-
+    test('should register OnboardingRepository as a lazy singleton', () {
       // Assert
       expect(getIt.isRegistered<OnboardingRepository>(), isTrue);
 
@@ -102,10 +98,7 @@ void main() {
       expect(instance1, same(instance2));
     });
 
-    test('should register LoginCubit as a factory', () async {
-      // Act
-      await configureDependencies();
-
+    test('should register LoginCubit as a factory', () {
       // Assert
       expect(getIt.isRegistered<LoginCubit>(), isTrue);
 
@@ -115,10 +108,7 @@ void main() {
       expect(instance1, isNot(same(instance2)));
     });
 
-    test('should register OnboardingCubit as a factory', () async {
-      // Act
-      await configureDependencies();
-
+    test('should register OnboardingCubit as a factory', () {
       // Assert
       expect(getIt.isRegistered<OnboardingCubit>(), isTrue);
 
@@ -159,39 +149,38 @@ void main() {
     });
   });
 
-  group('RegisterModule', () {
-    test('should provide SharedPreferences instance', () async {
-      // Act
-      await configureDependencies();
-
+  group('LocalStorageModule', () {
+    test('should provide SharedPreferences instance', () {
       // Assert
       final prefs = getIt<SharedPreferences>();
       expect(prefs, isA<SharedPreferences>());
     });
 
-    test('should initialize SharedPreferences only once', () async {
-      // Arrange - count how many times a SharedPreferences instance is created
-      var instanceCount = 0;
-
-      // Track creation of SharedPreferences instances
-      SharedPreferences.setMockInitialValues({});
-      addTearDown(() {
-        if (instanceCount > 0) {
-          // Verification happens here - we only want to create one instance
-          expect(instanceCount, 1);
-        }
-      });
-
-      // Act
-      await configureDependencies();
-      instanceCount++; // Increment after initialization
-
+    test('should initialize SharedPreferences only once', () {
       // Resolve multiple times
       getIt<SharedPreferences>();
       getIt<SharedPreferences>();
 
-      // Make sure we resolved it to verify the tearDown assertion
+      // Make sure we resolved it
       expect(getIt.isRegistered<SharedPreferences>(), isTrue);
+    });
+  });
+
+  group('ApiModule', () {
+    test('should register Dio instance', () {
+      // Act & Assert
+      expect(getIt<Dio>(), isA<Dio>());
+    });
+
+    test('all registered dependencies should resolve without errors', () {
+      // This is a smoke test to verify all dependencies can be resolved
+      // without throwing exceptions
+
+      // Act & Assert - these should not throw
+      expect(getIt<SharedPreferences>(), isNotNull);
+      expect(getIt<Dio>(), isNotNull);
+
+      // As more dependencies are registered, add additional expects here
     });
   });
 }

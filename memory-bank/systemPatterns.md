@@ -37,11 +37,14 @@ lib/
 │   ├── di/                     # Dependency Injection
 │   ├── router/                 # Navigation
 │   ├── asset/                  # Asset management
-│   ├── services/               # Service abstractions and implementations
 │   ├── styles/                 # UI styles definitions (colors, text styles)
 │   ├── sizes/                  # Size and dimension constants
 │   ├── durations/              # Duration constants for animations and transitions
 │   └── themes/                 # Theme management
+│       ├── extensions/         # Theme extensions for assets, colors, etc.
+│       │   └── extensions.dart # Barrel file for all theme extensions
+│       ├── app_theme.dart      # Main theme configuration
+│       └── themes.dart         # Barrel file for all theme exports
 ├── features/                   # Feature modules
 │   ├── env/                    # Environment configuration
 │   │   ├── domain/             # Environment repository interface
@@ -205,465 +208,75 @@ lib/features/env/
 - Integration tests for key user flows
 - Mock repositories and services for isolated testing 
 
-## Architectural Patterns
+### Testing Architecture
 
-### Clean Architecture
-The application is structured according to Clean Architecture principles, with a clear separation of concerns through layers:
+The project follows a comprehensive testing strategy across all layers:
 
-1. **Domain Layer**
-   - Contains business logic, entities, and repository interfaces
-   - Has no dependencies on other layers or external frameworks
-   - Includes use cases that encapsulate business rules
-
-2. **Application Layer**
-   - Contains state management (BLoC/Cubit)
-   - Orchestrates flow of data between domain and presentation
-   - Depends only on the domain layer
-
-3. **Infrastructure Layer**
-   - Implements repository interfaces from the domain layer
-   - Handles external data sources (API, database, local storage)
-   - Contains adapters to convert external data models to domain entities
-
-4. **Presentation Layer**
-   - Contains UI components (widgets, pages)
-   - Consumes state from application layer
-   - Handles user interactions and delegates to application layer
-
-### Feature-First Organization
-The project is organized around features rather than layers, which keeps related code together and improves maintainability:
-
-```
-lib/
-├── core/                  # Core utilities and shared functionality
-│   ├── theme/            # Application theming
-│   ├── router/           # Navigation routing
-│   ├── di/               # Dependency injection setup
-│   ├── styles/           # Shared style definitions
-│   ├── sizes/            # Standardized sizing constants
-│   └── durations/        # Animation duration constants
-├── features/             # Application features
-│   ├── env/              # Environment configuration feature
-│   │   ├── domain/       # Environment repository interface
-│   │   └── infrastructure/ # Environment repository implementation
-│   ├── onboarding/       # Onboarding feature
-│   │   ├── domain/       # Domain layer for onboarding
-│   │   ├── application/  # Application layer for onboarding
-│   │   ├── infrastructure/ # Infrastructure layer for onboarding
-│   │   └── presentation/ # Presentation layer for onboarding
-│   ├── login/            # Login feature
-│   │   ├── domain/       # Domain layer for login
-│   │   ├── application/  # Application layer for login
-│   │   ├── infrastructure/ # Infrastructure layer for login
-│   │   └── presentation/ # Presentation layer for login
-│   └── storage/          # Storage feature
-│       ├── domain/       # Domain layer for storage
-│       └── infrastructure/ # Infrastructure layer for storage
-└── main.dart             # Application entry point
-```
-
-### Environment Feature Architecture
-
-The Environment feature provides environment-specific configuration and constants using the envied package. It follows Clean Architecture principles:
-
-1. **Domain Layer**:
-   - `EnvConfigRepository` interface: Defines contract for accessing environment values
-   - Provides getters for common configuration values (apiUrl, appName, environmentName)
-
-2. **Infrastructure Layer**:
-   - `EnvConfigRepositoryImpl`: Implements repository interface by accessing EnvDev
-   - Registered as a lazySingleton in the dependency injection container
-   
-3. **Configuration**:
-   - `EnvDev` class: Uses the envied package to securely access and obfuscate environment variables
-   - `.env.dev` file: Stores actual environment variables (not committed to version control)
-
-4. **Testing**:
-   - Comprehensive tests for both domain and infrastructure layers
-   - Mock implementations for testing different scenarios
-   - Test helpers for validating environment values
-
-### Storage Feature Architecture
-
-The Storage feature implements persistent data storage capabilities using SharedPreferences as its underlying mechanism. It follows Clean Architecture principles and includes:
-
-1. **Domain Layer**:
-   - `StorageFailure` class: Represents different types of storage operation failures
-     - Uses freezed for immutable implementation
-     - Provides specific failure types: storageError, keyNotFound, typeMismatch
-   - `LocalStorageService` interface: Defines contract for storage operations
-     - Uses Either<StorageFailure, T> return type for functional error handling
-     - Provides methods for CRUD operations (getBool, setBool, containsKey, remove, clear)
-
-2. **Infrastructure Layer**:
-   - `SharedPreferencesStorageService`: Implements LocalStorageService using SharedPreferences
-     - Handles exceptions and converts them to appropriate StorageFailure types
-     - Registered as a lazySingleton in the dependency injection container
-
-3. **Testing**:
-   - 100% code coverage with comprehensive unit tests
-   - Tests for all failure and success scenarios
-   - Uses mocktail for mocking dependencies
-
-## Testing Architecture
-
-### Test Organization
 ```
 test/
-├── domain/
-│   ├── entities/
-│   ├── value_objects/
-│   └── use_cases/
-├── application/
-│   ├── blocs/
-│   └── services/
-├── infrastructure/
-│   └── repositories/
-├── presentation/
-│   ├── widgets/
-│   └── screens/
-├── integration/
-│   └── features/
-├── helpers/
-│   ├── test_helpers.dart
-│   ├── mock_helpers.dart
-│   └── robot_helpers.dart
-└── fixtures/
-    └── mock_data/
+├── core/                     # Tests for core functionality
+│   ├── di/                   # DI tests
+│   ├── router/               # Router tests
+│   ├── styles/               # Styles tests
+│   ├── sizes/                # Sizes tests
+│   ├── durations/            # Durations tests
+│   ├── themes/               # Theme tests
+│   └── asset/                # Asset tests
+├── features/                 # Feature-specific tests
+│   └── [feature_name]/       # Tests for specific feature
+│       ├── domain/           # Domain layer tests
+│       ├── application/      # Application layer tests
+│       ├── infrastructure/   # Infrastructure layer tests
+│       └── presentation/     # Presentation layer tests
+├── shared/                   # Tests for shared components
+│   └── helpers/              # Test helpers
+└── integration/              # Integration tests
 ```
 
 ### Testing Patterns
 
-#### 1. Robot Pattern
-Used for widget and integration tests to encapsulate test actions and assertions:
+#### Mock Implementation Standards
+- Use explicit return types for all function declarations
+- Make boolean parameters nullable with default values
+- Implement full interface for visual components
+- Use proper type hierarchies (MaterialColor vs Color)
+- Use factory constructors over static methods
+- Implement proper error handling in mocks
+
+#### Widget Test Structure
 ```dart
-class LoginRobot {
-  Future<void> enterEmail(String email) => ...
-  Future<void> enterPassword(String password) => ...
-  Future<void> tapLoginButton() => ...
-  Future<void> verifyErrorMessage(String message) => ...
-}
-```
-
-#### 2. Test Data Factories
-Consistent mock data generation using factory pattern:
-```dart
-class UserFactory {
-  static User createDefault() => ...
-  static User createWithRole(UserRole role) => ...
-  static List<User> createMany(int count) => ...
-}
-```
-
-#### 3. Golden Testing
-Visual regression testing setup:
-```dart
-goldenTest(
-  'renders correctly',
-  builder: () => MyWidget(),
-  goldenFile: 'my_widget.png',
-  customPump: (tester, widget) async {
-    await tester.binding.setSurfaceSize(Size(400, 800));
-    await tester.pumpWidget(widget);
-  },
-);
-```
-
-#### 4. BLoC Test Pattern
-Standard structure for testing BLoCs:
-```dart
-blocTest<LoginBloc, LoginState>(
-  'emits [loading, success] when login succeeds',
-  build: () => LoginBloc(authRepository: mockAuthRepo),
-  act: (bloc) => bloc.add(LoginSubmitted()),
-  expect: () => [
-    LoginState.loading(),
-    LoginState.success(),
-  ],
-);
-```
-
-### Test Helpers
-
-#### 1. Widget Test Helpers
-```dart
-extension PumpApp on WidgetTester {
-  Future<void> pumpApp(Widget widget) async {
-    await pumpWidget(
-      MaterialApp(
-        home: widget,
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
-      ),
-    );
-  }
-}
-```
-
-#### 2. Mock Helpers
-```dart
-class MockBuilder {
-  static MockAuthRepository buildAuthRepository() {
-    final mock = MockAuthRepository();
-    when(() => mock.login(any(), any()))
-        .thenAnswer((_) async => const Right(unit));
-    return mock;
-  }
-}
-```
-
-### Testing Guidelines
-
-1. **Unit Tests**
-   - One test file per class
-   - Follow Arrange-Act-Assert pattern
-   - Mock external dependencies
-   - Test edge cases and error scenarios
-
-2. **Widget Tests**
-   - Use robot pattern for complex widgets
-   - Test user interactions
-   - Verify widget state changes
-   - Include accessibility testing
-
-3. **Integration Tests**
-   - Focus on critical user flows
-   - Use mock data consistently
-   - Implement retry mechanisms
-   - Log test steps for debugging
-   - Test complete feature flows end-to-end
-   - Verify API integrations
-   - Test database operations
-   - Validate navigation flows
-   - Check error handling
-
-4. **Performance Tests**
-   - Measure widget build times
-   - Track memory usage
-   - Monitor frame drops
-   - Test with large datasets
-
-## Testing Patterns
-
-### Widget Testing Best Practices
-
-1. **Mock Dependencies**
-   - Use Mocktail for mocking dependencies
-   - Create mock classes with specific implementations for required methods
-   - Register mocks with GetIt for dependency injection
-
-```dart
-class MockAppSizes extends Mock implements AppSizes {
-  @override
-  double get h32 => 32;  // Use explicit values
-}
-
-class MockAppColors extends Mock implements AppColors {
-  static final MaterialColor _blue = MaterialColor(  // Use proper color types
-    0xFF2196F3,
-    <int, Color>{500: Colors.blue},
-  );
-  @override
-  MaterialColor get onboardingBlue => _blue;
-}
-
-class MockAssetGenImage extends Mock implements AssetGenImage {
-  @override
-  Image image({
-    Key? key,
-    double? width,
-    double? height,
-    BoxFit? fit,
-    ImageErrorWidgetBuilder? errorBuilder,
-    // Make boolean parameters nullable
-    bool? excludeFromSemantics,
-    // Use proper type aliases
-    ImageFrameBuilder? frameBuilder,
-  }) {
-    return Image.asset(
-      'test_path.png',
-      excludeFromSemantics: excludeFromSemantics ?? false,  // Provide defaults
-    );
-  }
-}
-```
-
-2. **Test Structure**
-```dart
-void main() {
-  late Type mockDependency;
-  late List<Type> testData;
-  
+group('Component Tests', () {
   setUp(() {
-    GetIt.I.reset();
-    // Initialize mocks
-    // Register dependencies
-    // Setup test data
+    // GetIt registration
+    // Mock initialization
+    // Test data setup
   });
 
   tearDown(() {
-    // Cleanup resources
-    GetIt.I.reset();
+    // Controller disposal
+    // GetIt cleanup
   });
 
-  group('Component Tests', () {
-    testWidgets('test description', (tester) async {
-      // ARRANGE
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: TestedWidget(),
-          ),
-        ),
-      );
-
-      // ACT
-      await tester.tap(find.byType(Button));
-      await tester.pumpAndSettle();
-
-      // ASSERT
-      expect(find.text('Expected'), findsOneWidget);
-    });
+  testWidgets('test case', (tester) async {
+    // Widget setup
+    // Action simulation
+    // Verification
   });
-}
+});
 ```
 
-3. **Coverage Requirements**
-- Basic Rendering
-  - Widget tree structure
-  - Initial state display
-  - Style and layout verification
+#### Standard Test Cases
+- Basic rendering verification
+- User interaction handling
+- Error state management
+- Style and layout verification
+- Edge cases (empty states, rapid interactions)
+- Animation and transition testing
 
-- User Interactions
-  - Tap/click handling
-  - Drag/swipe gestures
-  - Input validation
-
-- Error Handling
-  - Error state display
-  - Error recovery
-  - Fallback behavior
-
-- Edge Cases
-  - Empty states
-  - Boundary conditions
-  - Rapid interactions
-
-### Integration Testing
-
-1. Feature Flow Testing
-```dart
-void main() {
-  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-
-  group('Feature Flow Tests', () {
-    testWidgets('complete flow', (tester) async {
-      // Setup
-      // Execute flow steps
-      // Verify outcomes
-    });
-  });
-}
-```
-
-2. Coverage Areas
-- Full feature flows
-- Cross-component interactions
-- State persistence
-- Navigation paths
-
-## Best Practices
-
-1. Test File Organization
-```
-test/
-  features/
-    feature_name/
-      presentation/
-        widgets/
-          widget_test.dart
-      application/
-        cubit/
-          cubit_test.dart
-      domain/
-        models/
-          model_test.dart
-```
-
-2. Naming Conventions
-- Test files: `*_test.dart`
-- Test groups: Describe component/feature
-- Test cases: Describe behavior being tested
-
-3. Code Style
-- Use explicit types for callbacks
-- Make boolean parameters nullable
-- Provide default values via null coalescing
-- Use proper type hierarchies
-- Add trailing commas for better git diffs
-
-## Error Handling Patterns
-
-1. **Null Safety**
-   - Use null assertion operator (!) only when certain about non-null values
-   - Provide meaningful error messages for null checks
-   - Handle null cases gracefully in UI
-
-2. **Exception Handling**
-   - Catch specific exceptions rather than using catch-all
-   - Provide user-friendly error messages
-   - Log errors appropriately for debugging
-
-3. **State Management**
-   - Handle loading, success, and error states
-   - Provide feedback for user actions
-   - Maintain consistent state across widget tree
-
-## Code Organization
-
-1. **Feature Structure**
-   - Organize by feature first, then by layer
-   - Keep related files close together
-   - Use index files for cleaner imports
-
-2. **Test Structure**
-   - Mirror source code directory structure
-   - Group tests logically
-   - Keep test files focused and manageable
-
-3. **Dependency Management**
-   - Use GetIt for dependency injection
-   - Register dependencies at app startup
-   - Use proper scoping for dependencies
-
-## Testing Patterns
-
-### Test Organization
-
-1. **Feature-Based Tests**
-   - Test files mirror feature structure
-   - Each feature has its own test directory
-   - Tests are organized by layer (domain, application, infrastructure, presentation)
-
-2. **Widget Testing**
-   - Comprehensive widget testing for each UI component
-   - Verify rendering, callbacks, and user interactions
-   - Test different states (loading, error, success)
-   - Validate visual properties and layouts
-
-3. **Test Data Factories**
-   - Create reusable test data factories
-   - Generate consistent test data across test files
-   - Support custom data variations for edge cases
-
-### Test Implementation
-
-1. **Mock Implementation**
-   - Use mocktail for creating mocks
-   - Implement explicit property getters for required properties
-   - Always use up-to-date APIs, avoiding deprecated methods
-   - Properly type all return values
-   - For color properties:
-     - Use modern accessors (r, g, b, a) instead of deprecated ones (red, green, blue)
-     - Apply proper type conversion for color components (toInt() for r/g/b when needed)
-     - Use toARGB32() instead of deprecated value property for color integer representation
+#### Coverage Requirements
+- Widget tree structure verification
+- State management testing
+- Callback validation
+- Style property verification
+- Error handling validation
+- Edge case coverage

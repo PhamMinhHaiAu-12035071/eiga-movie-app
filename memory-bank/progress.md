@@ -23,6 +23,16 @@
 - ✅ Rebranded application to "EIGA Movie App" for cinema ticket booking
 - ✅ Refactored themes module to match styles structure (added extensions index, updated imports)
 - ✅ Created test/core/themes directory and achieved 100% unit test coverage for AppAssetExtension
+- ✅ Refactored lib/core directory:
+  - ✅ Split DI modules for clearer separation of concerns
+  - ✅ Added API module for network communication
+  - ✅ Removed RegisterModule in favor of more specific modules
+  - ✅ Created clear, focused structure with di, router, asset, styles, sizes, durations, themes subdirectories
+  - ✅ Updated themes directory with extensions support and proper barrel files
+- ✅ Updated test/core structure to mirror lib/core:
+  - ✅ Removed obsolete test/core/di/register_module_test.dart
+  - ✅ Created test directories matching production code
+  - ✅ Added new tests for specific DI modules
 - ✅ Refactored widgetbook to match main app structure:
   - ✅ Created bootstrap.dart with similar initialization flow
   - ✅ Added environment-specific entry points (main_development.dart, main_staging.dart, main_production.dart)
@@ -55,11 +65,17 @@
       - ✅ Basic functionality tests
       - ✅ Edge case handling
       - ✅ Style and layout verification
-    - ❌ OnboardingHeader widget tests
-    - ❌ OnboardingNextButton widget tests
-    - ❌ OnboardingPageView widget tests
-    - ❌ OnboardingCubit tests
-    - ❌ OnboardingRepository tests
+    - ❌ OnboardingHeader widget tests (In Progress)
+    - ❌ OnboardingNextButton widget tests (In Progress)
+    - ✅ OnboardingPageView widget tests (100% coverage achieved)
+      - ✅ Basic rendering tests
+      - ✅ Page navigation tests
+      - ✅ Error handling tests
+      - ✅ Style verification
+      - ✅ Edge case testing
+    - ❌ OnboardingCubit tests (Planned)
+    - ❌ OnboardingRepository tests (Planned)
+    - ❌ Integration tests for full onboarding flow (Planned)
 
 - 🚧 Login Feature (In Progress)
   - ✅ Created feature directory structure following Clean Architecture
@@ -109,7 +125,26 @@
   - ✅ Improved error checking pattern with proper function expression syntax
   - ✅ Enhanced reliability of dependency injection tests
 - ✅ Created test/core/themes/extensions/app_asset_extension_test.dart with 100% coverage
+- ✅ Created comprehensive widget tests for OnboardingPageView (100% coverage)
+- ✅ Updated test/core structure to mirror refactored lib/core structure
+  - ✅ Created matching test directories for all core components
+  - ✅ Removed outdated tests and added new ones for refactored modules
+  - ✅ Applied consistent test patterns across core component tests
+  - ✅ Focused on maintaining high test coverage during refactoring
+- ✅ Established mock implementation standards
+  - ✅ Explicit return types for all function declarations
+  - ✅ Boolean parameters made nullable with default values
+  - ✅ Full interface implementation for visual components
+  - ✅ Proper type hierarchies (MaterialColor vs Color)
+  - ✅ Factory constructors over static methods
+- ✅ Updated color property access to use modern API
+  - ✅ Replaced deprecated `color.red/green/blue` with `color.r/g/b.toInt()`
+  - ✅ Replaced deprecated `color.value` with `color.toARGB32()`
+  - ✅ Improved mock implementations with proper typing
+- ✅ Implemented proper teardown in widget tests to prevent interference
 - 🚧 Next: Extend themes test coverage to AppColorExtension and AppTheme
+- 🚧 Next: Create widget tests for remaining onboarding components (Header, NextButton)
+- 🚧 Next: Implement integration tests for full onboarding flow
 
 ### CI/CD
 - ✅ Set up basic project structure
@@ -122,38 +157,69 @@
 ## In Progress
 
 ### Current Sprint Focus
-1. Completing the onboarding feature implementation
-   - Building remaining UI components
-   - ✅ Implementing persistence of onboarding status
-   - Adding animations and transitions
+1. Updating tests for refactored core components
+   - 🚧 DI module tests (In Progress)
+   - 🚧 API module tests (In Progress)
+   - 🚧 Routing tests (In Progress)
+   - 🚧 Styles, sizes, durations tests (In Progress)
+   - 🚧 Theme tests with extensions (Planned)
 
-2. Expanding the login feature
+2. Completing the onboarding feature testing
+   - ✅ OnboardingPageView tests completed (100% coverage)
+   - 🚧 OnboardingHeader tests (In Progress)
+   - 🚧 OnboardingNextButton tests (In Progress)
+   - 🚧 OnboardingCubit tests (Planned)
+   - 🚧 OnboardingRepository tests (Planned)
+   - 🚧 Integration tests for full onboarding flow (Planned)
+
+3. Implementing testing best practices
+   - ✅ Established mock implementation standards
+   - ✅ Updated color API usage in tests
+   - ✅ Improved test structure and organization
+   - 🚧 Optimizing test performance
+   - 🚧 Documenting testing patterns and best practices
+
+4. Optimizing widget testing
+   - ✅ Proper setup and teardown procedures
+   - ✅ Improved widget finder specificity
+   - ✅ Enhanced error handling in assertions
+   - 🚧 Reducing test execution time
+   - 🚧 Improving test stability across environments
+
+5. Expanding the login feature
    - Designing login form UI
    - Implementing form validation
    - Adding authentication logic
 
-3. ✅ Creating a dedicated storage feature
+6. ✅ Creating a dedicated storage feature
    - ✅ Implementing proper abstractions for storage operations
    - ✅ Ensuring comprehensive test coverage
    - ✅ Following Clean Architecture principles
 
-4. ✅ Refactoring environment configuration to feature-based architecture
+7. ✅ Refactoring environment configuration to feature-based architecture
    - ✅ Moving environment configuration from core to features
    - ✅ Restructuring tests to match implementation
    - ✅ Updating import paths and fixing dependency injection
    - ✅ Creating robust test helpers and edge case tests
 
-5. Setting up testing infrastructure
+8. Setting up testing infrastructure
    - ✅ Unit tests with comprehensive coverage reporting
    - ✅ Fixed test failures and improved test patterns
-   - Widget tests for UI components
-   - Integration tests for key user flows
+   - 🚧 Widget tests for UI components (In Progress)
+   - 🚧 Integration tests for key user flows (Planned)
 
-6. Enhancing the development workflow
+9. ✅ Refactoring lib/core directory structure
+   - ✅ Split DI modules for clearer separation of concerns
+   - ✅ Added API module for network communication
+   - ✅ Removed RegisterModule in favor of more specific modules
+   - ✅ Organized into clear, focused subdirectories
+   - ✅ Updated themes directory with extensions support
+
+10. Enhancing the development workflow
    - ✅ Improving Makefile for better developer experience
-   - Improving code generation scripts
-   - Adding more static analysis rules
-   - Documenting architecture and patterns
+   - 🚧 Improving code generation scripts
+   - 🚧 Adding more static analysis rules
+   - 🚧 Documenting architecture and patterns
 
 ## Planned Work
 
@@ -183,16 +249,18 @@
 - Enhance offline capabilities
 - Optimize performance for slower devices
 - Increase test coverage
+- Update any remaining test files to match refactored structure
 
 ## Status and Metrics
 
 ### Project Status
-- **Overall Progress**: 45%
+- **Overall Progress**: 45% (Note: Percentage might be slightly higher due to recent test additions)
 - **Onboarding Feature**: 92% complete
 - **Login Feature**: 35% complete
 - **Storage Feature**: 100% complete
 - **Environment Feature**: 100% complete
-- **Test Coverage**: Improving (100% for Storage and Environment features, <15% overall)
+- **Core Refactoring**: 100% complete
+- **Test Coverage**: Improving (100% for Storage, Environment, OnboardingPageView; <15% overall)
 - **Known Issues**: 2 open issues
 
 ### Key Metrics
@@ -204,19 +272,16 @@
 
 1. Theming not properly applied in some edge cases
 2. Navigation not handling deep links properly
+3. Some tests need updating to match refactored core structure
 
 ## Milestones
 
 | Milestone | Target Date | Status |
 |-----------|-------------|--------|
 | Project Setup | Completed | ✅ |
+| Core Refactoring | Completed | ✅ |
 | Onboarding Feature | In Progress | 🚧 |
 | Login Feature | In Progress | 🚧 |
-| Authentication Feature | Not Started | ❌ |
-| Movie Listing Feature | Not Started | ❌ |
-| Ticket Booking Feature | Not Started | ❌ |
-| User Profile Feature | Not Started | ❌ |
-| Initial Release | Not Started | ❌ |
 
 # Project Progress
 

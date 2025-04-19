@@ -1,22 +1,22 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:ksk_app/core/di/injection.dart';
+import 'package:ksk_app/core/di/local_storage_module.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-/// Implementation of RegisterModule for testing
-class TestRegisterModule extends RegisterModule {}
+/// Implementation of LocalStorageModule for testing
+class TestLocalStorageModule extends LocalStorageModule {}
 
 void main() {
-  late TestRegisterModule registerModule;
+  late TestLocalStorageModule localStorageModule;
 
   setUp(() {
-    registerModule = TestRegisterModule();
+    localStorageModule = TestLocalStorageModule();
     SharedPreferences.setMockInitialValues({});
   });
 
-  group('RegisterModule', () {
+  group('LocalStorageModule', () {
     test('prefs should return SharedPreferences instance', () async {
       // Act
-      final prefs = await registerModule.prefs;
+      final prefs = await localStorageModule.prefs;
 
       // Assert
       expect(prefs, isA<SharedPreferences>());
@@ -25,8 +25,8 @@ void main() {
     test('prefs should return a SharedPreferences instance each time',
         () async {
       // Act
-      final prefs1 = await registerModule.prefs;
-      final prefs2 = await registerModule.prefs;
+      final prefs1 = await localStorageModule.prefs;
+      final prefs2 = await localStorageModule.prefs;
 
       // Assert - not comparing with same() because
       // SharedPreferences.setMockInitialValues creates new instances
@@ -39,7 +39,7 @@ void main() {
       SharedPreferences.setMockInitialValues({'test_key': 'test_value'});
 
       // Act
-      final prefs = await registerModule.prefs;
+      final prefs = await localStorageModule.prefs;
 
       // Assert
       expect(prefs.getString('test_key'), equals('test_value'));

@@ -31,17 +31,15 @@ lib/
 ├── core/                         # System configuration
 │   ├── di/                      # Dependency Injection (GetIt, Injectable)
 │   ├── router/                  # Navigation (auto_route)
-│   ├── env/                     # Environment configuration
 │   ├── asset/                   # Asset management
-│   ├── services/                # Service abstractions and implementations
 │   ├── styles/                  # UI styles definitions (colors, text styles)
 │   ├── sizes/                   # Size and dimension constants
-│   ├── durations/              # Duration constants for animations
+│   ├── durations/               # Duration constants for animations
 │   └── themes/                  # Theme management
-│       ├── extensions/         # Theme extensions for assets, colors, etc.
-│       │   └── extensions.dart # Barrel file for all theme extensions
-│       ├── app_theme.dart      # Main theme configuration
-│       └── themes.dart         # Barrel file for all theme exports
+│       ├── extensions/          # Theme extensions for assets, colors, etc.
+│       │   └── extensions.dart  # Barrel file for all theme extensions
+│       ├── app_theme.dart       # Main theme configuration
+│       └── themes.dart          # Barrel file for all theme exports
 ├── features/                    # Feature module separation
 │   └── [feature_name]/
 │       ├── domain/              # Business logic and rules
@@ -59,7 +57,7 @@ lib/
 ├── app.dart                     # Main application widget
 ├── bootstrap.dart               # Application initialization
 ├── main_development.dart        # Entry point for development environment
-├── main_staging.dart            # Entry point for staging environment
+├── main_staging.dart           # Entry point for staging environment
 └── main_production.dart         # Entry point for production environment
 ```
 
@@ -70,6 +68,71 @@ lib/
 | `features/` | Modules divided by functionality – easy to scale, maintain, and test separately |
 | `shared/`   | Reusable widgets and logic across modules                               |
 | `generated/`| Auto-generated code from the build_runner or other code generators      |
+
+### 📘 Core Directory Structure
+```
+core/
+├── di/                          # Dependency Injection
+│   ├── injection.dart           # Main DI configuration
+│   ├── injection.config.dart    # Generated DI configuration
+│   ├── api_module.dart          # API client DI module
+│   └── local_storage_module.dart # Storage DI module
+├── router/                      # Navigation
+│   ├── app_router.dart          # Main router configuration
+│   ├── app_router.gr.dart       # Generated router code
+│   └── routes.dart              # Route constants
+├── asset/                       # Asset management
+│   ├── app_asset.dart           # Asset access class
+│   └── app_image.dart           # Image asset handling
+├── styles/                      # UI style definitions
+│   ├── colors/                  # Color definitions
+│   │   └── app_colors.dart      # Application colors
+│   ├── app_text_styles.dart     # Text style definitions
+│   └── styles.dart              # Barrel file for all styles
+├── sizes/                       # Size constants
+│   ├── app_sizes.dart           # Size definitions
+│   └── sizes.dart               # Barrel file for sizes
+├── durations/                   # Animation durations
+│   ├── app_durations.dart       # Duration definitions
+│   └── durations.dart           # Barrel file for durations
+└── themes/                      # Theme management
+    ├── extensions/              # Theme extensions
+    │   ├── app_asset_extension.dart # Asset theming
+    │   ├── app_color_extension.dart # Color theming
+    │   └── extensions.dart      # Barrel file for extensions
+    ├── app_theme.dart           # Theme configuration
+    └── themes.dart              # Barrel file for themes
+```
+
+### 📘 Test Directory Structure
+```
+test/
+├── core/                     # Tests for core functionality
+│   ├── di/                   # DI tests
+│   │   ├── injection_test.dart           # Main DI tests
+│   │   ├── api_module_test.dart          # API module tests
+│   │   └── local_storage_module_test.dart # Storage module tests
+│   ├── router/               # Router tests
+│   │   └── app_router_test.dart          # Router tests
+│   ├── styles/               # Styles tests
+│   │   ├── colors/                        # Color tests
+│   │   │   └── app_colors_test.dart        # Color tests
+│   │   └── app_text_styles_test.dart      # Text style tests
+│   ├── sizes/                # Sizes tests
+│   │   └── app_sizes_test.dart           # Size tests
+│   ├── durations/            # Durations tests
+│   │   └── app_durations_test.dart       # Duration tests
+│   ├── themes/               # Theme tests
+│   │   ├── extensions/                  # Extension tests
+│   │   │   ├── app_asset_extension_test.dart # Asset extension tests
+│   │   │   └── app_color_extension_test.dart # Color extension tests
+│   │   └── app_theme_test.dart         # Theme tests
+│   └── asset/                # Asset tests
+│       └── app_image_test.dart          # Image tests
+├── features/                # Feature-specific tests
+├── shared/                  # Tests for shared components
+└── integration/             # Integration tests
+```
 
 ---
 
@@ -84,9 +147,7 @@ lib/features/your_feature/presentation
 # 4. Add the feature to the main app flow
 ```
 
----
-
-## 💬 Commenting Rule – Supporting AI & Readability
+---## 💬 Commenting Rule – Supporting AI & Readability
 
 > Comments are **mandatory** for Cursor AI and developers when reading or generating code.
 
@@ -150,9 +211,7 @@ class UserListPage extends StatelessWidget {
 | Function      | ≤ 40 lines     | Split if logic is complex           |
 | build()       | ≤ 50 lines     | Extract child widgets               |
 
----
-
-## 📚 Code Style & Formatting Rules
+---## 📚 Code Style & Formatting Rules
 
 - Use `const` wherever possible.
 - Use `final` by default – only use var if mutating.
@@ -254,7 +313,6 @@ class UserListPage extends StatelessWidget {
 | `envied` | Type-safe environment variables handling |
 
 ---
-
 ## ✅ Cursor Checklist – During Code Analysis or Code Generation
 
 - [ ] Correct structure of `core/`, `features/`, `shared/`, `generated/`
@@ -434,7 +492,6 @@ lib/features/onboarding/
 - Features depend on the abstraction, not concrete implementations
 
 ---
-
 ## Feature Implementation Checklist
 
 - [ ] Domain layer is properly defined with entities, repositories, and use cases
@@ -450,3 +507,9 @@ lib/features/onboarding/
 # Add note:
 - The `core/themes/extensions/extensions.dart` file is the index for all theme extensions, and `core/themes/themes.dart` is the main barrel file for theme exports.
 - The test structure now includes `test/core/themes` for theme-related tests and coverage.
+
+
+
+
+
+

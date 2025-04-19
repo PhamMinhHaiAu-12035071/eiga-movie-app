@@ -3,6 +3,11 @@ description:
 globs: 
 alwaysApply: false
 ---
+---
+description: 
+globs: 
+alwaysApply: false
+---
 # KSK App: Feature Structure & Naming Conventions
 
 ## Project Structure Overview
@@ -11,19 +16,26 @@ alwaysApply: false
 lib/
 ├── core/                      # Core application code
 │   ├── di/                    # Dependency injection setup
-│   ├── network/               # Network-related code
-│   ├── styles/                # Centralized styling system
+│   ├── router/                # Navigation
+│   ├── asset/                 # Asset management
+│   ├── styles/                # UI styles definitions
 │   │   ├── colors/            # Color definitions
 │   │   │   └── app_colors.dart
-│   │   ├── sizes/             # Size definitions
-│   │   │   └── app_sizes.dart
 │   │   ├── app_text_styles.dart # Text style definitions
 │   │   └── styles.dart        # Export file for all styles
-│   ├── themes/                # Theme configurations
-│   │   ├── extensions/        # Theme extensions
-│   │   ├── app_theme.dart     # Theme definitions
-│   │   └── themes.dart        # Export file for themes
-│   └── utils/                 # Utility functions and constants
+│   ├── sizes/                 # Size definitions
+│   │   ├── app_sizes.dart     # Size constants
+│   │   └── sizes.dart         # Barrel file for sizes
+│   ├── durations/             # Animation durations
+│   │   ├── app_durations.dart # Duration definitions
+│   │   └── durations.dart     # Barrel file for durations
+│   └── themes/                # Theme configurations
+│       ├── extensions/        # Theme extensions
+│       │   ├── app_asset_extension.dart # Asset theming
+│       │   ├── app_color_extension.dart # Color theming
+│       │   └── extensions.dart # Barrel file for extensions
+│       ├── app_theme.dart     # Theme definitions
+│       └── themes.dart        # Export file for themes
 ├── features/                  # Feature modules
 │   └── [feature_name]/        # A specific feature
 │       ├── domain/            # Domain layer
@@ -34,7 +46,9 @@ lib/
 │   ├── domain/                # Shared domain models
 │   ├── infrastructure/        # Shared infrastructure
 │   └── widgets/               # Shared UI components
-└── app.dart                   # Application entry point
+├── generated/                 # Generated code
+├── app.dart                   # Application entry point
+└── bootstrap.dart             # Application initialization
 ```
 
 ## Design Principles
@@ -53,6 +67,8 @@ lib/
 
 3. **Centralized Styling & Theming**
    * ALL styles MUST be defined in core/styles directory
+   * ALL sizes MUST be defined in core/sizes directory
+   * ALL durations MUST be defined in core/durations directory
    * ALL themes MUST be defined in core/themes directory
    * NO local style definitions are allowed in features or widgets
    * Use imports from centralized source for consistent styling
@@ -145,12 +161,12 @@ class AppTextStyles {
 
 ### Sizes & Spacing
 
-* ALL sizes and spacing MUST be defined in `core/styles/sizes/app_sizes.dart`
+* ALL sizes and spacing MUST be defined in `core/sizes/app_sizes.dart`
 * NEVER use hardcoded numerical values for layout
 * Access sizes via AppSizes class:
 
 ```dart
-// core/styles/sizes/app_sizes.dart
+// core/sizes/app_sizes.dart
 class AppSizes {
   // Spacing
   static const double spacing4 = 4.0;

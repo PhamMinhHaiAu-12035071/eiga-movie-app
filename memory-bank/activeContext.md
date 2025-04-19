@@ -1,13 +1,35 @@
 # Active Context
 
 ## Current Focus
-- Unit testing for onboarding feature
-- Widget testing patterns established
-- Fixing deprecated API usage in test files
-- Refactoring widgetbook to match main app structure
+- Unit testing for core components following refactoring
+- Completing test coverage for refactored lib/core structure
+- Ensuring proper alignment between production code and test code
+- Enhancing widgetbook showcases to match the latest structure
+- Applying established widget testing patterns to core components
+- Addressing performance issues in widget tests
 
 ## Recent Changes
-- Implemented comprehensive test coverage for OnboardingPageView widget
+- ✅ Refactored lib/core directory structure:
+  - Organized into clear, focused subdirectories (di, router, asset, styles, sizes, durations, themes)
+  - Split DI modules for clearer separation of concerns
+  - Added API module for network communication
+  - Removed RegisterModule in favor of more specific modules
+  - Aligned test directory structure with production code
+- ✅ Updated themes directory structure:
+  - Added extensions directory with extensions.dart barrel file
+  - Created app_theme.dart for main theme configuration
+  - Added themes.dart barrel file for easy imports
+- ✅ Updated testing infrastructure:
+  - Created matching test directory structure for refactored core components
+  - Updated test/core structure to mirror lib/core
+  - Removed obsolete test/core/di/register_module_test.dart
+  - Added new tests for specific DI modules
+- ✅ Implemented comprehensive test coverage for OnboardingPageView widget (100%)
+- ✅ Updated mock implementations to follow consistent patterns:
+  - Explicit return types for all function declarations
+  - Boolean parameters made nullable with default values
+  - Full interface implementation for visual components
+  - Proper type hierarchies (MaterialColor vs Color)
 - Fixed linting issues in test files:
   - Proper type declarations for callbacks
   - Named parameters for boolean values
@@ -25,6 +47,9 @@
 - Enhanced widgetbook developer experience:
   - Added InspectorAddon, GridAddon, AlignmentAddon, ZoomAddon for advanced layout/debugging
   - Greatly expanded DeviceFrameAddon list: now covers a wide range of iOS/Android phones and tablets (including iPhone12Mini, iPhone12ProMax, iPadAir4, iPadPro11Inches, iPad12InchesGen2/4, Samsung Galaxy A50, Sony Xperia 1 II, and generic small/medium/large devices)
+- Implemented proper teardown in widget tests to prevent test interference
+- Converted static methods to factory constructors in mock classes
+- Improved error handling in test assertions and validations
 
 ## Testing Patterns Established
 1. Mock Dependencies:
@@ -63,86 +88,127 @@
    - Error state management
    - Style and layout verification
    - Edge cases (empty states, rapid interactions)
+   - Animation and transition testing
+
+4. Coverage Requirements:
+   - Widget tree structure verification
+   - State management testing
+   - Callback validation
+   - Style property verification
+   - Error handling validation
+   - Edge case coverage
 
 ## Active Decisions
-1. Mock Implementation Standards:
+1. Core Directory Structure:
+   - Maintaining clear separation between different core functionalities
+   - Organizing themes with proper extensions support
+   - Keeping styles and sizes separate for better organization
+   - Using barrel files for easy imports
+
+2. Test Structure:
+   - Mirror production code structure in test directory
+   - Create dedicated test files for each component
+   - Focus on thorough test coverage for refactored components
+   - Verify both functionality and integration
+
+3. Mock Implementation Standards:
    - Use explicit return types for all function declarations
    - Make boolean parameters nullable with default values
    - Implement full interface for visual components
    - Use proper type hierarchies (MaterialColor vs Color)
+   - Factory constructors preferred over static methods
+   - Proper error handling in mock implementations
 
-2. Test Coverage Requirements:
+4. Test Coverage Requirements:
    - Widget rendering
    - User interactions
    - Error states
    - Style application
    - Edge cases
+   - Animation and transitions
+
+5. Performance Optimization:
+   - Optimize setup and teardown procedures
+   - Minimize unnecessary widget rebuilds in tests
+   - Improve test data generation
+   - Enhance mock implementation efficiency
 
 ## Next Steps
-1. Apply established testing patterns to other onboarding components:
+1. Implement updated tests for refactored core components:
+   - DI module tests
+   - API module tests
+   - Routing tests
+   - Styles, sizes, durations tests
+   - Theme tests with extensions
+2. Implement widget tests for remaining onboarding components:
    - OnboardingHeader
-   - OnboardingDotIndicator
    - OnboardingNextButton
-
-2. Implement integration tests for full onboarding flow
-
-3. Document test patterns for team reference
-
-4. Complete remaining widgetbook integration:
-   - Add additional component showcases
+3. Implement unit tests for:
+   - OnboardingCubit
+   - OnboardingRepository
+4. Implement integration tests for full onboarding flow:
+   - Page navigation
+   - Persistence verification
+   - State management testing
+5. Document established test patterns for team reference:
+   - Create testing guidelines document
+   - Update widget test templates
+   - Standardize mock implementations
+6. Complete remaining widgetbook integration:
+   - Add showcases for OnboardingHeader, NextButton, DotIndicator
    - Ensure consistent styling between app and widgetbook
    - Document widget usage patterns in widgetbook
-
-## Active Decisions
-1. Testing Standards:
-   - Use specific widget finders to avoid ambiguity
-   - Apply null safety best practices in tests
-   - Follow consistent code formatting
-   - Implement comprehensive style testing
-
-2. Code Style:
-   - Use trailing commas for better git diffs
-   - Prefer `var` for boolean flags in tests
-   - Use descriptive test names
-   - Group related tests logically
+7. Optimize test performance:
+   - Refactor setup and teardown procedures
+   - Improve mock implementation efficiency
+   - Enhance test data generation
 
 ## Current Challenges
 1. Widget Finding:
    - Multiple instances of similar widgets requiring specific finders
    - Need for careful widget tree traversal
    - Proper handling of async widget updates
+   - Ensuring stable test execution across different environments
 
 2. Style Testing:
    - Null safety in decoration testing
    - Proper type casting for decorations
    - Comprehensive style property verification
+   - Ensuring consistent style validation across different widgets
 
-## Testing Focus Areas
-1. Visual Properties:
-   - Colors and gradients
-   - Dimensions and padding
-   - Text styles and formatting
+3. Test Performance:
+   - Some widget tests are slower than desired
+   - Setup/teardown procedures need optimization
+   - Mock implementation overhead affecting test execution time
+   - Balancing comprehensive testing with execution speed
 
-2. Functionality:
-   - Callback handling
-   - State management
-   - User interactions
+4. Coverage Gaps:
+   - Some edge cases not fully covered
+   - Integration test coverage below target
+   - Animation and transition testing incomplete
+   - Error scenario coverage needs improvement
 
-3. Edge Cases:
-   - Null handling
-   - Error states
-   - Conditional rendering
+## Notes
+- Keep test files organized and well-documented
+- Follow established patterns for new tests
+- Maintain balance between coverage and maintainability
+- Regular review of test performance metrics
+- Continuously refine mock implementations based on lessons learned
+- Consider breaking complex tests into smaller, focused tests
+- Prioritize readability and maintainability in test code
 
 ## Active Work
-We are currently focused on implementing a comprehensive testing strategy across all layers of the application. The main areas of focus are:
+We are currently focused on implementing a comprehensive testing strategy for the refactored core components. The main areas of focus are:
 
-1. **Domain Layer Testing**
-   - Writing unit tests for entities and value objects
-   - Testing use cases and business logic
-   - Implementing test coverage for domain services
+1. **Core Component Testing**
+   - Updating/creating tests for DI modules
+   - Testing API module functionality
+   - Ensuring proper styling and theming tests
+   - Validating assets and resource handling
 
 2. **Widget Testing**
-   - Creating widget tests for core components
+   - ✅ Creating widget tests for core components (OnboardingPageView completed)
+   - 🚧 Creating widget tests for remaining Onboarding components (Header, NextButton)
    - Setting up visual regression testing
    - Implementing the robot pattern for widget test organization
 
@@ -152,11 +218,11 @@ We are currently focused on implementing a comprehensive testing strategy across
    - Implementing API mocking strategy
 
 ### Recent Decisions
-1. Adopted mocktail for mocking in tests
-2. Implemented robot pattern for widget testing
-3. Set up GitHub Actions for CI/CD test automation
-4. Chose golden_toolkit for visual regression testing
-5. Established 80% as minimum test coverage threshold
+1. Refactored lib/core for better organization and maintainability
+2. Aligned test structure with production code structure
+3. Set up Github Actions for CI/CD test automation
+4. Established testing standards for the refactored code
+5. Committed to maintaining high test coverage during refactoring
 
 ### Current Challenges
 1. Handling async operations in widget tests
@@ -173,13 +239,14 @@ We are currently focused on implementing a comprehensive testing strategy across
 - Integration of performance testing
 
 ## Technical Debt
-- Some tests need refactoring for better organization
+- Some tests need updating to match refactored code structure
 - Mock data needs better structure
 - Test helper utilities need optimization
 - Coverage gaps in error scenarios
 - Slow test execution in CI
 
 ## Dependencies
+(Verify these versions against pubspec.lock if needed)
 - mocktail: ^1.0.0
 - flutter_test: sdk: flutter
 - integration_test: sdk: flutter
@@ -191,26 +258,4 @@ We are currently focused on implementing a comprehensive testing strategy across
 - Need to improve error handling coverage
 - Visual regression tests needed for dark/light theme variations
 - Consider adding mutation testing
-- Document test patterns for new contributors
-
-## Current Challenges
-1. Test Performance
-   - Some widget tests are slower than desired
-   - Setup/teardown optimization needed
-   - Mock implementation overhead
-
-2. Coverage Gaps
-   - Integration test coverage below target
-   - Some edge cases not covered
-   - Complex widget interactions
-
-3. Technical Debt
-   - Linter warnings in test files
-   - Inconsistent mock implementations
-   - Test documentation gaps
-
-## Notes
-- Keep test files organized and well-documented
-- Follow established patterns for new tests
-- Maintain balance between coverage and maintainability
-- Regular review of test performance metrics 
+- Document test patterns for new contributors 

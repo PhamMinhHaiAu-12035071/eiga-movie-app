@@ -103,19 +103,27 @@ The project follows a feature-first organization with Clean Architecture:
 
 ```
 lib/
-├── core/                     # Core utilities and shared functionality
-│   ├── di/                   # Dependency injection
-│   ├── router/               # Navigation
-│   ├── styles/               # UI styles
-│   ├── sizes/                # Size constants
-│   └── durations/            # Animation durations
-├── features/                 # Feature modules
-│   ├── env/                  # Environment configuration feature
-│   ├── onboarding/           # Onboarding feature
-│   ├── login/                # Login feature
-│   └── storage/              # Storage feature
-├── app.dart                  # Main application widget
-└── bootstrap.dart            # Application initialization
+├── core/                       # Core utilities and shared functionality
+│   ├── di/                     # Dependency Injection
+│   ├── router/                 # Navigation
+│   ├── asset/                  # Asset management
+│   ├── styles/                 # UI styles definitions (colors, text styles)
+│   ├── sizes/                  # Size and dimension constants
+│   ├── durations/              # Duration constants for animations and transitions
+│   └── themes/                 # Theme management
+│       ├── extensions/         # Theme extensions for assets, colors, etc.
+│       │   └── extensions.dart # Barrel file for all theme extensions
+│       ├── app_theme.dart      # Main theme configuration
+│       └── themes.dart         # Barrel file for all theme exports
+├── features/                   # Feature modules
+│   ├── env/                    # Environment configuration feature
+│   ├── onboarding/             # Onboarding feature
+│   ├── login/                  # Login feature
+│   └── storage/                # Storage feature
+├── shared/                     # Shared components
+├── generated/                  # Generated code
+├── app.dart                    # Main application widget
+└── bootstrap.dart              # Application initialization
 ```
 
 ## Build & Deployment
@@ -137,21 +145,75 @@ lib/
 ### Unit Testing
 - **flutter_test**: Flutter's built-in testing framework
 - **bloc_test**: Testing utilities for BLoC
-- **mocktail**: Mocking framework
+- **mocktail**: Mocking framework for creating test doubles
+- **get_it**: Used for dependency injection in tests
+
+### Widget Testing
+- **flutter_test**: Provides widget testing utilities
+- **mocktail**: For mocking dependencies in widget tests
+- **golden_toolkit**: For screenshot/UI testing (planned)
+- **robot_pattern**: Custom implementation for test organization
 
 ### Test Organization
-- Tests mirror production code structure with feature-first organization
-- Domain tests focus on interface contracts and validation
-- Infrastructure tests verify implementation details
-- Integration tests check the whole feature flow
-- Edge case tests for error handling scenarios
+```
+test/
+├── core/                     # Tests for core functionality
+│   ├── di/                   # DI tests
+│   ├── router/               # Router tests
+│   ├── styles/               # Styles tests
+│   ├── sizes/                # Sizes tests
+│   ├── durations/            # Durations tests
+│   ├── themes/               # Theme tests
+│   └── asset/                # Asset tests
+├── features/                 # Feature-specific tests
+│   └── [feature_name]/       # Tests for specific feature
+│       ├── domain/           # Domain layer tests
+│       ├── application/      # Application layer tests
+│       ├── infrastructure/   # Infrastructure layer tests
+│       └── presentation/     # Presentation layer tests
+├── shared/                   # Tests for shared components
+│   └── helpers/              # Test helpers
+└── integration/              # Integration tests
+```
 
 ### Test Patterns
-- Helper classes for common test operations
-- Mock implementations using mocktail
-- Fake implementations for simple scenarios
-- Error-throwing implementations to test failure cases
-- Empty implementations to test boundary conditions
+- **Mock Implementation Standards**:
+  - Explicit return types for all function declarations
+  - Boolean parameters made nullable with default values
+  - Full interface implementation for visual components
+  - Proper type hierarchies (MaterialColor vs Color)
+  - Factory constructors over static methods
+  - Proper error handling in mock implementations
+
+- **Widget Test Structure**:
+  ```dart
+  group('Component Tests', () {
+    setUp(() {
+      // GetIt registration
+      // Mock initialization
+      // Test data setup
+    });
+
+    tearDown(() {
+      // Controller disposal
+      // GetIt cleanup
+    });
+
+    testWidgets('test case', (tester) async {
+      // Widget setup
+      // Action simulation
+      // Verification
+    });
+  });
+  ```
+
+- **Standard Test Cases**:
+  - Basic rendering verification
+  - User interaction handling
+  - Error state management
+  - Style and layout verification
+  - Edge cases (empty states, rapid interactions)
+  - Animation and transition testing
 
 ### Test Commands
 ```bash
@@ -166,7 +228,38 @@ genhtml coverage/lcov.info -o coverage/
 
 # Run specific feature tests
 fvm flutter test test/features/env/
+
+# Run tests with tags
+fvm flutter test --tags="unit"
 ```
+
+### Test Helpers
+- Helper classes for common test operations
+- Mock implementations using mocktail
+- Fake implementations for simple scenarios
+- Error-throwing implementations to test failure cases
+- Empty implementations to test boundary conditions
+
+### Current Testing Metrics
+- Overall project: ~65% coverage (improving)
+- Storage Feature: 100% (achieved)
+- Environment Feature: 100% (achieved)
+- OnboardingPageView: 100% (achieved)
+- OnboardingDotIndicator: 100% (achieved)
+- Core Modules: ~70% (improving)
+
+### Testing Challenges
+- Widget Finding: Multiple instances of similar widgets requiring specific finders
+- Style Testing: Null safety in decoration testing, proper type casting
+- Test Performance: Some widget tests are slower than desired
+- Coverage Gaps: Integration test coverage below target, some edge cases not covered
+
+### Testing Focus
+1. Complete widget tests for remaining onboarding components
+2. Implement integration tests for full onboarding flow
+3. Document established test patterns for team reference
+4. Optimize test performance and execution time
+5. Implement visual regression testing for key components
 
 ## CI/CD Pipeline
 
