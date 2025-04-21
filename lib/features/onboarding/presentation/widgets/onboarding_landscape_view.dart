@@ -51,124 +51,133 @@ class OnboardingLandscapeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: _colors.onboardingBackground,
-      ),
-      padding: EdgeInsets.symmetric(
-        horizontal: _sizes.h8,
-        vertical: _sizes.v8,
-      ),
-      child: Column(
-        children: [
-          // Logo and app name
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: _sizes.h16),
-            child: Row(
-              children: [
-                SizedBox(
-                  height: _sizes.v32,
-                  child: AppImage.of(context).onboarding.logo.image(
-                        fit: BoxFit.contain,
-                      ),
-                ),
-                Gap(_sizes.h12),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+    return SingleChildScrollView(
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          minHeight: MediaQuery.of(context).size.height,
+        ),
+        child: Container(
+          decoration: BoxDecoration(
+            color: _colors.onboardingBackground,
+          ),
+          padding: EdgeInsets.symmetric(
+            horizontal: _sizes.h8,
+            vertical: _sizes.v8,
+          ),
+          child: Column(
+            children: [
+              // Logo and app name
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: _sizes.h16),
+                child: Row(
                   children: [
-                    Text(
-                      'EIGA',
-                      style: _textStyles.headingLg(
-                        fontWeight: FontWeight.w900,
-                        color: _colors.skipButtonColor,
+                    SizedBox(
+                      height: _sizes.v32,
+                      child: AppImage.of(context).onboarding.logo.image(
+                            fit: BoxFit.contain,
+                          ),
+                    ),
+                    Gap(_sizes.h12),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'EIGA',
+                          style: _textStyles.headingLg(
+                            fontWeight: FontWeight.w900,
+                            color: _colors.skipButtonColor,
+                          ),
+                        ),
+                        Text(
+                          'CINEMA UI KIT.',
+                          style: _textStyles.headingXs(
+                            fontWeight: FontWeight.w500,
+                            color: _colors.skipButtonColor,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+
+              Gap(_sizes.v8),
+
+              // PageView with landscape layout
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.5,
+                child: PageView.builder(
+                  controller: pageController,
+                  onPageChanged: onPageChanged,
+                  itemCount: slides.length,
+                  itemBuilder: (context, index) {
+                    final slide = slides[index];
+                    return _buildPageContent(context, slide);
+                  },
+                ),
+              ),
+
+              // Dot indicators and action buttons
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: _sizes.h16,
+                  vertical: _sizes.v8,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    // Dot indicators
+                    Flexible(
+                      flex: 370,
+                      child: OnboardingDotIndicator(
+                        pageCount: slides.length,
+                        currentIndex: currentPage,
                       ),
                     ),
-                    Text(
-                      'CINEMA UI KIT.',
-                      style: _textStyles.headingXs(
-                        fontWeight: FontWeight.w500,
-                        color: _colors.skipButtonColor,
+
+                    // Buttons row
+                    Flexible(
+                      flex: 630,
+                      child: Row(
+                        children: [
+                          Gap(_sizes.h32),
+                          // Next or Get Started button
+                          _buildActionButton(
+                            text: isLastPage ? 'Get Started' : 'Next',
+                            onPressed: onNextPressed,
+                          ),
+
+                          Gap(_sizes.h12),
+
+                          // Skip button
+                          TextButton(
+                            onPressed: onSkipPressed,
+                            style: TextButton.styleFrom(
+                              minimumSize: const Size(170, 60),
+                              padding:
+                                  EdgeInsets.symmetric(horizontal: _sizes.h12),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(
+                                    _sizes.borderRadiusMd),
+                              ),
+                            ),
+                            child: Text(
+                              'Skip',
+                              style: _textStyles.heading(
+                                color: _colors.skipButtonColor,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-
-          Gap(_sizes.v8),
-
-          // PageView with landscape layout
-          Expanded(
-            child: PageView.builder(
-              controller: pageController,
-              onPageChanged: onPageChanged,
-              itemCount: slides.length,
-              itemBuilder: (context, index) {
-                final slide = slides[index];
-                return _buildPageContent(context, slide);
-              },
-            ),
-          ),
-
-          // Dot indicators and action buttons
-          Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: _sizes.h16,
-              vertical: _sizes.v8,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                // Dot indicators
-                Flexible(
-                  flex: 370,
-                  child: OnboardingDotIndicator(
-                    pageCount: slides.length,
-                    currentIndex: currentPage,
-                  ),
-                ),
-
-                // Buttons row
-                Flexible(
-                  flex: 630,
-                  child: Row(
-                    children: [
-                      Gap(_sizes.h32),
-                      // Next or Get Started button
-                      _buildActionButton(
-                        text: isLastPage ? 'Get Started' : 'Next',
-                        onPressed: onNextPressed,
-                      ),
-
-                      Gap(_sizes.h12),
-
-                      // Skip button
-                      TextButton(
-                        onPressed: onSkipPressed,
-                        style: TextButton.styleFrom(
-                          minimumSize: const Size(170, 60),
-                          padding: EdgeInsets.symmetric(horizontal: _sizes.h12),
-                          shape: RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.circular(_sizes.borderRadiusMd),
-                          ),
-                        ),
-                        child: Text(
-                          'Skip',
-                          style: _textStyles.heading(
-                            color: _colors.skipButtonColor,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
@@ -218,55 +227,42 @@ class OnboardingLandscapeView extends StatelessWidget {
   Widget _buildPageContent(BuildContext context, OnboardingInfo slide) {
     return Row(
       children: [
-        // Left column with image
+        // Image section
         Expanded(
-          flex: 5,
-          child: Center(
+          flex: 1,
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: _sizes.h16),
             child: slide.image.image(
-              height: _sizes.v192.h,
-              width: _sizes.h192.w,
               fit: BoxFit.contain,
-              errorBuilder: (context, error, stackTrace) {
-                return Container(
-                  height: _sizes.v128.h,
-                  width: _sizes.h128.w,
-                  color: _colors.grey[300],
-                  child: Icon(
-                    Icons.image_not_supported,
-                    size: _sizes.r64,
-                    color: _colors.grey[600],
-                  ),
-                );
-              },
             ),
           ),
         ),
 
-        Gap(_sizes.h16),
-
-        // Right column with text
+        // Text content section
         Expanded(
-          flex: 7,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                slide.title,
-                style: _textStyles.headingLg(
-                  color: _colors.onboardingBlue,
-                  fontWeight: FontWeight.w900,
+          flex: 1,
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: _sizes.h16),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  slide.title,
+                  style: _textStyles.headingXl(
+                    fontWeight: FontWeight.w700,
+                    color: _colors.onboardingBlue,
+                  ),
                 ),
-              ),
-              Gap(_sizes.v8),
-              Text(
-                slide.description,
-                style: _textStyles.body(
-                  color: _colors.black,
-                  fontWeight: FontWeight.w700,
+                Gap(_sizes.v8),
+                Text(
+                  slide.description,
+                  style: _textStyles.bodyLg(
+                    color: _colors.black,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ],
