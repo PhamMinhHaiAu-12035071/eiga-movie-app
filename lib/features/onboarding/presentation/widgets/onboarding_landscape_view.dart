@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart' show Gap;
 import 'package:get_it/get_it.dart';
 import 'package:ksk_app/core/asset/app_image.dart';
@@ -158,7 +157,8 @@ class OnboardingLandscapeView extends StatelessWidget {
                                   EdgeInsets.symmetric(horizontal: _sizes.h12),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(
-                                    _sizes.borderRadiusMd),
+                                  _sizes.borderRadiusMd,
+                                ),
                               ),
                             ),
                             child: Text(
@@ -229,7 +229,6 @@ class OnboardingLandscapeView extends StatelessWidget {
       children: [
         // Image section
         Expanded(
-          flex: 1,
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: _sizes.h16),
             child: slide.image.image(
@@ -240,7 +239,6 @@ class OnboardingLandscapeView extends StatelessWidget {
 
         // Text content section
         Expanded(
-          flex: 1,
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: _sizes.h16),
             child: Column(

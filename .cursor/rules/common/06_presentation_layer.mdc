@@ -278,38 +278,34 @@ class FeatureWidget extends StatelessWidget {
 }
 ```
 
-## Layout Responsiveness
+### Shared Widgets
 
-1. **ScreenUtil Integration**
-   * Initialize ScreenUtil in your app startup:
-     ```dart
-     void main() {
-       runApp(
-         ScreenUtilInit(
-           designSize: const Size(375, 812),
-           minTextAdapt: true,
-           splitScreenMode: true,
-           builder: (context, child) => const App(),
-         ),
-       );
-     }
-     ```
-   * Use extensions for responsive sizing:
-     - `.w` for widths (e.g., `AppSizes.spacing16.w`)
-     - `.h` for heights (e.g., `AppSizes.spacing16.h`)
-     - `.r` for radii (e.g., `AppSizes.radius8.r`)
-     - `.sp` for font sizes (e.g., `28.sp`)
+* Place reusable widgets in the `shared/widgets` directory
+* Organize shared widgets into subdirectories by type (buttons, inputs, etc.)
+* Ensure shared widgets are highly configurable and reusable
 
-2. **Layout Best Practices**
-   * Prefer `Expanded`, `Flexible`, and `FractionallySizedBox` for proportional sizing
-   * Use `LayoutBuilder` for container-aware sizing
-   * Apply `MediaQuery` for screen-aware adjustments
-   * Create responsive layouts with `OrientationBuilder`
+## Responsive Layouts & Orientation Handling
 
-3. **Adaptive Widgets**
-   * Create platform-adaptive widgets when needed
-   * Use `Theme.of(context).platform` to check the platform
-   * Consider different device sizes and orientations
+* **Responsiveness Foundation**: Use `flutter_screenutil` for scaling dimensions, padding, margins, and font sizes (`.w`, `.h`, `.sp`, `.r`). This ensures basic adaptation to different screen sizes.
+* **Adapting Layouts**: Use `LayoutBuilder` to get `BoxConstraints` and `OrientationBuilder` to get the current `Orientation`.
+  ```dart
+  OrientationBuilder(
+    builder: (context, orientation) {
+      if (orientation == Orientation.portrait) {
+        return MyWidgetPortraitLayout();
+      } else {
+        return MyWidgetLandscapeLayout();
+      }
+    },
+  )
+  ```
+* **Significant Differences**: When layouts for portrait and landscape are substantially different (e.g., different widget arrangements, navigation patterns), create separate view/widget components:
+  - `[ComponentName]PortraitView.dart` / `[ComponentName]Portrait.dart`
+  - `[ComponentName]LandscapeView.dart` / `[ComponentName]Landscape.dart`
+  - Use `OrientationBuilder` or `MediaQuery.of(context).orientation` in the parent component to switch between them.
+  - Example: `OnboardingPage` renders `OnboardingPortraitView` or `OnboardingLandscapeView` based on orientation.
+* **Minor Adjustments**: For smaller adjustments (e.g., changing the number of columns in a grid, adjusting spacing), use conditional logic within a single widget based on `constraints` from `LayoutBuilder` or `orientation` from `OrientationBuilder`.
+* **Testing**: Widget tests MUST cover both portrait and landscape orientations if the layout adapts. Use device previews or simulators to verify layouts on different screen sizes and orientations during development.
 
 ## State Interaction
 

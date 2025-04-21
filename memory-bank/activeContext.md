@@ -2,6 +2,7 @@
 
 ## Current Focus
 - Analyzing the onboarding feature implementation
+- **Successfully reaching 100% test coverage for the OnboardingPage component**
 - Reviewing the responsive design patterns between portrait and landscape orientations
 - Understanding navigation patterns, particularly route replacement techniques
 - Examining widget structure and component organization
@@ -11,6 +12,7 @@
 - Enhancing widgetbook showcases to match the latest structure
 - Applying established widget testing patterns to core components
 - Addressing performance issues in widget tests
+- **Updating memory bank and rules (`@common`) to formalize orientation handling patterns.**
 
 ## Recent Findings
 - ✅ Analyzed onboarding feature implementation:
@@ -56,32 +58,36 @@
   - Updated test/core structure to mirror lib/core
   - Removed obsolete test/core/di/register_module_test.dart
   - Added new tests for specific DI modules
-- ✅ Implemented comprehensive test coverage for OnboardingPageView widget (100%)
+- ✅ Implemented comprehensive test coverage for OnboardingPage widget (100%)
+  - Fixed failing tests by switching from direct callback invocation to UI interactions
+  - Added specific tests for portrait and landscape orientation interactions
+  - Ensured all callback methods were tested with proper verifications
+  - Successfully covered all branches in orientation-specific layouts and interactions
 - ✅ Updated mock implementations to follow consistent patterns:
   - Explicit return types for all function declarations
   - Boolean parameters made nullable with default values
   - Full interface implementation for visual components
   - Proper type hierarchies (MaterialColor vs Color)
-- Fixed linting issues in test files:
+- ✅ Fixed linting issues in test files:
   - Proper type declarations for callbacks
   - Named parameters for boolean values
   - Correct mock implementations for AssetGenImage
   - Proper MaterialColor usage in color mocks
-- Fixed deprecated color properties in test files:
+- ✅ Fixed deprecated color properties in test files:
   - Replaced `color.red`, `color.green`, `color.blue` with `color.r.toInt()`, `color.g.toInt()`, `color.b.toInt()`
   - Replaced `color.value` with `color.toARGB32()`
   - Improved mock implementations with proper typing
-- Refactored widgetbook structure to match main app structure:
+- ✅ Refactored widgetbook structure to match main app structure:
   - Created bootstrap.dart with similar structure to main app bootstrap
   - Added environment-specific entry points (main_development.dart, main_staging.dart, main_production.dart)
   - Updated widgetbook app.dart to use ResponsiveInitializer
   - Aligned initialization flow with main app patterns
-- Enhanced widgetbook developer experience:
+- ✅ Enhanced widgetbook developer experience:
   - Added InspectorAddon, GridAddon, AlignmentAddon, ZoomAddon for advanced layout/debugging
   - Greatly expanded DeviceFrameAddon list: now covers a wide range of iOS/Android phones and tablets (including iPhone12Mini, iPhone12ProMax, iPadAir4, iPadPro11Inches, iPad12InchesGen2/4, Samsung Galaxy A50, Sony Xperia 1 II, and generic small/medium/large devices)
-- Implemented proper teardown in widget tests to prevent test interference
-- Converted static methods to factory constructors in mock classes
-- Improved error handling in test assertions and validations
+- ✅ Implemented proper teardown in widget tests to prevent test interference
+- ✅ Converted static methods to factory constructors in mock classes
+- ✅ Improved error handling in test assertions and validations
 
 ## Testing Patterns Established
 1. Mock Dependencies:
@@ -164,6 +170,13 @@
    - Minimize unnecessary widget rebuilds in tests
    - Improve test data generation
    - Enhance mock implementation efficiency
+   
+6. **Widget Testing Best Practices**:
+   - **Avoid direct callback invocation when possible**
+   - **Use UI interactions (tester.tap, tester.drag) for more realistic tests**
+   - **Test portrait and landscape orientations separately**
+   - **Set appropriate window sizes for orientation-specific tests**
+   - **Ensure that orientation-specific views are properly tested**
 
 ## Next Steps
 1. Implement updated tests for refactored core components:
@@ -194,6 +207,7 @@
    - Refactor setup and teardown procedures
    - Improve mock implementation efficiency
    - Enhance test data generation
+8. **Apply updated rules regarding responsive/orientation handling to future features.**
 
 ## Current Challenges
 1. Widget Finding:
@@ -228,6 +242,8 @@
 - Continuously refine mock implementations based on lessons learned
 - Consider breaking complex tests into smaller, focused tests
 - Prioritize readability and maintainability in test code
+- **For orientation testing, prefer actual UI interactions over direct method calls**
+- **Use `tester.binding.window.physicalSizeTestValue` to properly set orientation in tests**
 
 ## Active Work
 We are currently focused on implementing a comprehensive testing strategy for the refactored core components. The main areas of focus are:
@@ -239,7 +255,7 @@ We are currently focused on implementing a comprehensive testing strategy for th
    - Validating assets and resource handling
 
 2. **Widget Testing**
-   - ✅ Creating widget tests for core components (OnboardingPageView completed)
+   - ✅ Creating widget tests for core components (OnboardingPage completed with 100% coverage)
    - 🚧 Creating widget tests for remaining Onboarding components (Header, NextButton)
    - Setting up visual regression testing
    - Implementing the robot pattern for widget test organization

@@ -3,10 +3,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:ksk_app/core/asset/app_image.dart';
+import 'package:ksk_app/core/durations/app_durations.dart';
 import 'package:ksk_app/core/sizes/app_sizes.dart';
 import 'package:ksk_app/core/styles/app_text_styles.dart';
 import 'package:ksk_app/core/styles/colors/app_colors.dart';
-import 'package:ksk_app/core/durations/app_durations.dart';
 import 'package:ksk_app/features/onboarding/domain/models/onboarding_info.dart';
 import 'package:ksk_app/features/onboarding/presentation/widgets/onboarding_landscape_view.dart';
 import 'package:mocktail/mocktail.dart';
@@ -72,29 +72,53 @@ void main() {
     when(() => mockColors.grey).thenReturn(Colors.grey);
 
     // Mock text styles
-    when(() => mockTextStyles.headingLg(
-          color: any(named: 'color'),
-          fontWeight: any(named: 'fontWeight'),
-        )).thenReturn(const TextStyle());
-    when(() => mockTextStyles.headingXs(
-          color: any(named: 'color'),
-          fontWeight: any(named: 'fontWeight'),
-        )).thenReturn(const TextStyle());
-    when(() => mockTextStyles.heading(
-          color: any(named: 'color'),
-          fontWeight: any(named: 'fontWeight'),
-        )).thenReturn(const TextStyle());
-    when(() => mockTextStyles.body(
-          color: any(named: 'color'),
-          fontWeight: any(named: 'fontWeight'),
-        )).thenReturn(const TextStyle());
-    when(() => mockTextStyles.headingXl(
-          color: any(named: 'color'),
-          fontWeight: any(named: 'fontWeight'),
-        )).thenReturn(const TextStyle());
-    when(() => mockTextStyles.bodyLg(
-          color: any(named: 'color'),
-        )).thenReturn(const TextStyle());
+    when(
+      () => mockTextStyles.headingLg(
+        color: any(named: 'color'),
+        fontWeight: any(named: 'fontWeight'),
+      ),
+    ).thenReturn(
+      const TextStyle(),
+    );
+    when(
+      () => mockTextStyles.headingXs(
+        color: any(named: 'color'),
+        fontWeight: any(named: 'fontWeight'),
+      ),
+    ).thenReturn(
+      const TextStyle(),
+    );
+    when(
+      () => mockTextStyles.heading(
+        color: any(named: 'color'),
+        fontWeight: any(named: 'fontWeight'),
+      ),
+    ).thenReturn(
+      const TextStyle(),
+    );
+    when(
+      () => mockTextStyles.body(
+        color: any(named: 'color'),
+        fontWeight: any(named: 'fontWeight'),
+      ),
+    ).thenReturn(
+      const TextStyle(),
+    );
+    when(
+      () => mockTextStyles.headingXl(
+        color: any(named: 'color'),
+        fontWeight: any(named: 'fontWeight'),
+      ),
+    ).thenReturn(
+      const TextStyle(),
+    );
+    when(
+      () => mockTextStyles.bodyLg(
+        color: any(named: 'color'),
+      ),
+    ).thenReturn(
+      const TextStyle(),
+    );
 
     // Mock durations
     when(() => mockDurations.medium)
@@ -128,7 +152,6 @@ void main() {
     VoidCallback? skipPressed,
   }) {
     return ScreenUtilInit(
-      designSize: const Size(360, 690),
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (_, __) => MaterialApp(
@@ -174,7 +197,7 @@ void main() {
 
     testWidgets('calls onNextPressed when Next/Get Started is tapped',
         (tester) async {
-      bool nextPressed = false;
+      var nextPressed = false;
       await tester.pumpWidget(
         buildTestWidget(
           nextPressed: () => nextPressed = true,
@@ -188,7 +211,7 @@ void main() {
     });
 
     testWidgets('calls onSkipPressed when Skip is tapped', (tester) async {
-      bool skipPressed = false;
+      var skipPressed = false;
       await tester.pumpWidget(
         buildTestWidget(
           skipPressed: () => skipPressed = true,

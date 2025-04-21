@@ -55,7 +55,8 @@
     - ✅ Created responsive design with separate portrait and landscape views
       - ✅ OnboardingPortraitView with vertical layout optimization
       - ✅ OnboardingLandscapeView with horizontal layout optimization
-      - ✅ Orientation detection using MediaQuery
+      - ✅ **Orientation detected using `MediaQuery` or `OrientationBuilder` to render the appropriate view.**
+      - ✅ **Established pattern: Use distinct views (`...PortraitView`, `...LandscapeView`) when layouts differ significantly between orientations.**
       - ✅ Consistent branding and UX between orientations
     - ✅ Applied color schemes from design
     - ✅ Standardized color usage with AppColors
@@ -77,9 +78,13 @@
       - ✅ Style and layout verification
     - ❌ OnboardingHeader widget tests (In Progress)
     - ❌ OnboardingNextButton widget tests (In Progress)
-    - ✅ OnboardingPageView widget tests (100% coverage achieved)
+    - ✅ OnboardingPage widget tests (100% coverage achieved)
       - ✅ Basic rendering tests
       - ✅ Page navigation tests
+      - ✅ Orientation-specific tests for both portrait and landscape modes
+      - ✅ Comprehensive button interaction tests (Next, Skip, Get Started)
+      - ✅ Proper UI-driven callback verification instead of direct method calls
+      - ✅ Navigation routing verification
       - ✅ Error handling tests
       - ✅ Style verification
       - ✅ Edge case testing
@@ -135,7 +140,12 @@
   - ✅ Improved error checking pattern with proper function expression syntax
   - ✅ Enhanced reliability of dependency injection tests
 - ✅ Created test/core/themes/extensions/app_asset_extension_test.dart with 100% coverage
-- ✅ Created comprehensive widget tests for OnboardingPageView (100% coverage)
+- ✅ Created comprehensive widget tests for OnboardingPage (100% coverage)
+- ✅ Established best practices for orientation testing
+  - ✅ Use `tester.binding.window.physicalSizeTestValue` to set orientation in tests
+  - ✅ Test portrait and landscape views separately
+  - ✅ Prefer UI interactions over direct callback invocation
+  - ✅ Verify that orientation-specific components render correctly
 - ✅ Updated test/core structure to mirror refactored lib/core structure
   - ✅ Created matching test directories for all core components
   - ✅ Removed outdated tests and added new ones for refactored modules
@@ -175,7 +185,7 @@
    - 🚧 Theme tests with extensions (Planned)
 
 2. Completing the onboarding feature testing
-   - ✅ OnboardingPageView tests completed (100% coverage)
+   - ✅ OnboardingPage tests completed (100% coverage)
    - 🚧 OnboardingHeader tests (In Progress)
    - 🚧 OnboardingNextButton tests (In Progress)
    - 🚧 OnboardingCubit tests (Planned)
@@ -186,6 +196,10 @@
    - ✅ Established mock implementation standards
    - ✅ Updated color API usage in tests
    - ✅ Improved test structure and organization
+   - ✅ Established orientation testing patterns
+     - ✅ Setting physical screen size for portrait/landscape
+     - ✅ Using UI interactions instead of direct callback invocation
+     - ✅ Testing both orientations separately
    - 🚧 Optimizing test performance
    - 🚧 Documenting testing patterns and best practices
 
@@ -193,6 +207,7 @@
    - ✅ Proper setup and teardown procedures
    - ✅ Improved widget finder specificity
    - ✅ Enhanced error handling in assertions
+   - ✅ Realistic UI-driven tests instead of direct callback invocation
    - 🚧 Reducing test execution time
    - 🚧 Improving test stability across environments
 

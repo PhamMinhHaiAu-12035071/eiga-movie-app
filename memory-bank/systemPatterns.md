@@ -2,315 +2,336 @@
 
 ## Architecture Overview
 
-The KSK App follows the **Clean Architecture** principles, organizing code into the following layers:
+The EIGA Movie App follows Clean Architecture principles, with a feature-first organization approach. Each feature is divided into four main layers:
 
-```
-Domain --> Application --> Infrastructure --> Presentation
-```
+1. **Domain Layer**
+   - Contains business models, interfaces, and use cases
+   - Defines repository interfaces that the infrastructure layer implements
+   - Represents the core business logic and rules
 
-### Domain Layer
-- Contains business entities and repository interfaces
-- Pure Dart with no dependencies on Flutter or external packages
-- Defines the business rules and logic
+2. **Application Layer**
+   - Manages state using BLoC/Cubit pattern
+   - Interacts with the domain layer to execute use cases
+   - Transforms domain data for presentation
 
-### Application Layer
-- Contains use cases and state management
-- Implements business logic
-- Uses BLoC/Cubit for state management
+3. **Infrastructure Layer**
+   - Provides concrete implementations of domain interfaces
+   - Manages external data sources (API, local storage)
+   - Converts data models to domain entities
 
-### Infrastructure Layer
-- Implements repository interfaces from the domain layer
-- Handles data sources (API, local storage)
-- Communicates with external services
+4. **Presentation Layer**
+   - Contains UI components, screens, and widgets
+   - Consumes state from the application layer
+   - Dispatches user events to the application layer
 
-### Presentation Layer
-- Contains UI components (pages, widgets)
-- Consumes state from the application layer
-- Handles user interactions
-
-## Project Structure
-The codebase follows a **feature-first** organization:
+## Directory Structure
 
 ```
 lib/
-├── core/                       # Common system configurations
-│   ├── di/                     # Dependency Injection
-│   ├── router/                 # Navigation
-│   ├── asset/                  # Asset management
-│   ├── styles/                 # UI styles definitions (colors, text styles)
-│   ├── sizes/                  # Size and dimension constants
-│   ├── durations/              # Duration constants for animations and transitions
-│   └── themes/                 # Theme management
-│       ├── extensions/         # Theme extensions for assets, colors, etc.
-│       │   └── extensions.dart # Barrel file for all theme extensions
-│       ├── app_theme.dart      # Main theme configuration
-│       └── themes.dart         # Barrel file for all theme exports
-├── features/                   # Feature modules
-│   ├── env/                    # Environment configuration
-│   │   ├── domain/             # Environment repository interface
-│   │   ├── infrastructure/     # Environment repository implementation
-│   │   └── env_development.dart # Environment variables and configuration
-│   └── [other_feature_name]/   
-│       ├── domain/             # Entities, repository interfaces
-│       ├── application/        # State management, use cases
-│       ├── infrastructure/     # Repository implementations
-│       └── presentation/       # UI components
-├── shared/                     # Shared components
-├── generated/                  # Generated code
-├── app.dart                    # Main application widget
-└── bootstrap.dart              # Application initialization
+├── core/                     # Core application code
+│   ├── di/                   # Dependency injection
+│   ├── router/               # Navigation configuration
+│   ├── asset/                # Asset management
+│   ├── styles/               # UI style definitions 
+│   ├── sizes/                # Size and spacing definitions
+│   ├── durations/            # Animation duration constants
+│   └── themes/               # Theme configurations
+│       ├── extensions/       # Theme extensions
+│       └── app_theme.dart    # Theme definitions
+├── features/                 # Feature modules
+│   └── [feature_name]/       # Specific feature
+│       ├── domain/           # Domain layer
+│       │   ├── models/       # Domain models
+│       │   └── repositories/ # Repository interfaces
+│       ├── application/      # Application layer (state management)
+│       │   ├── cubit/        # Feature Cubits (or BLoCs)
+│       │   └── facades/      # Feature facades (optional)
+│       ├── infrastructure/   # Infrastructure layer
+│       │   ├── datasources/  # Data sources (API, Database)
+│       │   ├── models/       # Response/Request models
+│       │   └── repositories/ # Repository implementations
+│       └── presentation/     # Presentation layer
+│           ├── pages/        # Full screens with routing
+│           ├── views/        # Main UI containers 
+│           └── widgets/      # UI components
+├── shared/                   # Shared code across features
+│   ├── domain/               # Shared models/interfaces
+│   ├── infrastructure/       # Shared implementations
+│   └── widgets/              # Shared UI components
+└── main.dart                 # Application entry point
 ```
 
-## Feature Structure Example
-
-### Login Feature Structure
-This is a typical structure for a feature, exemplified by the login feature:
-
-```
-lib/features/login/
-├── application/
-│   └── cubit/
-│       ├── login_cubit.dart    # State management
-│       └── login_state.dart    # State definition
-├── presentation/
-│   ├── pages/
-│   │   └── login_page.dart     # Route page with @RoutePage annotation
-│   └── widgets/
-│       └── login_view.dart     # Main UI component
-└── README.md                   # Feature documentation
-```
-
-### Environment Feature Structure
-The environment feature provides configuration based on the running environment:
-
-```
-lib/features/env/
-├── domain/
-│   └── env_config_repository.dart   # Repository interface
-├── infrastructure/
-│   └── env_config_repository_impl.dart  # Repository implementation
-├── env_development.dart         # Development environment configuration
-└── .env.dev                     # Environment variables file
-```
-
-## Key Design Patterns
-
-### Repository Pattern
-- Abstracts data sources behind interfaces
-- Uses clear naming convention (no "I" prefix for interfaces, "Impl" suffix for implementations)
-- Repository interfaces defined in domain layer (e.g., `FeatureRepository`)
-- Repository implementations in infrastructure layer (e.g., `FeatureRepositoryImpl`)
-- Allows for easy swapping of implementations
-- Facilitates testing via mock repositories
-
-### Dependency Injection
-- Uses `get_it` and `injectable` for service location
-- Centralizes dependency management
-- Facilitates testing by allowing injection of mocks
-
-### BLoC Pattern
-- Separates business logic from UI
-- Manages state through streams of events and states
-- Promotes unidirectional data flow
-
-### Factory Pattern
-- Used for creating instances of repositories and services
-- Centralizes object creation logic
-- Supports different implementations based on environment
-
-### Adapter Pattern
-- Used in the infrastructure layer to adapt external data to domain models
-- Isolates data transformation logic
-
-### Service Abstraction
-- Core services defined as interfaces to decouple from specific implementations
-- Services reside in `core/services` directory
-- Enables swapping implementations without affecting consumers
-- Examples include `LocalStorageService` for abstracting persistence operations
-- Follows Dependency Inversion principle from SOLID
-
-## Specific Implementation Patterns
-
-### Navigation
-- Uses `auto_route` for type-safe routing
-- Centralized route definitions in `app_router.dart`
-- Route pages annotated with `@RoutePage()`
-- Navigation implemented using `context.router.replace()` or `context.router.push()`
-- Support for nested routes and guards
+## Key Technical Decisions
 
 ### State Management
-- Uses `flutter_bloc` for state management
-- Separate state classes for each feature
-- Immutable state objects with `freezed` or `equatable`
-- State providers injected using BlocProvider
-- Consumption with BlocBuilder or BlocConsumer
 
-### Error Handling
-- Centralized error handling through repositories
-- Custom exception types for different error scenarios
-- User-friendly error messages via UI
+We use the BLoC pattern (via `flutter_bloc`) for state management:
 
-### Persistence
-- Storage abstracted through `LocalStorageService` interface
-- Primary implementation via `SharedPreferencesStorageService` for simple data
-- More complex data structures may use SQLite or Hive
-- All storage operations follow the interface contract
-- Features depend on the abstraction, not concrete implementations
+1. **Cubit Approach**
+   - Most features use Cubit for simpler state management
+   - State classes are created with Freezed for immutability
+   - State follows a uniform structure with data, status, and error properties
 
-### Networking
-- HTTP requests via `dio` and `chopper`
-- Type-safe API client generation
-- Request/response interceptors for common operations
+2. **State Design Pattern**
+   ```dart
+   @freezed
+   class FeatureState with _$FeatureState {
+     const factory FeatureState({
+       @Default(LoadingStatus.initial) LoadingStatus status,
+       FeatureModel? data,
+       String? errorMessage,
+     }) = _FeatureState;
+   
+     factory FeatureState.initial() => const FeatureState();
+   }
+   ```
 
-### Color System
-- Uses MaterialColor for primary color palettes
-- Centralizes all color definitions in AppColors class
-- Organizes colors by theme (light/dark) and feature
-- Provides shade variations (50-900) for each main color
-- Enforces color consistency by avoiding direct color references
+3. **Cubit Pattern**
+   ```dart
+   @injectable
+   class FeatureCubit extends Cubit<FeatureState> {
+     final FeatureRepository _repository;
+   
+     FeatureCubit(this._repository) : super(FeatureState.initial());
+   
+     // Methods to update state
+   }
+   ```
 
-### Duration System
-- Centralizes all animation and transition durations in AppDurations class
-- Provides categorized durations (veryShort, short, medium, long, extraLong, oneSecond)
-- Ensures consistent timing across the application
-- Improves maintainability by eliminating hardcoded duration values
-- Makes animation timing adjustments easier by changing values in a single place
+### Navigation
 
-### Styling System
-- Text styles defined in AppTextStyle class
-- Size constants defined in AppDimension class
-- Colors defined in AppColors class
-- Consistent usage throughout the application
-- Responsive design with ScreenUtil
+1. **Auto Router**
+   - Using `auto_route` for type-safe routing
+   - Routes are defined in `core/router/app_router.dart`
+   - Screens are annotated with `@RoutePage()`
+   - Navigation uses the `context.router` extension methods
 
-## Component Communication
-- Primarily through BLoC/Cubit pattern
-- Repository pattern for data access
-- Event-based communication for cross-feature interactions
+2. **Route Replacement**
+   - For one-time screens like onboarding, we use route replacement:
+   ```dart
+   context.router.replace(const LoginRoute());
+   ```
 
-## Feature Implementation Patterns
-### Minimal Feature
-- Start with a simple state class (using Equatable or Freezed)
-- Create a basic Cubit with minimal functionality
-- Implement UI with proper routing and navigation
-- Follow the app's design guidelines for consistent UI
+### Dependency Injection
 
-### Full Feature
-- Domain layer with entities and repository interfaces
-- Infrastructure layer with repository implementations
-- Application layer with state management
-- Presentation layer with UI components
-- Comprehensive documentation in README.md
+1. **GetIt + Injectable**
+   - Using `get_it` for service location
+   - Using `injectable` for code generation
+   - Dependencies are registered in modules under `core/di`
+   - Repositories are registered with their interfaces
+   - Modules are organized by functionality
 
-### Responsive Design Pattern
-The application implements a specific pattern for handling different device orientations:
+2. **Registration Pattern**
+   ```dart
+   @module
+   abstract class ApiModule {
+     @lazySingleton
+     Dio provideDio(EnvRepository envRepository) {
+       // Configuration...
+     }
+   }
+   ```
 
-#### Orientation-specific Views
-- Separate widget implementations for portrait and landscape orientations
-- Main page determines orientation using `MediaQuery.of(context).orientation`
-- Renders either portrait or landscape view based on orientation
-- Example in Onboarding feature:
-  ```dart
-  orientation == Orientation.portrait
-      ? OnboardingPortraitView(...)
-      : OnboardingLandscapeView(...)
-  ```
+### Repositories
 
-#### Portrait vs Landscape Implementation
-- Portrait views optimize for vertical space
-  - Vertical stacking with image on top, text below
-  - Generally more padding/margins for comfortable reading
-  - Taller buttons and controls
+1. **Repository Pattern**
+   - Interfaces defined in domain layer
+   - Implementations in infrastructure layer
+   - Result return type using Either from fpdart
+   - Error handling with typed error objects
 
-- Landscape views optimize for horizontal space
-  - Split layout with image on left/right and content on opposite side
-  - Reduced vertical spacing
-  - More compact controls
-  - Different flex ratios for content distribution
+2. **Repository Interface**
+   ```dart
+   abstract class FeatureRepository {
+     Future<Either<FeatureError, FeatureModel>> getFeature(String id);
+   }
+   ```
 
-#### Shared Components
-- Core widget functionality shared between orientations
-- Common styling and branding elements
-- Same navigation patterns and event handling
-- Identical data displayed in different layouts
+3. **Repository Implementation**
+   ```dart
+   @LazySingleton(as: FeatureRepository)
+   class FeatureRepositoryImpl implements FeatureRepository {
+     final ApiClient _apiClient;
+   
+     FeatureRepositoryImpl(this._apiClient);
+   
+     @override
+     Future<Either<FeatureError, FeatureModel>> getFeature(String id) async {
+       try {
+         final response = await _apiClient.getFeature(id);
+         return right(response.toDomain());
+       } catch (e) {
+         return left(_mapExceptionToError(e));
+       }
+     }
+   }
+   ```
 
-This pattern ensures optimal user experience across different device orientations while maintaining code organization and reusability.
+## Responsive Design Patterns
 
-## Testing Strategy
-- Unit tests for domain and application layers
-- Widget tests for presentation layer
-- Integration tests for key user flows
-- Mock repositories and services for isolated testing 
+1. **Orientation Handling**
+   - **Pattern: Separate Views for Different Orientations**
+   - We use distinct view components for portrait and landscape layouts:
+     ```dart
+     Scaffold(
+       body: SafeArea(
+         child: orientation == Orientation.portrait
+             ? PortraitView(...)
+             : LandscapeView(...),
+       ),
+     )
+     ```
+   - Orientation is detected via `MediaQuery.of(context).orientation`
+   - All callbacks and data are passed consistently to both views
+   - Views are responsible for optimizing layouts for their orientation
 
-### Testing Architecture
+2. **View-Specific Layout Optimizations**
+   - **Portrait Views:** Optimize for vertical flow
+     - Vertical arrangement of components
+     - Full width utilization
+     - Scroll for content overflow
+   - **Landscape Views:** Optimize for horizontal flow
+     - Side-by-side arrangement of components
+     - Split screen approach
+     - Horizontal navigation when appropriate
 
-The project follows a comprehensive testing strategy across all layers:
+3. **Consistent UX Across Orientations**
+   - Core functionality remains identical between orientations
+   - Visual styling and branding stay consistent
+   - Only the layout and positioning are adjusted
 
-```
-test/
-├── core/                     # Tests for core functionality
-│   ├── di/                   # DI tests
-│   ├── router/               # Router tests
-│   ├── styles/               # Styles tests
-│   ├── sizes/                # Sizes tests
-│   ├── durations/            # Durations tests
-│   ├── themes/               # Theme tests
-│   └── asset/                # Asset tests
-├── features/                 # Feature-specific tests
-│   └── [feature_name]/       # Tests for specific feature
-│       ├── domain/           # Domain layer tests
-│       ├── application/      # Application layer tests
-│       ├── infrastructure/   # Infrastructure layer tests
-│       └── presentation/     # Presentation layer tests
-├── shared/                   # Tests for shared components
-│   └── helpers/              # Test helpers
-└── integration/              # Integration tests
-```
+4. **Example Implementation: Onboarding Feature**
+   ```dart
+   // In onboarding_page.dart
+   @override
+   Widget build(BuildContext context) {
+     return BlocProvider(
+       create: (_) => getIt<OnboardingCubit>(),
+       child: BlocBuilder<OnboardingCubit, OnboardingState>(
+         builder: (context, state) {
+           final orientation = MediaQuery.of(context).orientation;
+           
+           return Scaffold(
+             body: SafeArea(
+               child: orientation == Orientation.portrait
+                   ? OnboardingPortraitView(
+                       pageController: _pageController,
+                       slides: state.slides,
+                       currentPage: state.currentPage,
+                       isLastPage: state.isLastPage,
+                       onPageChanged: (index) => 
+                           context.read<OnboardingCubit>().updatePage(index),
+                       onNextPressed: () {
+                         if (state.isLastPage) {
+                           _finishOnboarding(context);
+                         } else {
+                           _nextPage(context);
+                         }
+                       },
+                       onSkipPressed: () => _finishOnboarding(context),
+                     )
+                   : OnboardingLandscapeView(
+                       // Same properties as portrait view
+                     ),
+             ),
+           );
+         },
+       ),
+     );
+   }
+   ```
 
-### Testing Patterns
+## Testing Patterns
 
-#### Mock Implementation Standards
-- Use explicit return types for all function declarations
-- Make boolean parameters nullable with default values
-- Implement full interface for visual components
-- Use proper type hierarchies (MaterialColor vs Color)
-- Use factory constructors over static methods
-- Implement proper error handling in mocks
+1. **Unit Testing**
+   - All repositories and service implementations are unit tested
+   - Domain models and application layer logic have comprehensive tests
+   - Mockito or Mocktail is used for mocking dependencies
 
-#### Widget Test Structure
-```dart
-group('Component Tests', () {
-  setUp(() {
-    // GetIt registration
-    // Mock initialization
-    // Test data setup
-  });
+2. **Widget Testing**
+   - Key components and screens have widget tests
+   - Test both basic rendering and interaction scenarios
+   - Mock dependencies using GetIt in test setup
 
-  tearDown(() {
-    // Controller disposal
-    // GetIt cleanup
-  });
+3. **Orientation Testing Strategy**
+   - **Test both portrait and landscape orientations separately**
+   - Set physical screen size to control orientation in tests:
+     ```dart
+     // Set portrait orientation
+     tester.binding.window.physicalSizeTestValue = const Size(800, 1600);
+     tester.binding.window.devicePixelRatioTestValue = 1.0;
+     addTearDown(tester.binding.window.clearPhysicalSizeTestValue);
+     
+     // Set landscape orientation
+     tester.binding.window.physicalSizeTestValue = const Size(1600, 800);
+     tester.binding.window.devicePixelRatioTestValue = 1.0;
+     addTearDown(tester.binding.window.clearPhysicalSizeTestValue);
+     ```
+   - Verify orientation-specific views appear correctly:
+     ```dart
+     expect(find.byType(OnboardingPortraitView), findsOneWidget);
+     expect(find.byType(OnboardingLandscapeView), findsNothing);
+     ```
+   - Use UI interactions in tests rather than direct callback invocation:
+     ```dart
+     // Prefer this:
+     await tester.tap(find.text('Next'));
+     await tester.pumpAndSettle();
+     
+     // Over this:
+     final view = tester.widget<MyView>(find.byType(MyView));
+     view.onNextPressed();
+     ```
+   - **Ensure test coverage for orientation-specific behavior**
 
-  testWidgets('test case', (tester) async {
-    // Widget setup
-    // Action simulation
-    // Verification
-  });
-});
-```
+## Error Handling
 
-#### Standard Test Cases
-- Basic rendering verification
-- User interaction handling
-- Error state management
-- Style and layout verification
-- Edge cases (empty states, rapid interactions)
-- Animation and transition testing
+1. **Repository Error Model**
+   - Domain-specific error types returned via Either
+   - Explicit error mapping in repositories
+   - Consistent error patterns across features
 
-#### Coverage Requirements
-- Widget tree structure verification
-- State management testing
-- Callback validation
-- Style property verification
-- Error handling validation
-- Edge case coverage
+2. **UI Error Handling**
+   - Error states managed in Cubit/BLoC state
+   - Consistent error UI patterns (snackbars, error widgets)
+   - Retry mechanisms implemented where appropriate
+
+## Styling System
+
+1. **Centralized Styling**
+   - Colors defined in `AppColors`
+   - Text styles defined in `AppTextStyles`
+   - Sizes and spacing in `AppSizes`
+   - Durations in `AppDurations`
+   - Theme data and extensions in `AppTheme`
+
+2. **Theme Extensions**
+   - Custom theme properties implemented via ThemeExtension
+   - Accessed through `Theme.of(context).extension<ExtensionType>()`
+   - Both light and dark mode supported
+
+## Component Relationships
+
+The application follows a clear dependency flow, with each layer communicating only with adjacent layers:
+
+1. Presentation → Application → Domain ← Infrastructure
+
+2. Core systems (DI, Router, Styles) are accessed by all layers as needed
+
+3. Components in the same layer can communicate directly, but should generally minimize direct dependencies.
+
+The core principles of Clean Architecture are maintained, with dependencies flowing inward toward the domain layer. The domain layer defines interfaces that the infrastructure layer implements, ensuring that the domain remains isolated from external concerns.
+
+## Widgetbook Integration
+
+Widgetbook serves as a component library and development tool, showcasing UI components in isolation:
+
+1. **Structures**
+   - Components organized by feature and type
+   - Each widget has multiple use cases demonstrated
+   - Responsive layout testing with device frames
+
+2. **Developer Experience**
+   - Grid, alignment, and inspector add-ons available
+   - Device frame selection for various form factors
+   - Zoom controls for detailed inspection
