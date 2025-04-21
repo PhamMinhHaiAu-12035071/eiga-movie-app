@@ -373,3 +373,58 @@ The project uses a standardized approach to tracking and generating code coverag
    - Will include seat selection interface
    - Will handle theater, date, and time selection
    - Domain models in early design
+
+## Navigation System
+The application uses the [auto_route](https://pub.dev/packages/auto_route) package for navigation, which provides a type-safe routing solution with minimal boilerplate.
+
+### Router Configuration
+- Centralized route configuration in `lib/core/router/app_router.dart`
+- Route generation through auto_route code generation
+- Type-safe routes with strongly typed parameters
+- Support for deep linking and nested navigation
+
+### Navigation Patterns
+
+#### Basic Navigation
+- Push routes onto the navigation stack:
+  ```dart
+  context.router.push(const SomeRoute());
+  ```
+- Navigate with parameters:
+  ```dart
+  context.router.push(SomeRoute(id: itemId));
+  ```
+
+#### Route Replacement
+- Replace current route, preventing return with back button:
+  ```dart
+  context.router.replace(const NewRoute());
+  ```
+- Used in scenarios like onboarding-to-login flow where returning is undesired
+- Example in `OnboardingPage`:
+  ```dart
+  context.router.replace(const LoginRoute());
+  ```
+
+#### Route Guards
+- Implemented as classes that extend `AutoRouteGuard`
+- Used for authentication checks, feature flags, etc.
+- Can redirect to different routes based on conditions
+
+### Route Annotations
+- Routes are defined using annotations on page widgets:
+  ```dart
+  @RoutePage()
+  class SomePage extends StatelessWidget {
+    // Implementation
+  }
+  ```
+- Generated code creates type-safe route classes
+
+### Testing Navigation
+- Router mocking using `MockStackRouter` in tests
+- Navigation assertions to verify correct routing behavior
+- Example in onboarding tests:
+  ```dart
+  verify(() => mockRouter.replace(any<LoginRoute>())).called(1);
+  ```

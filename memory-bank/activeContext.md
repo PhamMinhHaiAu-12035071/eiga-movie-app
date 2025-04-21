@@ -1,12 +1,44 @@
 # Active Context
 
 ## Current Focus
+- Analyzing the onboarding feature implementation
+- Reviewing the responsive design patterns between portrait and landscape orientations
+- Understanding navigation patterns, particularly route replacement techniques
+- Examining widget structure and component organization
 - Unit testing for core components following refactoring
 - Completing test coverage for refactored lib/core structure
 - Ensuring proper alignment between production code and test code
 - Enhancing widgetbook showcases to match the latest structure
 - Applying established widget testing patterns to core components
 - Addressing performance issues in widget tests
+
+## Recent Findings
+- ✅ Analyzed onboarding feature implementation:
+  - The `OnboardingPage` is a stateful widget that handles orientation changes
+  - It uses a `PageController` to control page swiping animations
+  - Contains separate views for portrait and landscape orientations
+  - Integrates with `OnboardingCubit` for state management
+  - Uses `context.router.replace()` for navigation after completing onboarding
+
+- ✅ Identified responsive design patterns:
+  - Portrait and landscape views are implemented as separate components
+  - `OnboardingPortraitView` for vertical layout optimization
+  - `OnboardingLandscapeView` for horizontal layout optimization
+  - Media queries detect orientation changes and render appropriate view
+  - Common components like dot indicators and buttons are shared between views
+
+- ✅ Analyzed UI structure differences:
+  - Portrait: Vertical stacking with image on top, text below
+  - Landscape: Horizontal split with image on left, text on right
+  - Portrait uses more vertical space for images (flex: 3)
+  - Landscape optimizes horizontal space with different flex ratios (5:7)
+  - Both use consistent branding (logo, colors, text)
+
+- ✅ Identified navigation patterns:
+  - Route replacement used to navigate from onboarding to login
+  - `context.router.replace(const LoginRoute())` pattern for navigation
+  - Ensures back button doesn't return to onboarding after completion
+  - Testing with mock routers to verify navigation behavior
 
 ## Recent Changes
 - ✅ Refactored lib/core directory structure:

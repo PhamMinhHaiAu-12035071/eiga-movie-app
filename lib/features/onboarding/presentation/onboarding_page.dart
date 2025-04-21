@@ -1,20 +1,13 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gap/gap.dart' show Gap;
-import 'package:get_it/get_it.dart';
 import 'package:ksk_app/core/di/injection.dart';
 import 'package:ksk_app/core/durations/app_durations.dart';
 import 'package:ksk_app/core/router/app_router.gr.dart' show LoginRoute;
-import 'package:ksk_app/core/sizes/app_sizes.dart';
-import 'package:ksk_app/core/styles/app_text_styles.dart';
-import 'package:ksk_app/core/styles/colors/app_colors.dart';
 import 'package:ksk_app/features/onboarding/application/cubit/onboarding_cubit.dart';
 import 'package:ksk_app/features/onboarding/application/cubit/onboarding_state.dart';
-import 'package:ksk_app/features/onboarding/presentation/widgets/onboarding_dot_indicator.dart';
-import 'package:ksk_app/features/onboarding/presentation/widgets/onboarding_header.dart';
-import 'package:ksk_app/features/onboarding/presentation/widgets/onboarding_next_button.dart';
-import 'package:ksk_app/features/onboarding/presentation/widgets/onboarding_page_view.dart';
+import 'package:ksk_app/features/onboarding/presentation/widgets/onboarding_landscape_view.dart';
+import 'package:ksk_app/features/onboarding/presentation/widgets/onboarding_portrait_view.dart';
 
 /// OnboardingPage displays the introductory content for the application.
 @RoutePage()
@@ -29,11 +22,6 @@ class OnboardingPage extends StatefulWidget {
 class _OnboardingPageState extends State<OnboardingPage> {
   /// Page controller that manages swiping between pages
   late PageController _pageController;
-
-  /// Access app sizes
-  AppSizes get _sizes => getIt<AppSizes>();
-  AppTextStyles get _textStyles => GetIt.I<AppTextStyles>();
-  AppColors get _colors => GetIt.I<AppColors>();
 
   @override
   void initState() {
@@ -53,66 +41,44 @@ class _OnboardingPageState extends State<OnboardingPage> {
       create: (_) => getIt<OnboardingCubit>(),
       child: BlocBuilder<OnboardingCubit, OnboardingState>(
         builder: (context, state) {
+          // Get current orientation
+          final orientation = MediaQuery.of(context).orientation;
+
           return Scaffold(
             body: SafeArea(
-              child: Container(
-                decoration: BoxDecoration(
-                  color: _colors.onboardingBackground,
-                ),
-                padding: EdgeInsets.symmetric(horizontal: _sizes.h24),
-                child: Column(
-                  children: [
-                    Gap(_sizes.v48),
-
-                    // Header with logo and app name
-                    const OnboardingHeader(),
-
-                    // PageView to display onboarding pages
-                    OnboardingPageView(
-                      controller: _pageController,
+              child: orientation == Orientation.portrait
+                  ? OnboardingPortraitView(
+                      pageController: _pageController,
                       slides: state.slides,
+                      currentPage: state.currentPage,
+                      isLastPage: state.isLastPage,
                       onPageChanged: (index) =>
                           context.read<OnboardingCubit>().updatePage(index),
-                    ),
-
-                    // Dot indicators
-                    OnboardingDotIndicator(
-                      pageCount: state.slides.length,
-                      currentIndex: state.currentPage,
-                    ),
-
-                    Gap(_sizes.v40),
-
-                    // Next or Get Started button
-                    OnboardingNextButton(
-                      text: state.isLastPage ? 'Get Started' : 'Next',
-                      isLastPage: state.isLastPage,
-                      onPressed: () {
+                      onNextPressed: () {
                         if (state.isLastPage) {
                           _finishOnboarding(context);
                         } else {
                           _nextPage(context);
                         }
                       },
+                      onSkipPressed: () => _finishOnboarding(context),
+                    )
+                  : OnboardingLandscapeView(
+                      pageController: _pageController,
+                      slides: state.slides,
+                      currentPage: state.currentPage,
+                      isLastPage: state.isLastPage,
+                      onPageChanged: (index) =>
+                          context.read<OnboardingCubit>().updatePage(index),
+                      onNextPressed: () {
+                        if (state.isLastPage) {
+                          _finishOnboarding(context);
+                        } else {
+                          _nextPage(context);
+                        }
+                      },
+                      onSkipPressed: () => _finishOnboarding(context),
                     ),
-
-                    Gap(_sizes.v32),
-
-                    // Skip button
-                    TextButton(
-                      onPressed: () => _finishOnboarding(context),
-                      child: Text(
-                        'Skip',
-                        style: _textStyles.heading(
-                          color: _colors.skipButtonColor,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ),
-                    Gap(_sizes.v40),
-                  ],
-                ),
-              ),
             ),
           );
         },

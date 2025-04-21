@@ -202,6 +202,40 @@ lib/features/env/
 - Presentation layer with UI components
 - Comprehensive documentation in README.md
 
+### Responsive Design Pattern
+The application implements a specific pattern for handling different device orientations:
+
+#### Orientation-specific Views
+- Separate widget implementations for portrait and landscape orientations
+- Main page determines orientation using `MediaQuery.of(context).orientation`
+- Renders either portrait or landscape view based on orientation
+- Example in Onboarding feature:
+  ```dart
+  orientation == Orientation.portrait
+      ? OnboardingPortraitView(...)
+      : OnboardingLandscapeView(...)
+  ```
+
+#### Portrait vs Landscape Implementation
+- Portrait views optimize for vertical space
+  - Vertical stacking with image on top, text below
+  - Generally more padding/margins for comfortable reading
+  - Taller buttons and controls
+
+- Landscape views optimize for horizontal space
+  - Split layout with image on left/right and content on opposite side
+  - Reduced vertical spacing
+  - More compact controls
+  - Different flex ratios for content distribution
+
+#### Shared Components
+- Core widget functionality shared between orientations
+- Common styling and branding elements
+- Same navigation patterns and event handling
+- Identical data displayed in different layouts
+
+This pattern ensures optimal user experience across different device orientations while maintaining code organization and reusability.
+
 ## Testing Strategy
 - Unit tests for domain and application layers
 - Widget tests for presentation layer
