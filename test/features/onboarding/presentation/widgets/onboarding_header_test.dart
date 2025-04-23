@@ -159,7 +159,7 @@ void main() {
       );
 
       // Verify widget tree structure
-      expect(find.byType(Padding), findsOneWidget);
+      expect(find.byType(Container), findsOneWidget);
       expect(find.byType(Row), findsOneWidget);
       expect(find.byType(Image), findsOneWidget);
       expect(find.byType(Gap), findsOneWidget);
@@ -195,13 +195,14 @@ void main() {
 
       await tester.pump();
 
-      // Verify padding
-      final paddingFinder = find.byType(Padding);
-      final paddingWidget = tester.widget<Padding>(paddingFinder);
+      // Verify container properties
+      final containerFinder = find.byType(Container);
+      final containerWidget = tester.widget<Container>(containerFinder);
       expect(
-        paddingWidget.padding,
+        containerWidget.padding,
         EdgeInsets.symmetric(horizontal: mockSizes.h32),
       );
+      expect(containerWidget.color, Colors.transparent);
 
       // Verify logo size
       final logoContainer = find.byType(SizedBox);

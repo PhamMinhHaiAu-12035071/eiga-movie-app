@@ -23,14 +23,13 @@ import 'package:mocktail/mocktail.dart';
 
 /// A test widget that provides access to a StackRouter
 class MockRouter extends StatelessWidget {
-  final StackRouter router;
-  final Widget child;
-
   const MockRouter({
-    Key? key,
     required this.router,
     required this.child,
-  }) : super(key: key);
+    super.key,
+  });
+  final StackRouter router;
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
@@ -374,9 +373,9 @@ class MockAssetGenImage extends Mock implements AssetGenImage {
       errorBuilder: (_, __, ___) => SizedBox(
         width: width ?? 100,
         height: height ?? 100,
-        child: Container(
+        child: const ColoredBox(
           color: Colors.grey,
-          child: const Center(child: Text('Mock Image')),
+          child: Center(child: Text('Mock Image')),
         ),
       ),
     );
@@ -429,7 +428,9 @@ class MockPageController extends Mock implements PageController {
 // Add a new helper class for testing internal callbacks
 class OnboardingPageCallback {
   static void testLandscapeCallbacks(
-      OnboardingLandscapeView view, BuildContext context) {
+    OnboardingLandscapeView view,
+    BuildContext context,
+  ) {
     // Test the onPageChanged callback (lines 55-56)
     view.onPageChanged(2);
 
@@ -459,7 +460,6 @@ void main() {
   late MockAppTextStyles mockAppTextStyles;
   late MockAppDurations mockAppDurations;
   late MockAssetGenImage mockAppImage;
-  late MockPageController mockPageController;
 
   // Create test OnboardingInfo instances
   List<OnboardingInfo> createTestSlides() {
@@ -490,7 +490,6 @@ void main() {
     mockAppTextStyles = MockAppTextStyles();
     mockAppDurations = MockAppDurations();
     mockAppImage = MockAssetGenImage();
-    mockPageController = MockPageController();
 
     // Setup the mock AppImage
     final mockAppImageObj = MockAppImage();
@@ -569,7 +568,8 @@ void main() {
         ),
       );
 
-      // Instead of accessing the private state directly, verify the widget exists
+      // Instead of accessing the private state directly
+      // verify the widget exists
       expect(find.byType(OnboardingPage), findsOneWidget);
 
       // Rebuild with a different widget to trigger dispose
@@ -586,9 +586,9 @@ void main() {
       when(() => mockOnboardingCubit.state).thenReturn(state);
 
       // Set portrait orientation
-      tester.binding.window.physicalSizeTestValue = const Size(800, 1600);
-      tester.binding.window.devicePixelRatioTestValue = 1.0;
-      addTearDown(tester.binding.window.clearPhysicalSizeTestValue);
+      tester.view.physicalSize = const Size(800, 1600);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.resetPhysicalSize);
 
       // Build widget with StackRouter
       await tester.pumpWidget(
@@ -616,9 +616,9 @@ void main() {
       when(() => mockOnboardingCubit.state).thenReturn(state);
 
       // Set landscape orientation
-      tester.binding.window.physicalSizeTestValue = const Size(1600, 800);
-      tester.binding.window.devicePixelRatioTestValue = 1.0;
-      addTearDown(tester.binding.window.clearPhysicalSizeTestValue);
+      tester.view.physicalSize = const Size(1600, 800);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.resetPhysicalSize);
 
       // Build widget with StackRouter
       await tester.pumpWidget(
@@ -811,12 +811,10 @@ void main() {
       );
 
       // Find appropriate widgets
-      final pageController = PageController();
-      final onboarding = OnboardingState(slides: createTestSlides());
 
       // Call the function we're explicitly trying to test
-      final Function(int) onPageChangedHandler =
-          (index) => mockOnboardingCubit.updatePage(index);
+      void onPageChangedHandler(int index) =>
+          mockOnboardingCubit.updatePage(index);
 
       // Simulate a page change
       onPageChangedHandler(1);
@@ -869,7 +867,7 @@ void main() {
         'Should call _nextPage when not on last page and Next is pressed',
         (tester) async {
       // Setup - not last page
-      final state = OnboardingState(slides: createTestSlides(), currentPage: 0);
+      final state = OnboardingState(slides: createTestSlides());
       when(() => mockOnboardingCubit.state).thenReturn(state);
       when(() => mockOnboardingCubit.nextPage()).thenReturn(null);
 
@@ -931,13 +929,13 @@ void main() {
     testWidgets('Landscape orientation callbacks are directly tested',
         (tester) async {
       // Setup with landscape orientation
-      tester.binding.window.physicalSizeTestValue = const Size(1600, 800);
-      tester.binding.window.devicePixelRatioTestValue = 1.0;
-      addTearDown(tester.binding.window.clearPhysicalSizeTestValue);
+      tester.view.physicalSize = const Size(1600, 800);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.resetPhysicalSize);
 
       // Setup state and mocks
       final testSlides = createTestSlides();
-      final state = OnboardingState(slides: testSlides, currentPage: 0);
+      final state = OnboardingState(slides: testSlides);
       when(() => mockOnboardingCubit.state).thenReturn(state);
       when(() => mockOnboardingCubit.updatePage(any())).thenReturn(null);
       when(() => mockOnboardingCubit.nextPage()).thenReturn(null);
@@ -978,13 +976,13 @@ void main() {
     testWidgets('Portrait orientation callbacks are directly tested',
         (tester) async {
       // Setup with portrait orientation
-      tester.binding.window.physicalSizeTestValue = const Size(800, 1600);
-      tester.binding.window.devicePixelRatioTestValue = 1.0;
-      addTearDown(tester.binding.window.clearPhysicalSizeTestValue);
+      tester.view.physicalSize = const Size(800, 1600);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.resetPhysicalSize);
 
       // Setup state and mocks
       final testSlides = createTestSlides();
-      final state = OnboardingState(slides: testSlides, currentPage: 0);
+      final state = OnboardingState(slides: testSlides);
       when(() => mockOnboardingCubit.state).thenReturn(state);
       when(() => mockOnboardingCubit.updatePage(any())).thenReturn(null);
       when(() => mockOnboardingCubit.nextPage()).thenReturn(null);
@@ -1030,9 +1028,9 @@ void main() {
     testWidgets('Portrait: Get Started button works on last page',
         (tester) async {
       // Setup with portrait orientation
-      tester.binding.window.physicalSizeTestValue = const Size(800, 1600);
-      tester.binding.window.devicePixelRatioTestValue = 1.0;
-      addTearDown(tester.binding.window.clearPhysicalSizeTestValue);
+      tester.view.physicalSize = const Size(800, 1600);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.resetPhysicalSize);
 
       // Setup state for last page
       final testSlides = createTestSlides();
@@ -1079,7 +1077,7 @@ void main() {
 
     // Add a note about code coverage
     // NOTE: We've now achieved ~100% code coverage for onboarding_page.dart.
-    // All callbacks in both portrait and landscape modes are now directly tested.
+    // All callbacks in both portrait and landscape modes are now directly test
   });
 
   group('OnboardingPortraitView', () {
@@ -1088,9 +1086,9 @@ void main() {
       when(() => mockOnboardingCubit.state).thenReturn(state);
 
       final pageController = PageController();
-      final onPageChanged = (int _) {};
-      final onNextPressed = () {};
-      final onSkipPressed = () {};
+      void onPageChanged(int _) {}
+      void onNextPressed() {}
+      void onSkipPressed() {}
 
       await tester.pumpWidget(
         MaterialApp(
@@ -1119,9 +1117,9 @@ void main() {
       );
 
       final pageController = PageController();
-      final onPageChanged = (int _) {};
-      final onNextPressed = () {};
-      final onSkipPressed = () {};
+      void onPageChanged(int _) {}
+      void onNextPressed() {}
+      void onSkipPressed() {}
 
       await tester.pumpWidget(
         MaterialApp(
@@ -1148,9 +1146,9 @@ void main() {
       when(() => mockOnboardingCubit.state).thenReturn(state);
 
       final pageController = PageController();
-      final onPageChanged = (int _) {};
-      final onNextPressed = () {};
-      final onSkipPressed = () {};
+      void onPageChanged(int _) {}
+      void onNextPressed() {}
+      void onSkipPressed() {}
 
       await tester.pumpWidget(
         MaterialApp(
@@ -1179,9 +1177,9 @@ void main() {
       );
 
       final pageController = PageController();
-      final onPageChanged = (int _) {};
-      final onNextPressed = () {};
-      final onSkipPressed = () {};
+      void onPageChanged(int _) {}
+      void onNextPressed() {}
+      void onSkipPressed() {}
 
       await tester.pumpWidget(
         MaterialApp(

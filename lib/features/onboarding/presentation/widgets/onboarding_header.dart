@@ -19,7 +19,8 @@ class OnboardingHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return Container(
+      color: Colors.transparent,
       padding: EdgeInsets.symmetric(horizontal: _sizes.h32),
       child: Row(
         children: [
