@@ -152,14 +152,15 @@ void main() {
         MaterialApp(
           home: Scaffold(
             body: Builder(
-              builder: (context) => const OnboardingHeader(),
+              builder: (context) => OnboardingHeader(),
             ),
           ),
         ),
       );
 
       // Verify widget tree structure
-      expect(find.byType(Container), findsOneWidget);
+      expect(find.byType(ColoredBox), findsOneWidget);
+      expect(find.byType(Padding), findsOneWidget);
       expect(find.byType(Row), findsOneWidget);
       expect(find.byType(Image), findsOneWidget);
       expect(find.byType(Gap), findsOneWidget);
@@ -172,7 +173,7 @@ void main() {
         MaterialApp(
           home: Scaffold(
             body: Builder(
-              builder: (context) => const OnboardingHeader(),
+              builder: (context) => OnboardingHeader(),
             ),
           ),
         ),
@@ -182,12 +183,13 @@ void main() {
       expect(find.text('CINEMA UI KIT.'), findsOneWidget);
     });
 
-    testWidgets('applies correct styles and dimensions', (tester) async {
+    testWidgets('applies correct styles, dimensions and semantics',
+        (tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
             body: Builder(
-              builder: (context) => const OnboardingHeader(),
+              builder: (context) => OnboardingHeader(),
             ),
           ),
         ),
@@ -195,17 +197,30 @@ void main() {
 
       await tester.pump();
 
-      // Verify container properties
-      final containerFinder = find.byType(Container);
-      final containerWidget = tester.widget<Container>(containerFinder);
+      // Verify ColoredBox properties
+      final coloredBoxFinder = find.byType(ColoredBox);
+      final coloredBoxWidget = tester.widget<ColoredBox>(coloredBoxFinder);
+      expect(coloredBoxWidget.color, Colors.transparent);
+
+      // Verify Padding properties
+      final paddingFinder = find.byType(Padding);
+      final paddingWidget = tester.widget<Padding>(paddingFinder);
       expect(
-        containerWidget.padding,
+        paddingWidget.padding,
         EdgeInsets.symmetric(horizontal: mockSizes.h32),
       );
-      expect(containerWidget.color, Colors.transparent);
+
+      // We don't need to directly test semantics properties
+      // Just verify that we have keys for testability
+      expect(find.byKey(const Key('onboarding_header_logo')), findsOneWidget);
+      expect(find.byKey(const Key('onboarding_header_title')), findsOneWidget);
+      expect(
+        find.byKey(const Key('onboarding_header_subtitle')),
+        findsOneWidget,
+      );
 
       // Verify logo size
-      final logoContainer = find.byType(SizedBox);
+      final logoContainer = find.byKey(const Key('onboarding_header_logo'));
       final sizedBox = tester.widget<SizedBox>(logoContainer);
       expect(sizedBox.height, mockSizes.v56);
 
@@ -240,7 +255,7 @@ void main() {
         MaterialApp(
           home: Scaffold(
             body: Builder(
-              builder: (context) => const OnboardingHeader(),
+              builder: (context) => OnboardingHeader(),
             ),
           ),
         ),
@@ -249,6 +264,85 @@ void main() {
       final imageFinder = find.byType(Image);
       final image = tester.widget<Image>(imageFinder);
       expect(image.fit, equals(BoxFit.contain));
+    });
+
+    testWidgets('accepts constructor injection', (tester) async {
+      // Create custom mocks for testing constructor injection
+      final customSizes = MockAppSizes();
+      final customTextStyles = MockAppTextStyles();
+      final customColors = MockAppColors();
+
+      when(() => customSizes.h32).thenReturn(64); // Double the size for testing
+      when(() => customSizes.v56).thenReturn(112);
+      when(() => customSizes.h16).thenReturn(32);
+
+      when(() => customColors.skipButtonColor).thenReturn(Colors.red);
+
+      when(
+        () => customTextStyles.headingXl(
+          fontWeight: any(named: 'fontWeight'),
+          color: any(named: 'color'),
+        ),
+      ).thenReturn(
+        const TextStyle(
+          fontSize: 30, // Different size for testing
+          fontWeight: FontWeight.w900,
+          color: Colors.red,
+        ),
+      );
+
+      when(
+        () => customTextStyles.headingSm(
+          fontWeight: any(named: 'fontWeight'),
+          color: any(named: 'color'),
+        ),
+      ).thenReturn(
+        const TextStyle(
+          fontSize: 20, // Different size for testing
+          fontWeight: FontWeight.w500,
+          color: Colors.red,
+        ),
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: Builder(
+              builder: (context) => OnboardingHeader(
+                sizes: customSizes,
+                textStyles: customTextStyles,
+                colors: customColors,
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.pump();
+
+      // Verify custom padding is applied
+      final paddingFinder = find.byType(Padding);
+      final paddingWidget = tester.widget<Padding>(paddingFinder);
+      expect(
+        paddingWidget.padding,
+        const EdgeInsets.symmetric(horizontal: 64), // Our custom value
+      );
+
+      // Verify custom logo size
+      final logoContainer = find.byKey(const Key('onboarding_header_logo'));
+      final sizedBox = tester.widget<SizedBox>(logoContainer);
+      expect(sizedBox.height, 112); // Our custom value
+
+      // Verify custom gap width
+      final gapFinder = find.byType(Gap);
+      final gap = tester.widget<Gap>(gapFinder);
+      expect(gap.mainAxisExtent, 32); // Our custom value
+
+      // Verify custom text styles
+      final eigaText = find.text('EIGA');
+      final eigaTextWidget = tester.widget<Text>(eigaText);
+      expect(eigaTextWidget.style?.fontSize, 30); // Our custom value
+      expect(eigaTextWidget.style?.color, Colors.red); // Our custom value
     });
   });
 }

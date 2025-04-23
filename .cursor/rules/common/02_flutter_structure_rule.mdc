@@ -508,6 +508,348 @@ lib/features/onboarding/
 - The `core/themes/extensions/extensions.dart` file is the index for all theme extensions, and `core/themes/themes.dart` is the main barrel file for theme exports.
 - The test structure now includes `test/core/themes` for theme-related tests and coverage.
 
+# Flutter Structure Guidelines
+
+## Project Structure
+```
+├── lib/
+│   ├── app.dart                   # Application root
+│   ├── bootstrap.dart             # Initialization code
+│   ├── core/                      # Core functionality
+│   │   ├── di/                    # Dependency injection
+│   │   ├── router/                # Router configuration
+│   │   ├── asset/                 # Asset management
+│   │   ├── styles/                # UI styles
+│   │   │   ├── colors/
+│   │   │   │   └── app_colors.dart
+│   │   │   ├── app_text_styles.dart
+│   │   │   └── styles.dart       # Barrel file
+│   │   ├── sizes/                 # Size constants
+│   │   │   ├── app_sizes.dart
+│   │   │   └── sizes.dart        # Barrel file 
+│   │   ├── durations/            # Animation durations
+│   │   │   ├── app_durations.dart
+│   │   │   └── durations.dart    # Barrel file
+│   │   └── themes/               # Theme configuration
+│   │       ├── extensions/
+│   │       │   ├── app_asset_extension.dart
+│   │       │   ├── app_color_extension.dart
+│   │       │   └── extensions.dart
+│   │       ├── app_theme.dart
+│   │       └── themes.dart       # Barrel file
+│   ├── features/                  # Application features
+│   │   └── [feature_name]/         # Individual feature
+│   │       ├── domain/             # Domain layer
+│   │       │   ├── models/         # Domain models
+│   │       │   └── repositories/   # Repository interfaces
+│   │       ├── application/        # Application layer
+│   │       │   ├── cubit/          # State management
+│   │       │   └── services/       # Application services
+│   │       ├── infrastructure/     # Infrastructure layer
+│   │       │   ├── datasources/    # Data sources
+│   │       │   ├── models/         # Data models
+│   │       │   └── repositories/   # Repository implementations
+│   │       └── presentation/       # Presentation layer
+│   │           ├── pages/          # Page widgets
+│   │           ├── views/          # View widgets
+│   │           └── widgets/        # Smaller UI components
+│   ├── shared/                    # Shared functionality
+│   │   ├── domain/                # Shared domain code
+│   │   ├── infrastructure/        # Shared infrastructure
+│   │   └── widgets/               # Shared widgets
+│   └── generated/                 # Generated code
+├── test/                          # Test code (mirrors lib/ structure)
+├── widgetbook/                    # Widgetbook for component showcase
+├── assets/                        # Application assets
+├── pubspec.yaml                   # Dependencies
+└── analysis_options.yaml          # Linting rules
+```
+
+## Feature Structure
+
+Each feature follows clean architecture principles with four distinct layers:
+
+### Domain Layer
+- Contains the business logic
+- Defines entity models and repository interfaces
+- Pure Dart with no external dependencies
+- Uses `Either<Failure, Success>` for error handling
+
+### Application Layer
+- Coordinates use cases by calling repository methods
+- Contains state management (Cubit/BLoC)
+- Transforms domain data for presentation
+- Handles events and emits states
+
+### Infrastructure Layer
+- Implements repository interfaces
+- Connects to external data sources (API, database)
+- Provides data transformations
+- Handles network and storage operations
+
+### Presentation Layer
+- Contains UI components (pages, views, and widgets)
+- Consumes states from application layer
+- Dispatches events to application layer
+- Handles user interactions
+
+## Orientation Handling
+
+For screens that need significantly different layouts between portrait and landscape orientations, use the following pattern:
+
+### Separate Views for Different Orientations
+
+Create dedicated views for portrait and landscape layouts:
+
+```
+features/
+└── [feature_name]/
+    └── presentation/
+        ├── pages/
+        │   └── feature_page.dart      # Determines orientation and selects view
+        └── views/
+            ├── feature_portrait_view.dart   # Portrait-optimized layout
+            └── feature_landscape_view.dart  # Landscape-optimized layout
+```
+
+### Implementation Pattern
+
+In the page component, detect orientation and render appropriate view:
+
+```dart
+@override
+Widget build(BuildContext context) {
+  final orientation = MediaQuery.of(context).orientation;
+  
+  return Scaffold(
+    body: SafeArea(
+      child: orientation == Orientation.portrait
+          ? FeaturePortraitView(
+              // Common properties and callbacks
+            )
+          : FeatureLandscapeView(
+              // Same properties and callbacks
+            ),
+    ),
+  );
+}
+```
+
+### Layout Optimization Guidelines
+
+1. **Portrait Views:**
+   - Optimize for vertical flow
+   - Stack components vertically
+   - Use full width
+   - Provide sufficient vertical spacing
+   - Consider scrolling for overflow content
+
+2. **Landscape Views:**
+   - Optimize for horizontal flow
+   - Use side-by-side layouts for main content
+   - Reduce vertical spacing
+   - Consider horizontal navigation patterns
+   - Ensure touch targets remain accessible
+
+3. **Consistent Experience:**
+   - Both views should provide the same functionality
+   - Use consistent styling and branding
+   - Ensure all features are accessible in both orientations
+   - Pass identical callbacks and data to both views
+
+### Testing Orientation-Specific Components
+
+When testing orientation-sensitive components:
+
+1. Use `tester.binding.window.physicalSizeTestValue` to set orientation:
+
+```dart
+// Set portrait orientation
+tester.binding.window.physicalSizeTestValue = const Size(800, 1600);
+tester.binding.window.devicePixelRatioTestValue = 1.0;
+addTearDown(tester.binding.window.clearPhysicalSizeTestValue);
+
+// Set landscape orientation
+tester.binding.window.physicalSizeTestValue = const Size(1600, 800);
+tester.binding.window.devicePixelRatioTestValue = 1.0;
+addTearDown(tester.binding.window.clearPhysicalSizeTestValue);
+```
+
+2. Verify appropriate views are rendered based on orientation:
+
+```dart
+expect(find.byType(FeaturePortraitView), findsOneWidget);
+expect(find.byType(FeatureLandscapeView), findsNothing);
+```
+
+3. Test interactions using UI actions rather than direct callback invocation:
+
+```dart
+// Prefer this (UI interaction):
+await tester.tap(find.text('Next'));
+await tester.pumpAndSettle();
+
+// Over this (direct callback):
+final view = tester.widget<PortraitView>(find.byType(PortraitView));
+view.onButtonPressed();
+```
+
+4. Test each orientation separately with complete verification of all interactions.
+
+## Dependency Injection
+
+Use GetIt with Injectable for dependency injection:
+
+```dart
+@module
+abstract class FeatureModule {
+  @lazySingleton
+  FeatureRepository provideFeatureRepository(
+    ApiClient apiClient,
+  ) =>
+      FeatureRepositoryImpl(apiClient);
+}
+
+@injectable
+class FeatureCubit extends Cubit<FeatureState> {
+  final FeatureRepository _repository;
+
+  FeatureCubit(this._repository) : super(FeatureState.initial());
+}
+```
+
+## Navigation
+
+Use AutoRoute for type-safe navigation:
+
+```dart
+@RoutePage()
+class FeaturePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    // Page implementation
+  }
+}
+
+// In app_router.dart
+@AutoRouterConfig(replaceInRouteName: 'Page,Route')
+class AppRouter extends $AppRouter {
+  @override
+  List<AutoRoute> get routes => [
+        AutoRoute(page: HomeRoute.page, initial: true),
+        AutoRoute(page: FeatureRoute.page),
+      ];
+}
+```
+
+For navigation:
+```dart
+// Navigate to a new page
+context.router.push(const FeatureRoute());
+
+// Replace current page
+context.router.replace(const FeatureRoute());
+```
+
+## State Management
+
+Use BLoC pattern with flutter_bloc:
+
+```dart
+// State
+@freezed
+class FeatureState with _$FeatureState {
+  const factory FeatureState({
+    @Default(LoadingStatus.initial) LoadingStatus status,
+    FeatureModel? data,
+    String? errorMessage,
+  }) = _FeatureState;
+
+  factory FeatureState.initial() => const FeatureState();
+}
+
+// Cubit
+@injectable
+class FeatureCubit extends Cubit<FeatureState> {
+  final FeatureRepository _repository;
+
+  FeatureCubit(this._repository) : super(FeatureState.initial());
+
+  Future<void> loadData() async {
+    emit(state.copyWith(status: LoadingStatus.loading));
+    
+    final result = await _repository.getData();
+    result.fold(
+      (failure) => emit(state.copyWith(
+        status: LoadingStatus.failure,
+        errorMessage: failure.message,
+      )),
+      (data) => emit(state.copyWith(
+        status: LoadingStatus.success,
+        data: data,
+      )),
+    );
+  }
+}
+```
+
+## Style Management
+
+Access styles through centralized providers:
+
+```dart
+// Colors
+final backgroundColor = AppColors.background;
+
+// Text styles
+final titleStyle = AppTextStyles.heading;
+
+// Sizes
+final spacing = AppSizes.spacing16;
+
+// Durations
+final animationDuration = AppDurations.medium;
+```
+
+## Widget Organization
+
+1. **Pages**: Full screens with routing
+2. **Views**: Major sections of UI
+3. **Widgets**: Reusable components
+
+## Testing Structure
+
+Test directory should mirror the lib structure:
+
+```
+test/
+├── core/                      # Tests for core functionality
+├── features/                  # Tests for features
+│   └── [feature_name]/
+│       ├── domain/            # Domain tests
+│       ├── application/       # Application tests
+│       ├── infrastructure/    # Infrastructure tests
+│       └── presentation/      # Widget tests
+└── shared/                    # Tests for shared code
+```
+
+## Code Style
+
+- Use `// ignore:` comments sparingly and deliberately
+- Prefer composition over inheritance
+- Keep widget methods focused and concise
+- Extract complex logic to separate methods or classes
+- Use const constructors wherever possible
+- Document public APIs with dartdoc comments
+
+## Performance Considerations
+
+- Avoid expensive operations in build methods
+- Use const constructors for immutable widgets
+- Implement `operator ==` and `hashCode` for classes in lists
+- Cache complex computations
+- Use lazy loading for expensive resources
+
 
 
 

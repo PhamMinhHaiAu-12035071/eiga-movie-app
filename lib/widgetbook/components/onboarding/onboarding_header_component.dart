@@ -9,18 +9,47 @@ WidgetbookComponent getOnboardingHeaderComponent() {
     useCases: [
       WidgetbookUseCase(
         name: 'Default',
-        builder: (context) => const Scaffold(
-          backgroundColor: Colors.white,
-          body: SafeArea(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                SizedBox(height: 24),
-                OnboardingHeader(),
-              ],
+        builder: (context) {
+          // Add knobs for customizing the header
+          final title = context.knobs.string(
+            label: 'Title',
+            description: 'The main title of the header',
+            initialValue: 'EIGA',
+          );
+
+          final subtitle = context.knobs.string(
+            label: 'Subtitle',
+            description: 'The subtitle text of the header',
+            initialValue: 'CINEMA UI KIT.',
+          );
+
+          // Use slider directly for gap adjustment
+          final gapWidth = context.knobs.double.slider(
+            label: 'Gap Width',
+            description: 'Adjust the width of the gap between logo and text',
+            min: 8,
+            max: 48,
+            initialValue: 16, // Default value
+            divisions: 40,
+          );
+
+          return Scaffold(
+            backgroundColor: Colors.white,
+            body: SafeArea(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const SizedBox(height: 24),
+                  OnboardingHeader(
+                    title: title,
+                    subtitle: subtitle,
+                    gapWidth: gapWidth,
+                  ),
+                ],
+              ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     ],
   );

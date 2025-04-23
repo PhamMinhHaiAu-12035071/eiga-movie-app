@@ -10,47 +10,78 @@ import 'package:ksk_app/core/styles/colors/app_colors.dart';
 /// Contains the logo and app name
 class OnboardingHeader extends StatelessWidget {
   /// Constructor
-  const OnboardingHeader({super.key});
+  OnboardingHeader({
+    super.key,
+    AppSizes? sizes,
+    AppTextStyles? textStyles,
+    AppColors? colors,
+    this.title = 'EIGA',
+    this.subtitle = 'CINEMA UI KIT.',
+    this.gapWidth,
+  })  : sizes = sizes ?? GetIt.I<AppSizes>(),
+        textStyles = textStyles ?? GetIt.I<AppTextStyles>(),
+        colors = colors ?? GetIt.I<AppColors>();
 
-  /// Access app sizes
-  AppSizes get _sizes => GetIt.I<AppSizes>();
-  AppTextStyles get _textStyles => GetIt.I<AppTextStyles>();
-  AppColors get _colors => GetIt.I<AppColors>();
+  /// The app sizes for dimensions
+  final AppSizes sizes;
+
+  /// The app text styles
+  final AppTextStyles textStyles;
+
+  /// The app colors
+  final AppColors colors;
+
+  /// The title text to display
+  final String title;
+
+  /// The subtitle text to display
+  final String subtitle;
+
+  /// Custom gap width between logo and text
+  final double? gapWidth;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return ColoredBox(
       color: Colors.transparent,
-      padding: EdgeInsets.symmetric(horizontal: _sizes.h32),
-      child: Row(
-        children: [
-          SizedBox(
-            height: _sizes.v56,
-            child: AppImage.of(context).onboarding.logo.image(
-                  fit: BoxFit.contain,
-                ),
-          ),
-          Gap(_sizes.h16),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'EIGA',
-                style: _textStyles.headingXl(
-                  fontWeight: FontWeight.w900,
-                  color: _colors.skipButtonColor,
-                ),
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: sizes.h32),
+        child: Row(
+          children: [
+            Semantics(
+              label: 'App logo - $title',
+              child: SizedBox(
+                key: const Key('onboarding_header_logo'),
+                height: sizes.v56,
+                child: AppImage.of(context).onboarding.logo.image(
+                      fit: BoxFit.contain,
+                    ),
               ),
-              Text(
-                'CINEMA UI KIT.',
-                style: _textStyles.headingSm(
-                  fontWeight: FontWeight.w500,
-                  color: _colors.skipButtonColor,
+            ),
+            Gap(gapWidth ?? sizes.h16),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  key: const Key('onboarding_header_title'),
+                  style: textStyles.headingXl(
+                    fontWeight: FontWeight.w900,
+                    color: colors.skipButtonColor,
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ],
+                Text(
+                  subtitle,
+                  key: const Key('onboarding_header_subtitle'),
+                  style: textStyles.headingSm(
+                    fontWeight: FontWeight.w500,
+                    color: colors.skipButtonColor,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -62,7 +62,7 @@ class OnboardingPortraitView extends StatelessWidget {
           Gap(_sizes.v48),
 
           // Header with logo and app name
-          const OnboardingHeader(),
+          OnboardingHeader(),
 
           // PageView to display onboarding pages
           OnboardingPageView(
