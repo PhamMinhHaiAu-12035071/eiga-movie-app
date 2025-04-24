@@ -241,6 +241,29 @@ We use the BLoC pattern (via `flutter_bloc`) for state management:
    }
    ```
 
+## Utility Usage Patterns
+
+1. **Direct Package Usage**
+   - **Prefer direct usage of utility packages** rather than creating wrapper components
+   - Example: Use `Gap` directly from the 'gap' package instead of creating custom wrappers
+   ```dart
+   // PREFERRED: Direct usage
+   Gap(16)
+   
+   // AVOID: Unnecessary wrapper
+   CustomGap(width: 16)
+   ```
+   - This approach reduces abstraction layers and simplifies the codebase
+   - Only create wrapper components when they add significant value or customization
+
+2. **Utility Library Selection**
+   - Use established packages for common utilities:
+     - `gap` for spacing in UI
+     - `flutter_screenutil` for responsive sizing
+     - `dartx` for extension methods
+     - `collection` for advanced collection operations
+     - `logger` for structured logging
+
 ## Testing Patterns
 
 1. **Unit Testing**

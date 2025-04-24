@@ -44,6 +44,13 @@
   - Testing with mock routers to verify navigation behavior
 
 ## Recent Changes
+- ✅ Refactored HorizontalGap widget:
+  - Completely removed the redundant HorizontalGap widget
+  - Replaced all usages with the Gap widget from the 'gap' package directly
+  - Updated OnboardingHeader to use Gap directly: `Gap(gapWidth ?? sizes.h16)`
+  - Removed HorizontalGap Widgetbook component and its reference in directories.dart
+  - Deleted horizontal_gap_test.dart as it's no longer needed
+  - Simplified codebase by eliminating unnecessary abstraction
 - ✅ Refactored OnboardingHeader widget:
   - Changed from Padding to Container for better structure
   - Added transparent color property for consistent styling

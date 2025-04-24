@@ -23,6 +23,11 @@
 - ✅ Rebranded application to "EIGA Movie App" for cinema ticket booking
 - ✅ Refactored themes module to match styles structure (added extensions index, updated imports)
 - ✅ Created test/core/themes directory and achieved 100% unit test coverage for AppAssetExtension
+- ✅ Removed redundant HorizontalGap widget:
+  - ✅ Replaced with Gap widget from the 'gap' package directly
+  - ✅ Updated all import references and usages
+  - ✅ Removed related test files and Widgetbook components
+  - ✅ Simplified codebase by eliminating unnecessary abstraction layer
 - ✅ Refactored lib/core directory:
   - ✅ Split DI modules for clearer separation of concerns
   - ✅ Added API module for network communication
