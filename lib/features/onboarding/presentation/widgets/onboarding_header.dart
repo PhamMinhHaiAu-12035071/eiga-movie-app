@@ -54,6 +54,7 @@ class OnboardingHeader extends StatelessWidget {
                 key: const Key('onboarding_header_logo'),
                 height: sizes.v56,
                 child: AppImage.of(context).onboarding.logo.image(
+                      key: const Key('onboarding_header_image'),
                       fit: BoxFit.contain,
                     ),
               ),

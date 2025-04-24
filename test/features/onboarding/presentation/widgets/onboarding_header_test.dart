@@ -344,5 +344,27 @@ void main() {
       expect(eigaTextWidget.style?.fontSize, 30); // Our custom value
       expect(eigaTextWidget.style?.color, Colors.red); // Our custom value
     });
+
+    testWidgets('renders correct logo via its imageKey', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: Builder(
+              builder: (context) => OnboardingHeader(),
+            ),
+          ),
+        ),
+      );
+
+      // Find Image by key
+      final imageWidget = tester.widget<Image>(
+        find.byKey(const Key('onboarding_header_image')),
+      );
+
+      // Assert image provider type and path
+      expect(imageWidget.image, isA<AssetImage>());
+      expect((imageWidget.image as AssetImage).assetName,
+          equals('assets/images/onboarding/logo.png'));
+    });
   });
 }
