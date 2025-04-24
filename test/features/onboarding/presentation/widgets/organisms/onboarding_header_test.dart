@@ -6,7 +6,8 @@ import 'package:ksk_app/core/asset/app_image.dart';
 import 'package:ksk_app/core/sizes/app_sizes.dart';
 import 'package:ksk_app/core/styles/app_text_styles.dart';
 import 'package:ksk_app/core/styles/colors/app_colors.dart';
-import 'package:ksk_app/features/onboarding/presentation/widgets/onboarding_header.dart';
+import 'package:ksk_app/features/onboarding/presentation/widgets/atoms/onboarding_logo.dart';
+import 'package:ksk_app/features/onboarding/presentation/widgets/organisms/onboarding_header.dart';
 import 'package:ksk_app/generated/assets.gen.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -152,7 +153,7 @@ void main() {
         MaterialApp(
           home: Scaffold(
             body: Builder(
-              builder: (context) => OnboardingHeader(),
+              builder: (context) => const OnboardingHeader(),
             ),
           ),
         ),
@@ -173,7 +174,7 @@ void main() {
         MaterialApp(
           home: Scaffold(
             body: Builder(
-              builder: (context) => OnboardingHeader(),
+              builder: (context) => const OnboardingHeader(),
             ),
           ),
         ),
@@ -189,7 +190,7 @@ void main() {
         MaterialApp(
           home: Scaffold(
             body: Builder(
-              builder: (context) => OnboardingHeader(),
+              builder: (context) => const OnboardingHeader(),
             ),
           ),
         ),
@@ -220,9 +221,9 @@ void main() {
       );
 
       // Verify logo size
-      final logoContainer = find.byKey(const Key('onboarding_header_logo'));
-      final sizedBox = tester.widget<SizedBox>(logoContainer);
-      expect(sizedBox.height, mockSizes.v56);
+      final logoFinder = find.byKey(const Key('onboarding_header_logo'));
+      final logoWidget = tester.widget<OnboardingLogo>(logoFinder);
+      expect(logoWidget.height, mockSizes.v56);
 
       // Verify gap width
       final gapFinder = find.byType(Gap);
@@ -255,7 +256,7 @@ void main() {
         MaterialApp(
           home: Scaffold(
             body: Builder(
-              builder: (context) => OnboardingHeader(),
+              builder: (context) => const OnboardingHeader(),
             ),
           ),
         ),
@@ -329,9 +330,11 @@ void main() {
       );
 
       // Verify custom logo size
-      final logoContainer = find.byKey(const Key('onboarding_header_logo'));
-      final sizedBox = tester.widget<SizedBox>(logoContainer);
-      expect(sizedBox.height, 112); // Our custom value
+      final logoFinderInjected =
+          find.byKey(const Key('onboarding_header_logo'));
+      final logoWidgetInjected =
+          tester.widget<OnboardingLogo>(logoFinderInjected);
+      expect(logoWidgetInjected.height, 112); // Our custom value
 
       // Verify custom gap width
       final gapFinder = find.byType(Gap);
@@ -350,7 +353,7 @@ void main() {
         MaterialApp(
           home: Scaffold(
             body: Builder(
-              builder: (context) => OnboardingHeader(),
+              builder: (context) => const OnboardingHeader(),
             ),
           ),
         ),
@@ -363,8 +366,10 @@ void main() {
 
       // Assert image provider type and path
       expect(imageWidget.image, isA<AssetImage>());
-      expect((imageWidget.image as AssetImage).assetName,
-          equals('assets/images/onboarding/logo.png'));
+      expect(
+        (imageWidget.image as AssetImage).assetName,
+        equals('assets/images/onboarding/logo.png'),
+      );
     });
   });
 }

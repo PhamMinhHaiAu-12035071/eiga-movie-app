@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:ksk_app/features/onboarding/presentation/widgets/onboarding_header.dart';
+import 'package:ksk_app/features/onboarding/presentation/widgets/organisms/onboarding_header.dart';
+import 'package:ksk_app/widgetbook/mocks/mock_app_image.dart';
 import 'package:widgetbook/widgetbook.dart';
 
 /// Returns a WidgetbookComponent for OnboardingHeader
@@ -33,19 +34,21 @@ WidgetbookComponent getOnboardingHeaderComponent() {
             divisions: 40,
           );
 
-          return Scaffold(
-            backgroundColor: Colors.white,
-            body: SafeArea(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  const SizedBox(height: 24),
-                  OnboardingHeader(
-                    title: title,
-                    subtitle: subtitle,
-                    gapWidth: gapWidth,
-                  ),
-                ],
+          return MockAppImage.provider(
+            child: Scaffold(
+              backgroundColor: Colors.white,
+              body: SafeArea(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const SizedBox(height: 24),
+                    OnboardingHeader(
+                      title: title,
+                      subtitle: subtitle,
+                      gapWidth: gapWidth,
+                    ),
+                  ],
+                ),
               ),
             ),
           );

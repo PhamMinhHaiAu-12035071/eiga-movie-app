@@ -9,10 +9,10 @@ import 'package:ksk_app/core/styles/app_text_styles.dart';
 import 'package:ksk_app/core/styles/colors/app_colors.dart';
 import 'package:ksk_app/features/onboarding/domain/models/onboarding_info.dart';
 import 'package:ksk_app/features/onboarding/presentation/widgets/onboarding_dot_indicator.dart';
-import 'package:ksk_app/features/onboarding/presentation/widgets/onboarding_header.dart';
 import 'package:ksk_app/features/onboarding/presentation/widgets/onboarding_next_button.dart';
 import 'package:ksk_app/features/onboarding/presentation/widgets/onboarding_page_view.dart';
 import 'package:ksk_app/features/onboarding/presentation/widgets/onboarding_portrait_view.dart';
+import 'package:ksk_app/features/onboarding/presentation/widgets/organisms/onboarding_header.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockAppSizes extends Mock implements AppSizes {}
