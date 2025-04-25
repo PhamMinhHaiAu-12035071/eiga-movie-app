@@ -44,6 +44,13 @@
   - Testing with mock routers to verify navigation behavior
 
 ## Recent Changes
+- ✅ Updated HeaderTitle widget to improve text handling:
+  - Added `maxLines` property with default value of 1
+  - Implemented `TextOverflow.ellipsis` for proper text truncation
+  - Updated unit tests to verify both default and custom maxLines values
+  - Updated widgetbook component to include maxLines configuration knob
+  - Ensured tests are aligned with implementation for 100% coverage
+  - Successfully tested both default behavior and parameter overrides
 - ✅ Achieved 100% test coverage for OnboardingLogo widget:
   - Added tests for fixed widget keys (`onboarding_logo_container` and `onboarding_logo_image_container`)
   - Implemented individual parameter override tests (containerSize, imageSize, borderRadius, containerColor)

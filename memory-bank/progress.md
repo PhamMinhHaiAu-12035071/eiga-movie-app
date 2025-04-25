@@ -58,6 +58,12 @@
       - ✅ Added transparent color property for consistent styling
       - ✅ Created and maintained comprehensive unit tests
       - ✅ Added Widgetbook component for development and testing
+    - ✅ Created HeaderTitle widget for title display
+      - ✅ Implemented with configurable text style and color
+      - ✅ Added maxLines property with default value of 1 
+      - ✅ Added TextOverflow.ellipsis for proper text truncation
+      - ✅ Created comprehensive unit tests with 100% coverage
+      - ✅ Updated widgetbook component with maxLines configuration knob
     - ✅ Created OnboardingLogo widget with container and image
       - ✅ Implemented with flexible parameters (containerSize, imageSize, borderRadius, containerColor)
       - ✅ Used proper key identifiers for testability
@@ -95,6 +101,11 @@
       - ✅ Tested text content and styling
       - ✅ Validated layout and dimensions
       - ✅ Checked logo BoxFit properties
+    - ✅ HeaderTitle widget tests (100% coverage)
+      - ✅ Verified default maxLines (1) and TextOverflow.ellipsis
+      - ✅ Tested custom maxLines values
+      - ✅ Validated text styling and color
+      - ✅ Verified properties and parameter overrides
     - ✅ OnboardingLogo widget tests (100% coverage)
       - ✅ Verified correct widget keys
       - ✅ Tested individual parameter overrides while maintaining defaults
@@ -118,6 +129,7 @@
     - ✅ OnboardingPage component in Widgetbook
     - ✅ OnboardingDotIndicator component with various states
     - ✅ OnboardingHeader component for isolated testing
+    - ✅ HeaderTitle component with configurable text, color, and maxLines
 
 - 🚧 Login Feature (In Progress)
   - ✅ Created feature directory structure following Clean Architecture
@@ -172,6 +184,11 @@
   - ✅ Updated tests to match widget implementation changes (Padding to Container)
   - ✅ Ensured proper validation of all widget properties
   - ✅ Maintained test coverage during implementation changes
+- ✅ Created comprehensive widget tests for HeaderTitle (100% coverage)
+  - ✅ Verified text styling and content
+  - ✅ Tested default and custom maxLines values
+  - ✅ Verified TextOverflow.ellipsis is applied correctly
+  - ✅ Ensured constructor injection for styles works properly
 - ✅ Created comprehensive widget tests for OnboardingLogo (100% coverage)
   - ✅ Tested widget key correctness and consistency
   - ✅ Verified individual parameter overrides maintain correct defaults
@@ -212,6 +229,7 @@
   - ✅ OnboardingPage component
   - ✅ OnboardingDotIndicator component with states for different pages
   - ✅ OnboardingHeader component for isolated testing
+  - ✅ HeaderTitle component with configurable text, color, and maxLines
 - ✅ Added advanced developer tools through addons:
   - ✅ Material theme toggles (light/dark)
   - ✅ Inspector, Grid, Alignment and Zoom tools
@@ -240,6 +258,7 @@
 2. Completing the onboarding feature testing
    - ✅ OnboardingPage tests completed (100% coverage)
    - ✅ OnboardingHeader tests completed (100% coverage)
+   - ✅ HeaderTitle tests completed (100% coverage)
    - ✅ OnboardingLogo tests completed (100% coverage)
    - 🚧 OnboardingNextButton tests (In Progress)
    - 🚧 OnboardingCubit tests (Planned)
@@ -248,67 +267,88 @@
 
 3. Implementing testing best practices
    - ✅ Established mock implementation standards
-   - ✅ Updated color API usage in tests
-   - ✅ Improved test structure and organization
-   - ✅ Established orientation testing patterns
-     - ✅ Setting physical screen size for portrait/landscape
-     - ✅ Using UI interactions instead of direct callback invocation
-     - ✅ Testing both orientations separately
-   - ✅ Established pattern for maintaining test alignment with implementation changes
-     - ✅ Update tests when widget implementation changes
-     - ✅ Verify all properties including new additions
-     - ✅ Maintain test coverage during refactoring
-   - ✅ Established patterns for thorough widget testing
-     - ✅ Testing individual parameter overrides
-     - ✅ Verifying widget keys and hierarchy
-     - ✅ Ensuring defaults are maintained when overriding individual parameters
-   - 🚧 Optimizing test performance
-   - 🚧 Documenting testing patterns and best practices
+   - ✅ Created consistent test pattern for all widgets
+   - ✅ Implemented proper teardown in tests
+   - ✅ Added orientation-specific testing procedures
+   - 🚧 Documenting test patterns (In Progress)
 
-4. Optimizing widget testing
-   - ✅ Proper setup and teardown procedures
-   - ✅ Improved widget finder specificity
-   - ✅ Enhanced error handling in assertions
-   - ✅ Realistic UI-driven tests instead of direct callback invocation
-   - 🚧 Reducing test execution time
-   - 🚧 Improving test stability across environments
+4. Widgetbook component development
+   - ✅ Basic structure implemented 
+   - ✅ Core components added
+   - ✅ Header components (HeaderTitle, OnboardingHeader) completed with all controls
+   - 🚧 Additional components in progress (NextButton)
 
-5. Expanding the login feature
-   - Designing login form UI
-   - Implementing form validation
-   - Adding authentication logic
+## Remaining Work
 
-6. ✅ Creating a dedicated storage feature
-   - ✅ Implementing proper abstractions for storage operations
-   - ✅ Ensuring comprehensive test coverage
-   - ✅ Following Clean Architecture principles
+### High Priority
+1. Complete onboarding feature testing
+   - Add tests for OnboardingNextButton
+   - Implement OnboardingCubit tests
+   - Add OnboardingRepository tests
+   - Create integration tests
 
-7. ✅ Refactoring environment configuration to feature-based architecture
-   - ✅ Moving environment configuration from core to features
-   - ✅ Restructuring tests to match implementation
-   - ✅ Updating import paths and fixing dependency injection
-   - ✅ Creating robust test helpers and edge case tests
+2. Finish core component test coverage
+   - Complete DI module tests
+   - Implement API module tests
+   - Add routing tests
+   - Create styles, sizes, durations tests
+   - Add theme tests with extensions
 
-8. Setting up testing infrastructure
-   - ✅ Unit tests with comprehensive coverage reporting
-   - ✅ Fixed test failures and improved test patterns
-   - 🚧 Widget tests for UI components (In Progress)
-   - 🚧 Integration tests for key user flows (Planned)
+3. Document established patterns
+   - Create comprehensive testing guidelines
+   - Document widgetbook component usage
+   - Create template for new features
 
-9. ✅ Refactoring lib/core directory structure
-   - ✅ Split DI modules for clearer separation of concerns
-   - ✅ Added API module for network communication
-   - ✅ Removed RegisterModule in favor of more specific modules
-   - ✅ Organized into clear, focused subdirectories
-   - ✅ Updated themes directory with extensions support
+### Medium Priority
+1. Implement login feature
+   - Complete UI implementation
+   - Add authentication logic
+   - Implement form validation
+   - Write comprehensive tests
 
-10. Enhancing the development workflow
-   - ✅ Improving Makefile for better developer experience
-   - ✅ Creating Widgetbook components for key UI elements
-     - ✅ OnboardingPage, OnboardingDotIndicator, OnboardingHeader components
-   - 🚧 Improving code generation scripts
-   - 🚧 Adding more static analysis rules
-   - 🚧 Documenting architecture and patterns
+2. Set up CI/CD pipeline
+   - Configure GitHub Actions
+   - Implement automated testing
+   - Set up linting checks
+   - Add coverage reporting
+
+### Low Priority
+1. Optimize test performance
+   - Improve setup/teardown procedures
+   - Enhance mock implementation efficiency
+   - Reduce test execution time
+
+2. Enhance developer documentation
+   - Create component usage guidelines
+   - Document architecture decisions
+   - Implement better code examples
+
+## Blockers
+- None currently
+
+## Decisions Made
+1. Repository Implementation:
+   - All repositories follow a consistent pattern
+   - API repositories handle networking, caching, and error mapping
+   - Results returned as Either<Failure, Success> from fpdart
+   - Repository interfaces defined in domain layer
+
+2. UI Components Structure:
+   - Pages for routable screens
+   - Views for main UI containers
+   - Widgets for reusable components
+   - Atoms/Molecules/Organisms pattern for component hierarchy
+   - OrientationBuilder for responsive layouts
+   - Separate view components for significantly different portrait/landscape layouts
+
+3. Testing Strategy:
+   - Unit tests for all repository implementations
+   - Widget tests for all UI components
+   - Each feature has its own test directory matching the production code structure
+   - Mock all external dependencies
+   - Test individual parameter overrides to ensure defaults are maintained
+   - Test both portrait and landscape orientations for responsive components
+   - Verify widget keys and trees for complex components
 
 ## Planned Work
 

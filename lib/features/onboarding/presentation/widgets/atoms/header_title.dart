@@ -11,6 +11,7 @@ class HeaderTitle extends StatelessWidget {
     super.key,
     this.textStyle,
     this.color,
+    this.maxLines = 1,
   }) : assert(text.trim().isNotEmpty, 'Header title must not be empty');
 
   /// The text to display as the title
@@ -21,6 +22,9 @@ class HeaderTitle extends StatelessWidget {
 
   /// The color for the title
   final Color? color;
+
+  /// The maximum number of lines for the title
+  final int? maxLines;
 
   /// Builds the effective text style for the header
   TextStyle _buildHeaderStyle() {
@@ -42,6 +46,8 @@ class HeaderTitle extends StatelessWidget {
       text,
       key: const Key('onboarding_header_title'),
       style: _buildHeaderStyle(),
+      maxLines: maxLines,
+      overflow: TextOverflow.ellipsis,
     );
   }
 }

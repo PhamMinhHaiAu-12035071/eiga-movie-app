@@ -25,6 +25,19 @@ WidgetbookComponent getHeaderTitleComponent() {
             initialValue: Colors.black,
           );
 
+          // Using double.slider for maxLines with integer conversion
+          final maxLinesDouble = context.knobs.double.slider(
+            label: 'Max Lines',
+            description: 'Maximum number of lines for the title',
+            initialValue: 1,
+            min: 1,
+            max: 5,
+            divisions: 4, // To get whole numbers: 1,2,3,4,5
+          );
+
+          // Convert to integer for the maxLines property
+          final maxLines = maxLinesDouble.toInt();
+
           // Create mocks for the component
           final mockTextStyles = TextStylesMock();
 
@@ -50,6 +63,7 @@ WidgetbookComponent getHeaderTitleComponent() {
                       text: text,
                       textStyle: textStyle,
                       color: textColor,
+                      maxLines: maxLines,
                     ),
                   ],
                 ),

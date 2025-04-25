@@ -119,5 +119,39 @@ void main() {
       expect(textWidget.style?.fontWeight, FontWeight.bold);
       expect(textWidget.style?.color, Colors.red);
     });
+
+    testWidgets('applies default maxLines of 1 and TextOverflow.ellipsis',
+        (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: HeaderTitle(text: 'Default MaxLines'),
+          ),
+        ),
+      );
+
+      final textWidget = tester.widget<Text>(find.text('Default MaxLines'));
+      expect(textWidget.maxLines, 1);
+      expect(textWidget.overflow, TextOverflow.ellipsis);
+    });
+
+    testWidgets('accepts custom maxLines value', (tester) async {
+      const customMaxLines = 2;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: HeaderTitle(
+              text: 'Custom MaxLines',
+              maxLines: customMaxLines,
+            ),
+          ),
+        ),
+      );
+
+      final textWidget = tester.widget<Text>(find.text('Custom MaxLines'));
+      expect(textWidget.maxLines, customMaxLines);
+      expect(textWidget.overflow, TextOverflow.ellipsis);
+    });
   });
 }
