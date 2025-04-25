@@ -286,26 +286,163 @@ class FeatureWidget extends StatelessWidget {
 
 ## Responsive Layouts & Orientation Handling
 
-* **Responsiveness Foundation**: Use `flutter_screenutil` for scaling dimensions, padding, margins, and font sizes (`.w`, `.h`, `.sp`, `.r`). This ensures basic adaptation to different screen sizes.
-* **Adapting Layouts**: Use `LayoutBuilder` to get `BoxConstraints` and `OrientationBuilder` to get the current `Orientation`.
+### Standard Practice for Orientation Handling
+
+* **Basic Responsiveness**: Always use `flutter_screenutil` for responsive dimension scaling (`.w`, `.h`, `.sp`, `.r`).
+
+* **Detecting Orientation**: Use one of these methods to detect orientation and adapt layouts:
   ```dart
+  // Method 1: Using MediaQuery
+  final isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
+  
+  // Method 2: Using OrientationBuilder
   OrientationBuilder(
     builder: (context, orientation) {
-      if (orientation == Orientation.portrait) {
-        return MyWidgetPortraitLayout();
-      } else {
-        return MyWidgetLandscapeLayout();
-      }
+      final isLandscape = orientation == Orientation.landscape;
+      // Return appropriate layout based on orientation
     },
   )
   ```
-* **Significant Differences**: When layouts for portrait and landscape are substantially different (e.g., different widget arrangements, navigation patterns), create separate view/widget components:
-  - `[ComponentName]PortraitView.dart` / `[ComponentName]Portrait.dart`
-  - `[ComponentName]LandscapeView.dart` / `[ComponentName]Landscape.dart`
-  - Use `OrientationBuilder` or `MediaQuery.of(context).orientation` in the parent component to switch between them.
-  - Example: `OnboardingPage` renders `OnboardingPortraitView` or `OnboardingLandscapeView` based on orientation.
-* **Minor Adjustments**: For smaller adjustments (e.g., changing the number of columns in a grid, adjusting spacing), use conditional logic within a single widget based on `constraints` from `LayoutBuilder` or `orientation` from `OrientationBuilder`.
-* **Testing**: Widget tests MUST cover both portrait and landscape orientations if the layout adapts. Use device previews or simulators to verify layouts on different screen sizes and orientations during development.
+
+* **Layout Pattern Decision Matrix**:
+
+  | Layout Difference | Implementation Approach | Example |
+  |-------------------|-------------------------|---------|
+  | Significant difference | Use separate view components | `FeaturePortraitView` / `FeatureLandscapeView` |
+  | Minor adjustments | Use conditional logic in one view | Adjust flex factors or grid columns |
+
+### Significant Layout Differences
+
+When portrait and landscape orientations require substantially different layouts:
+
+1. **Create separate view components**:
+   ```dart
+   // In feature_page.dart
+   @override
+   Widget build(BuildContext context) {
+     return Scaffold(
+       body: OrientationBuilder(
+         builder: (context, orientation) {
+           if (orientation == Orientation.portrait) {
+             return const FeaturePortraitView();
+           } else {
+             return const FeatureLandscapeView();
+           }
+         },
+       ),
+     );
+   }
+   ```
+
+2. **File Structure**:
+   ```
+   lib/features/feature_name/presentation/
+   ├── views/
+   │   ├── feature_portrait_view.dart
+   │   └── feature_landscape_view.dart
+   ```
+
+3. **Naming Pattern**:
+   - Use the suffixes `PortraitView` and `LandscapeView` for view components
+   - For smaller widgets with orientation-specific versions, use `Portrait` and `Landscape` suffixes
+
+4. **Component Structure**:
+   - Share common state management between views
+   - Extract common UI elements to shared widgets
+   - Each view implements a layout optimized for its orientation
+
+5. **Example Implementation**:
+   ```dart
+   // feature_portrait_view.dart
+   class FeaturePortraitView extends StatelessWidget {
+     const FeaturePortraitView({super.key});
+   
+     @override
+     Widget build(BuildContext context) {
+       return Column(
+         children: [
+           Expanded(flex: 3, child: FeatureImage()),
+           Expanded(flex: 2, child: FeatureContent()),
+         ],
+       );
+     }
+   }
+   
+   // feature_landscape_view.dart
+   class FeatureLandscapeView extends StatelessWidget {
+     const FeatureLandscapeView({super.key});
+   
+     @override
+     Widget build(BuildContext context) {
+       return Row(
+         children: [
+           Expanded(flex: 5, child: FeatureImage()),
+           Expanded(flex: 7, child: FeatureContent()),
+         ],
+       );
+     }
+   }
+   ```
+
+### Minor Layout Adjustments
+
+For simpler orientation changes that don't require completely different layouts:
+
+1. **Use conditional logic within a single component**:
+   ```dart
+   @override
+   Widget build(BuildContext context) {
+     final orientation = MediaQuery.of(context).orientation;
+     final isLandscape = orientation == Orientation.landscape;
+     
+     return GridView.builder(
+       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+         crossAxisCount: isLandscape ? 4 : 2,
+         childAspectRatio: isLandscape ? 1.5 : 1.0,
+       ),
+       // rest of implementation
+     );
+   }
+   ```
+
+2. **Adjust flex factors based on orientation**:
+   ```dart
+   @override
+   Widget build(BuildContext context) {
+     final orientation = MediaQuery.of(context).orientation;
+     final isLandscape = orientation == Orientation.landscape;
+     
+     return Column(
+       children: [
+         Expanded(
+           flex: isLandscape ? 1 : 2,
+           child: HeaderWidget(),
+         ),
+         Expanded(
+           flex: isLandscape ? 3 : 2,
+           child: ContentWidget(),
+         ),
+       ],
+     );
+   }
+   ```
+
+### Testing Orientation Support
+
+* Widget tests MUST cover both orientations when a component adapts to orientation
+* Use appropriate test window sizing to simulate orientations:
+  ```dart
+  // Set portrait orientation
+  tester.binding.window.physicalSizeTestValue = const Size(800, 1600);
+  
+  // Set landscape orientation
+  tester.binding.window.physicalSizeTestValue = const Size(1600, 800);
+  
+  // Don't forget to reset after test
+  addTearDown(() {
+    tester.binding.window.clearPhysicalSizeTestValue();
+  });
+  ```
 
 ## State Interaction
 

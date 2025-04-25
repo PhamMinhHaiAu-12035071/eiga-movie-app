@@ -30,24 +30,28 @@ class OnboardingLogo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = GetIt.I<AppColors>();
+    final boxSize = containerSize ?? 59.sp;
+    final imageSize = this.imageSize ?? 37.sp;
+    final borderRadius = this.borderRadius ?? 12.r;
+    final containerColor = this.containerColor ?? colors.white;
 
     return Semantics(
       label: 'App logo - EIGA',
       child: Container(
         key: const Key('onboarding_logo_container'),
-        width: containerSize ?? 59.sp,
-        height: containerSize ?? 59.sp,
+        width: boxSize,
+        height: boxSize,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(borderRadius ?? 12.r),
-          color: containerColor ?? colors.white,
+          borderRadius: BorderRadius.circular(borderRadius),
+          color: containerColor,
         ),
         child: Center(
           child: SizedBox(
-            key: const Key('onboarding_logo_image'),
-            width: imageSize ?? 37.sp,
-            height: imageSize ?? 37.sp,
+            key: const Key('onboarding_logo_image_container'),
+            width: imageSize,
+            height: imageSize,
             child: AppImage.of(context).onboarding.logo.image(
-                  key: const Key('onboarding_header_image'),
+                  key: const Key('onboarding_logo_image'),
                   fit: BoxFit.contain,
                 ),
           ),

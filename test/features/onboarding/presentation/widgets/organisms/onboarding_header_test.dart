@@ -330,7 +330,7 @@ void main() {
       await tester.pumpWidget(buildTestApp(const OnboardingHeader()));
 
       // Find Image inside OnboardingLogo by key
-      final imageFinder = find.byKey(const Key('onboarding_header_image'));
+      final imageFinder = find.byKey(const Key('onboarding_logo_image'));
       expect(imageFinder, findsOneWidget);
 
       final image = tester.widget<Image>(imageFinder);
@@ -440,7 +440,7 @@ void main() {
       await tester.pumpWidget(buildTestApp(const OnboardingHeader()));
 
       // Find Image by key
-      final imageFinder = find.byKey(const Key('onboarding_header_image'));
+      final imageFinder = find.byKey(const Key('onboarding_logo_image'));
       expect(imageFinder, findsOneWidget);
 
       final imageWidget = tester.widget<Image>(imageFinder);
