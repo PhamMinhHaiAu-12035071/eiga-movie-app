@@ -60,7 +60,7 @@ void main() {
     // Mock colors
     when(() => mockColors.onboardingBackground)
         .thenReturn(const Color(0xFFFFFFFF));
-    when(() => mockColors.skipButtonColor).thenReturn(const Color(0xFF2196F3));
+    when(() => mockColors.slateBlue).thenReturn(const Color(0xFF2196F3));
     when(() => mockColors.onboardingBlue).thenReturn(Colors.blue);
     when(() => mockColors.black).thenReturn(Colors.grey);
     when(() => mockColors.white).thenReturn(Colors.grey);

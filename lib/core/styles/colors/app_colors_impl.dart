@@ -119,7 +119,7 @@ class AppColorsImpl implements AppColors {
   Color get textSecondary => const Color(0xFF64748B);
 
   @override
-  Color get skipButtonColor => const Color(0xFF607395);
+  Color get slateBlue => const Color(0xFF607395);
   @override
   Color get onboardingBackground => const Color(0xFFE9F0F2);
   @override

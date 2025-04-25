@@ -23,7 +23,7 @@ void main() {
     GetIt.I.registerSingleton<AppColors>(mockColors);
 
     // Common style setup
-    when(() => mockColors.skipButtonColor)
+    when(() => mockColors.slateBlue)
         .thenReturn(Colors.green); // Use a distinct color
     when(
       () => mockTextStyles.headingSm(
@@ -84,7 +84,7 @@ void main() {
       final customTextStyles = MockAppTextStyles();
       final customColors = MockAppColors();
 
-      when(() => customColors.skipButtonColor).thenReturn(Colors.orange);
+      when(() => customColors.slateBlue).thenReturn(Colors.orange);
       when(
         () => customTextStyles.headingSm(
           fontWeight: any(named: 'fontWeight'),
@@ -116,7 +116,7 @@ void main() {
       expect(textWidget.style?.color, Colors.orange);
 
       // Verify the mocks were called
-      verify(() => customColors.skipButtonColor).called(1);
+      verify(() => customColors.slateBlue).called(1);
       verify(
         () => customTextStyles.headingSm(
           fontWeight: FontWeight.w500,

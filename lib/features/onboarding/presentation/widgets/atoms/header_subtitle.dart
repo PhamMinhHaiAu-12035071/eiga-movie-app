@@ -32,7 +32,7 @@ class HeaderSubtitle extends StatelessWidget {
       key: const Key('onboarding_header_subtitle'),
       style: textStyles.headingSm(
         fontWeight: FontWeight.w500,
-        color: colors.skipButtonColor,
+        color: colors.slateBlue,
       ),
     );
   }

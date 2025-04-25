@@ -14,7 +14,7 @@ abstract class AppColors {
   Color get textPrimary;
   Color get textSecondary;
 
-  Color get skipButtonColor;
+  Color get slateBlue;
   Color get onboardingBackground;
   Color get onboardingGradientStart;
   Color get onboardingGradientEnd;

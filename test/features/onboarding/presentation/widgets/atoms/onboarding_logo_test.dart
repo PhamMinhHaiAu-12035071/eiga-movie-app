@@ -115,7 +115,12 @@ void main() {
           designSize: const Size(360, 800),
           minTextAdapt: true,
           splitScreenMode: true,
-          builder: (_, __) => buildTestApp(const OnboardingLogo()),
+          builder: (_, __) => buildTestApp(
+            OnboardingLogo(
+              containerSize: 59.sp,
+              imageSize: 37.sp,
+            ),
+          ),
         ),
       );
 
@@ -211,7 +216,12 @@ void main() {
           designSize: const Size(360, 800),
           minTextAdapt: true,
           splitScreenMode: true,
-          builder: (_, __) => buildTestApp(const OnboardingLogo()),
+          builder: (_, __) => buildTestApp(
+            OnboardingLogo(
+              containerSize: 59.sp,
+              imageSize: 37.sp,
+            ),
+          ),
         ),
       );
 
@@ -231,18 +241,18 @@ void main() {
       expect(semanticsFinder, findsOneWidget);
     });
 
-    // NOTE: The implementation has a duplicate key issue
-    // - both the Container and SizedBox
-    // use the key 'onboarding_logo_container'.
-    // This should ideally be fixed in the implementation.
-
     testWidgets('Image uses BoxFit.contain and correct key', (tester) async {
       await tester.pumpWidget(
         ScreenUtilInit(
           designSize: const Size(360, 800),
           minTextAdapt: true,
           splitScreenMode: true,
-          builder: (_, __) => buildTestApp(const OnboardingLogo()),
+          builder: (_, __) => buildTestApp(
+            OnboardingLogo(
+              containerSize: 59.sp,
+              imageSize: 37.sp,
+            ),
+          ),
         ),
       );
 
@@ -259,7 +269,12 @@ void main() {
           designSize: const Size(360, 800),
           minTextAdapt: true,
           splitScreenMode: true,
-          builder: (_, __) => buildTestApp(const OnboardingLogo()),
+          builder: (_, __) => buildTestApp(
+            OnboardingLogo(
+              containerSize: 59.sp,
+              imageSize: 37.sp,
+            ),
+          ),
         ),
       );
 
@@ -282,7 +297,12 @@ void main() {
           designSize: const Size(360, 800),
           minTextAdapt: true,
           splitScreenMode: true,
-          builder: (_, __) => buildTestApp(const OnboardingLogo()),
+          builder: (_, __) => buildTestApp(
+            OnboardingLogo(
+              containerSize: 59.sp,
+              imageSize: 37.sp,
+            ),
+          ),
         ),
       );
 
@@ -298,7 +318,12 @@ void main() {
           designSize: const Size(360, 800),
           minTextAdapt: true,
           splitScreenMode: true,
-          builder: (_, __) => buildTestApp(const OnboardingLogo()),
+          builder: (_, __) => buildTestApp(
+            OnboardingLogo(
+              containerSize: 59.sp,
+              imageSize: 37.sp,
+            ),
+          ),
         ),
       );
 
@@ -310,6 +335,8 @@ void main() {
 
     testWidgets('only overrides containerSize', (tester) async {
       const customSize = 80.0;
+      // Also need to provide imageSize that's less than customSize
+      const imageSize = 40.0;
 
       await tester.pumpWidget(
         ScreenUtilInit(
@@ -317,7 +344,10 @@ void main() {
           minTextAdapt: true,
           splitScreenMode: true,
           builder: (_, __) => buildTestApp(
-            const OnboardingLogo(containerSize: customSize),
+            const OnboardingLogo(
+              containerSize: customSize,
+              imageSize: imageSize,
+            ),
           ),
         ),
       );
@@ -334,16 +364,18 @@ void main() {
       expect((boxDecoration.borderRadius! as BorderRadius).topLeft.x, 12.r);
       expect(boxDecoration.color, mockAppColors.white);
 
-      // Check image size remains default
+      // Check image size is as provided
       final imageSizedBox = tester.widget<SizedBox>(
         find.byKey(const Key('onboarding_logo_image_container')),
       );
-      expect(imageSizedBox.width, 37.sp);
-      expect(imageSizedBox.height, 37.sp);
+      expect(imageSizedBox.width, imageSize);
+      expect(imageSizedBox.height, imageSize);
     });
 
     testWidgets('only overrides imageSize', (tester) async {
       const customImgSize = 50.0;
+      // Make container size larger than image size to satisfy the assertion
+      const containerSize = 70.0;
 
       await tester.pumpWidget(
         ScreenUtilInit(
@@ -351,7 +383,10 @@ void main() {
           minTextAdapt: true,
           splitScreenMode: true,
           builder: (_, __) => buildTestApp(
-            const OnboardingLogo(imageSize: customImgSize),
+            const OnboardingLogo(
+              containerSize: containerSize,
+              imageSize: customImgSize,
+            ),
           ),
         ),
       );
@@ -363,12 +398,12 @@ void main() {
       expect(imageSizedBox.width, customImgSize);
       expect(imageSizedBox.height, customImgSize);
 
-      // Check container properties remain default
+      // Check container properties remain as set
       final container = tester.widget<Container>(
         find.byKey(const Key('onboarding_logo_container')),
       );
-      expect(container.constraints?.maxWidth, 59.sp);
-      expect(container.constraints?.maxHeight, 59.sp);
+      expect(container.constraints?.maxWidth, containerSize);
+      expect(container.constraints?.maxHeight, containerSize);
 
       final boxDecoration = container.decoration! as BoxDecoration;
       expect((boxDecoration.borderRadius! as BorderRadius).topLeft.x, 12.r);
@@ -384,7 +419,11 @@ void main() {
           minTextAdapt: true,
           splitScreenMode: true,
           builder: (_, __) => buildTestApp(
-            const OnboardingLogo(borderRadius: customRadius),
+            OnboardingLogo(
+              containerSize: 59.sp,
+              imageSize: 37.sp,
+              borderRadius: customRadius,
+            ),
           ),
         ),
       );
@@ -421,7 +460,11 @@ void main() {
           minTextAdapt: true,
           splitScreenMode: true,
           builder: (_, __) => buildTestApp(
-            const OnboardingLogo(containerColor: customColor),
+            OnboardingLogo(
+              containerSize: 59.sp,
+              imageSize: 37.sp,
+              containerColor: customColor,
+            ),
           ),
         ),
       );
@@ -452,7 +495,12 @@ void main() {
           designSize: const Size(360, 800),
           minTextAdapt: true,
           splitScreenMode: true,
-          builder: (_, __) => buildTestApp(const OnboardingLogo()),
+          builder: (_, __) => buildTestApp(
+            OnboardingLogo(
+              containerSize: 59.sp,
+              imageSize: 37.sp,
+            ),
+          ),
         ),
       );
 

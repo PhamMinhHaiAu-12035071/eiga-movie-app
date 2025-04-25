@@ -226,8 +226,6 @@ class MockAppColors extends Mock implements AppColors {
   @override
   Color get onboardingBackground => Colors.white;
   @override
-  Color get skipButtonColor => Colors.black;
-  @override
   Color get transparent => Colors.transparent;
 }
 

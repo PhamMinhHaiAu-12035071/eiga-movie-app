@@ -21,7 +21,7 @@ void main() {
     expect(colors.accent, const Color(0xFFE0E7FF));
     expect(colors.textPrimary, const Color(0xFF1E293B));
     expect(colors.textSecondary, const Color(0xFF64748B));
-    expect(colors.skipButtonColor, const Color(0xFF607395));
+    expect(colors.slateBlue, const Color(0xFF607395));
     expect(colors.onboardingBackground, const Color(0xFFE9F0F2));
     expect(colors.onboardingGradientStart, const Color(0xFF00B3C6));
     expect(colors.onboardingGradientEnd, const Color(0xFF5D84B4));

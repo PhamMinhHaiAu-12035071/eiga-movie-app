@@ -27,7 +27,12 @@ WidgetbookComponent getHeaderTitleComponent() {
 
           // Create mocks for the component
           final mockTextStyles = TextStylesMock();
-          final mockColors = ColorsMock(textColor);
+
+          // Create the text style directly for the HeaderTitle
+          final textStyle = mockTextStyles.headingXl(
+            fontWeight: FontWeight.w900,
+            color: textColor,
+          );
 
           return Scaffold(
             backgroundColor: Colors.white,
@@ -40,11 +45,11 @@ WidgetbookComponent getHeaderTitleComponent() {
                   children: [
                     const Text('Header Title Component:'),
                     const SizedBox(height: 20),
-                    // Use the header title with mocked dependencies
+                    // Use the header title with updated parameter names
                     HeaderTitle(
                       text: text,
-                      textStyles: mockTextStyles,
-                      colors: mockColors,
+                      textStyle: textStyle,
+                      color: textColor,
                     ),
                   ],
                 ),
@@ -123,7 +128,7 @@ class ColorsMock implements AppColors {
   final Color textColor;
 
   @override
-  Color get skipButtonColor => textColor;
+  Color get slateBlue => textColor;
 
   // Implement other required color properties
   @override

@@ -23,7 +23,7 @@ void main() {
     GetIt.I.registerSingleton<AppColors>(mockColors);
 
     // Common style setup
-    when(() => mockColors.skipButtonColor)
+    when(() => mockColors.slateBlue)
         .thenReturn(Colors.blue); // Use a distinct color
     when(
       () => mockTextStyles.headingXl(
@@ -49,7 +49,7 @@ void main() {
       const testText = 'Test Title';
 
       await tester.pumpWidget(
-        const MaterialApp(
+        MaterialApp(
           home: Scaffold(
             body: HeaderTitle(text: testText),
           ),
@@ -63,7 +63,7 @@ void main() {
 
     testWidgets('uses styles from GetIt by default', (tester) async {
       await tester.pumpWidget(
-        const MaterialApp(
+        MaterialApp(
           home: Scaffold(
             body: HeaderTitle(text: 'Default Style'),
           ),
@@ -81,7 +81,7 @@ void main() {
       final customTextStyles = MockAppTextStyles();
       final customColors = MockAppColors();
 
-      when(() => customColors.skipButtonColor).thenReturn(Colors.red);
+      when(() => customColors.slateBlue).thenReturn(Colors.red);
       when(
         () => customTextStyles.headingXl(
           fontWeight: any(named: 'fontWeight'),
@@ -95,13 +95,20 @@ void main() {
         ),
       );
 
+      // Create the text style that will be passed to HeaderTitle
+      const customTextStyle = TextStyle(
+        fontSize: 30,
+        fontWeight: FontWeight.bold,
+        color: Colors.red,
+      );
+
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
             body: HeaderTitle(
               text: 'Injected Style',
-              textStyles: customTextStyles,
-              colors: customColors,
+              textStyle: customTextStyle,
+              color: Colors.red,
             ),
           ),
         ),
@@ -111,15 +118,6 @@ void main() {
       expect(textWidget.style?.fontSize, 30);
       expect(textWidget.style?.fontWeight, FontWeight.bold);
       expect(textWidget.style?.color, Colors.red);
-
-      // Verify the mocks were called
-      verify(() => customColors.skipButtonColor).called(1);
-      verify(
-        () => customTextStyles.headingXl(
-          fontWeight: FontWeight.w900,
-          color: Colors.red,
-        ),
-      ).called(1);
     });
   });
 }

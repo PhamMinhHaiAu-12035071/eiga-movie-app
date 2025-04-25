@@ -160,7 +160,7 @@ void main() {
     when(() => mockSizes.v56).thenReturn(56);
     when(() => mockSizes.h16).thenReturn(16);
 
-    when(() => mockColors.skipButtonColor).thenReturn(Colors.black);
+    when(() => mockColors.slateBlue).thenReturn(Colors.black);
 
     when(
       () => mockTextStyles.headingXl(
@@ -347,7 +347,7 @@ void main() {
       when(() => customSizes.v56).thenReturn(112);
       when(() => customSizes.h16).thenReturn(32);
 
-      when(() => customColors.skipButtonColor).thenReturn(Colors.red);
+      when(() => customColors.slateBlue).thenReturn(Colors.red);
 
       when(
         () => customTextStyles.headingXl(

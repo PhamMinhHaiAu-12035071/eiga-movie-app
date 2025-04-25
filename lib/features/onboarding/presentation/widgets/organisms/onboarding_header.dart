@@ -52,6 +52,8 @@ class OnboardingHeader extends StatelessWidget {
             OnboardingLogo(
               key: const Key('onboarding_header_logo'),
               containerSize: sizes.v56,
+              imageSize:
+                  sizes.v56 * 0.6, // Make image size 60% of container size
             ),
             Gap(gapWidth ?? sizes.h16),
             HeaderTitleGroup(

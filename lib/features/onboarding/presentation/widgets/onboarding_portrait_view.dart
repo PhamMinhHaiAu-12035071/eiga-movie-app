@@ -94,7 +94,7 @@ class OnboardingPortraitView extends StatelessWidget {
             child: Text(
               'Skip',
               style: _textStyles.heading(
-                color: _colors.skipButtonColor,
+                color: _colors.slateBlue,
                 fontWeight: FontWeight.w700,
               ),
             ),

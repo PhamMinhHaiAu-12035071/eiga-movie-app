@@ -34,8 +34,11 @@ class HeaderTitleGroup extends StatelessWidget {
       children: [
         HeaderTitle(
           text: title,
-          textStyles: textStyles,
-          colors: colors,
+          textStyle: textStyles?.headingXl(
+            fontWeight: FontWeight.w900,
+            color: colors?.slateBlue,
+          ),
+          color: colors?.slateBlue,
         ),
         HeaderSubtitle(
           text: subtitle,

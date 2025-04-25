@@ -13,7 +13,16 @@ class OnboardingLogo extends StatelessWidget {
     this.borderRadius,
     this.containerColor,
     super.key,
-  });
+  })  : assert(
+          containerSize != null || imageSize != null,
+          'Either containerSize or imageSize must be provided',
+        ),
+        assert(
+          imageSize != null &&
+              containerSize != null &&
+              imageSize <= containerSize,
+          'imageSize must not exceed containerSize',
+        );
 
   /// The size of the container (width = height)
   final double? containerSize;
@@ -27,18 +36,36 @@ class OnboardingLogo extends StatelessWidget {
   /// The background color of the container
   final Color? containerColor;
 
+  /// The label for the logo
+  static const _label = 'App logo - EIGA';
+
+  /// The key for the logo container
+  static const _logoContainerKey = Key('onboarding_logo_container');
+
+  /// The key for the logo image container
+  static const _logoImageContainerKey = Key('onboarding_logo_image_container');
+
+  /// The default size of the logo container
+  static const _defaultBox = 59.0;
+
+  /// The default size of the logo image
+  static const _defaultImage = 37.0;
+
+  /// The default border radius of the logo container
+  static const _defaultRadius = 12.0;
+
   @override
   Widget build(BuildContext context) {
     final colors = GetIt.I<AppColors>();
-    final boxSize = containerSize ?? 59.sp;
-    final imageSize = this.imageSize ?? 37.sp;
-    final borderRadius = this.borderRadius ?? 12.r;
+    final boxSize = containerSize ?? _defaultBox.sp;
+    final imageSize = this.imageSize ?? _defaultImage.sp;
+    final borderRadius = this.borderRadius ?? _defaultRadius.r;
     final containerColor = this.containerColor ?? colors.white;
 
     return Semantics(
-      label: 'App logo - EIGA',
+      label: _label,
       child: Container(
-        key: const Key('onboarding_logo_container'),
+        key: _logoContainerKey,
         width: boxSize,
         height: boxSize,
         decoration: BoxDecoration(
@@ -47,7 +74,7 @@ class OnboardingLogo extends StatelessWidget {
         ),
         child: Center(
           child: SizedBox(
-            key: const Key('onboarding_logo_image_container'),
+            key: _logoImageContainerKey,
             width: imageSize,
             height: imageSize,
             child: AppImage.of(context).onboarding.logo.image(

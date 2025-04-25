@@ -88,7 +88,7 @@ class TestAppColors implements AppColors {
   Color get secondaryDark => Colors.blue;
 
   @override
-  Color get skipButtonColor => const Color(0xFF2196F3);
+  Color get slateBlue => const Color(0xFF2196F3);
 
   @override
   Color get textPrimary => Colors.black;

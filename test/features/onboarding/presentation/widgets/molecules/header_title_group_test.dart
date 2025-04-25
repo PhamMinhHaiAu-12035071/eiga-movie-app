@@ -25,7 +25,7 @@ void main() {
     GetIt.I.registerSingleton<AppColors>(mockColors);
 
     // Common style setup for default case
-    when(() => mockColors.skipButtonColor).thenReturn(Colors.black);
+    when(() => mockColors.slateBlue).thenReturn(Colors.black);
     when(
       () => mockTextStyles.headingXl(
         fontWeight: any(named: 'fontWeight'),
@@ -77,7 +77,7 @@ void main() {
       final customColors = MockAppColors();
 
       // Setup specific return values for injected mocks
-      when(() => customColors.skipButtonColor).thenReturn(Colors.purple);
+      when(() => customColors.slateBlue).thenReturn(Colors.purple);
       when(
         () => customTextStyles.headingXl(
           fontWeight: any(named: 'fontWeight'),
@@ -104,11 +104,8 @@ void main() {
         ),
       );
 
-      // Verify HeaderTitle received injected styles
-      final headerTitle = tester.widget<HeaderTitle>(find.byType(HeaderTitle));
-      expect(headerTitle.textStyles, customTextStyles);
-      expect(headerTitle.colors, customColors);
-      // We can also check the rendered text style indirectly if needed
+      // We can't directly verify properties in HeaderTitle due to its new API
+      // But we can check the rendered text style which should reflect our style
       final titleTextWidget = tester.widget<Text>(find.text('Injected Title'));
       expect(titleTextWidget.style?.fontSize, 30);
       expect(titleTextWidget.style?.color, Colors.purple);

@@ -84,14 +84,14 @@ class OnboardingLandscapeView extends StatelessWidget {
                           'EIGA',
                           style: _textStyles.headingLg(
                             fontWeight: FontWeight.w900,
-                            color: _colors.skipButtonColor,
+                            color: _colors.slateBlue,
                           ),
                         ),
                         Text(
                           'CINEMA UI KIT.',
                           style: _textStyles.headingXs(
                             fontWeight: FontWeight.w500,
-                            color: _colors.skipButtonColor,
+                            color: _colors.slateBlue,
                           ),
                         ),
                       ],
@@ -164,7 +164,7 @@ class OnboardingLandscapeView extends StatelessWidget {
                             child: Text(
                               'Skip',
                               style: _textStyles.heading(
-                                color: _colors.skipButtonColor,
+                                color: _colors.slateBlue,
                                 fontWeight: FontWeight.w700,
                               ),
                             ),
