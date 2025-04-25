@@ -12,27 +12,53 @@ WidgetbookComponent getOnboardingLogoComponent() {
         name: 'Default',
         builder: (context) {
           // Add knobs for customizing the logo
-          final height = context.knobs.double.slider(
-            label: 'Height',
-            description: 'Height of the logo',
-            min: 20,
+          final containerSize = context.knobs.double.slider(
+            label: 'Container Size',
+            description: 'Size of the container (width = height)',
+            min: 40,
             max: 200,
-            initialValue: 56,
-            divisions: 18,
+            initialValue: 59,
+            divisions: 16,
+          );
+
+          final imageSize = context.knobs.double.slider(
+            label: 'Image Size',
+            description: 'Size of the logo image (width = height)',
+            min: 20,
+            max: 150,
+            initialValue: 37,
+            divisions: 13,
+          );
+
+          final borderRadius = context.knobs.double.slider(
+            label: 'Border Radius',
+            description: 'Border radius of the container',
+            max: 30,
+            initialValue: 12,
+            divisions: 6,
+          );
+
+          final containerColor = context.knobs.color(
+            label: 'Container Color',
+            description: 'Background color of the container',
           );
 
           // Wrap with MockAppImage provider since
           // OnboardingLogo depends on AppImage
           return MockAppImage.provider(
             child: Scaffold(
-              backgroundColor: Colors.white,
+              backgroundColor: Colors.grey.shade200,
               body: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text('OnboardingLogo with adjustable height:'),
                     const SizedBox(height: 20),
-                    OnboardingLogo(height: height),
+                    OnboardingLogo(
+                      containerSize: containerSize,
+                      imageSize: imageSize,
+                      borderRadius: borderRadius,
+                      containerColor: containerColor,
+                    ),
                   ],
                 ),
               ),

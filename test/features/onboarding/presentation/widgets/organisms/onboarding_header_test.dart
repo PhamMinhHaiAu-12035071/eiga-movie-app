@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:gap/gap.dart';
 import 'package:get_it/get_it.dart';
@@ -15,9 +16,30 @@ class MockAppSizes extends Mock implements AppSizes {}
 
 class MockAppTextStyles extends Mock implements AppTextStyles {}
 
-class MockAppColors extends Mock implements AppColors {}
+class MockAppColors extends Mock implements AppColors {
+  final _white = const MaterialColor(
+    0xFFFFFFFF,
+    <int, Color>{
+      50: Colors.white,
+      100: Colors.white,
+      200: Colors.white,
+      300: Colors.white,
+      400: Colors.white,
+      500: Colors.white,
+      600: Colors.white,
+      700: Colors.white,
+      800: Colors.white,
+      900: Colors.white,
+    },
+  );
+
+  @override
+  MaterialColor get white => _white;
+}
 
 class MockAssetGenImage extends Mock implements AssetGenImage {
+  final String _mockPath = 'assets/images/onboarding/logo.png';
+
   @override
   Image image({
     Key? key,
@@ -44,9 +66,14 @@ class MockAssetGenImage extends Mock implements AssetGenImage {
     int? cacheWidth,
     int? cacheHeight,
   }) =>
-      Image.network(
-        'dummy_url',
+      Image.asset(
+        _mockPath,
         key: key,
+        bundle: bundle,
+        frameBuilder: frameBuilder,
+        errorBuilder: errorBuilder,
+        semanticLabel: semanticLabel,
+        excludeFromSemantics: excludeFromSemantics,
         scale: scale ?? 1.0,
         width: width,
         height: height,
@@ -60,10 +87,14 @@ class MockAssetGenImage extends Mock implements AssetGenImage {
         matchTextDirection: matchTextDirection,
         gaplessPlayback: gaplessPlayback,
         isAntiAlias: isAntiAlias,
+        package: package,
         filterQuality: filterQuality,
         cacheWidth: cacheWidth,
         cacheHeight: cacheHeight,
       );
+
+  @override
+  String get path => _mockPath;
 }
 
 class MockOnboardingImages extends Mock implements OnboardingImages {
@@ -89,6 +120,21 @@ class MockAppImage extends Mock implements AppImage {
 
   @override
   OnboardingImages get onboarding => _mockOnboarding;
+}
+
+Widget buildTestApp(Widget child) {
+  return ScreenUtilInit(
+    designSize: const Size(360, 800),
+    minTextAdapt: true,
+    splitScreenMode: true,
+    builder: (_, __) => MaterialApp(
+      home: Scaffold(
+        body: Builder(
+          builder: (context) => child,
+        ),
+      ),
+    ),
+  );
 }
 
 void main() {
@@ -149,36 +195,56 @@ void main() {
 
   group('OnboardingHeader', () {
     testWidgets('renders correctly with all components', (tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: Builder(
-              builder: (context) => const OnboardingHeader(),
-            ),
-          ),
-        ),
-      );
+      await tester.pumpWidget(buildTestApp(const OnboardingHeader()));
 
       // Verify widget tree structure
-      expect(find.byType(ColoredBox), findsOneWidget);
-      expect(find.byType(Padding), findsOneWidget);
-      expect(find.byType(Row), findsOneWidget);
-      expect(find.byType(Image), findsOneWidget);
+      expect(find.byType(OnboardingHeader), findsOneWidget);
+
+      // Find ColoredBox inside OnboardingHeader
+      expect(
+        find.descendant(
+          of: find.byType(OnboardingHeader),
+          matching: find.byType(ColoredBox),
+        ),
+        findsOneWidget,
+      );
+
+      // Find Row inside OnboardingHeader
+      expect(
+        find.descendant(
+          of: find.byType(OnboardingHeader),
+          matching: find.byType(Row),
+        ),
+        findsOneWidget,
+      );
+
+      expect(find.byType(OnboardingLogo), findsOneWidget);
       expect(find.byType(Gap), findsOneWidget);
-      expect(find.byType(Column), findsOneWidget);
-      expect(find.byType(Text), findsNWidgets(2));
+
+      // Find Column inside OnboardingHeader
+      expect(
+        find.descendant(
+          of: find.byType(OnboardingHeader),
+          matching: find.byType(Column),
+        ),
+        findsOneWidget,
+      );
+
+      expect(find.text('EIGA'), findsOneWidget);
+      expect(find.text('CINEMA UI KIT.'), findsOneWidget);
+
+      // Find Image inside OnboardingLogo
+      expect(
+        find.descendant(
+          of: find.byType(OnboardingLogo),
+          matching: find.byType(Image),
+        ),
+        findsOneWidget,
+      );
     });
 
     testWidgets('displays correct text content', (tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: Builder(
-              builder: (context) => const OnboardingHeader(),
-            ),
-          ),
-        ),
-      );
+      await tester.pumpWidget(buildTestApp(const OnboardingHeader()));
 
       expect(find.text('EIGA'), findsOneWidget);
       expect(find.text('CINEMA UI KIT.'), findsOneWidget);
@@ -186,25 +252,30 @@ void main() {
 
     testWidgets('applies correct styles, dimensions and semantics',
         (tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: Builder(
-              builder: (context) => const OnboardingHeader(),
-            ),
-          ),
-        ),
-      );
+      await tester.pumpWidget(buildTestApp(const OnboardingHeader()));
 
       await tester.pump();
 
-      // Verify ColoredBox properties
-      final coloredBoxFinder = find.byType(ColoredBox);
+      // Verify ColoredBox properties - find it inside OnboardingHeader
+      final coloredBoxFinder = find.descendant(
+        of: find.byType(OnboardingHeader),
+        matching: find.byType(ColoredBox),
+      );
+      expect(coloredBoxFinder, findsOneWidget);
       final coloredBoxWidget = tester.widget<ColoredBox>(coloredBoxFinder);
       expect(coloredBoxWidget.color, Colors.transparent);
 
-      // Verify Padding properties
-      final paddingFinder = find.byType(Padding);
+      // Verify Padding properties -
+      // find it inside OnboardingHeader with specific padding
+      final paddingFinder = find.descendant(
+        of: find.byType(OnboardingHeader),
+        matching: find.byWidgetPredicate(
+          (widget) =>
+              widget is Padding &&
+              widget.padding == EdgeInsets.symmetric(horizontal: mockSizes.h32),
+        ),
+      );
+      expect(paddingFinder, findsOneWidget);
       final paddingWidget = tester.widget<Padding>(paddingFinder);
       expect(
         paddingWidget.padding,
@@ -223,10 +294,14 @@ void main() {
       // Verify logo size
       final logoFinder = find.byKey(const Key('onboarding_header_logo'));
       final logoWidget = tester.widget<OnboardingLogo>(logoFinder);
-      expect(logoWidget.height, mockSizes.v56);
+      expect(logoWidget.containerSize, mockSizes.v56);
 
-      // Verify gap width
-      final gapFinder = find.byType(Gap);
+      // Verify gap width - find Gap inside OnboardingHeader
+      final gapFinder = find.descendant(
+        of: find.byType(OnboardingHeader),
+        matching: find.byType(Gap),
+      );
+      expect(gapFinder, findsOneWidget);
       final gap = tester.widget<Gap>(gapFinder);
       expect(gap.mainAxisExtent, mockSizes.h16);
 
@@ -252,17 +327,12 @@ void main() {
     });
 
     testWidgets('logo uses correct BoxFit', (tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: Builder(
-              builder: (context) => const OnboardingHeader(),
-            ),
-          ),
-        ),
-      );
+      await tester.pumpWidget(buildTestApp(const OnboardingHeader()));
 
-      final imageFinder = find.byType(Image);
+      // Find Image inside OnboardingLogo by key
+      final imageFinder = find.byKey(const Key('onboarding_header_image'));
+      expect(imageFinder, findsOneWidget);
+
       final image = tester.widget<Image>(imageFinder);
       expect(image.fit, equals(BoxFit.contain));
     });
@@ -306,13 +376,18 @@ void main() {
       );
 
       await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: Builder(
-              builder: (context) => OnboardingHeader(
-                sizes: customSizes,
-                textStyles: customTextStyles,
-                colors: customColors,
+        ScreenUtilInit(
+          designSize: const Size(360, 800),
+          minTextAdapt: true,
+          splitScreenMode: true,
+          builder: (_, __) => MaterialApp(
+            home: Scaffold(
+              body: Builder(
+                builder: (context) => OnboardingHeader(
+                  sizes: customSizes,
+                  textStyles: customTextStyles,
+                  colors: customColors,
+                ),
               ),
             ),
           ),
@@ -321,8 +396,17 @@ void main() {
 
       await tester.pump();
 
-      // Verify custom padding is applied
-      final paddingFinder = find.byType(Padding);
+      // Verify custom padding is applied -
+      // find Padding inside OnboardingHeader with specific padding
+      final paddingFinder = find.descendant(
+        of: find.byType(OnboardingHeader),
+        matching: find.byWidgetPredicate(
+          (widget) =>
+              widget is Padding &&
+              widget.padding == const EdgeInsets.symmetric(horizontal: 64),
+        ),
+      );
+      expect(paddingFinder, findsOneWidget);
       final paddingWidget = tester.widget<Padding>(paddingFinder);
       expect(
         paddingWidget.padding,
@@ -334,10 +418,14 @@ void main() {
           find.byKey(const Key('onboarding_header_logo'));
       final logoWidgetInjected =
           tester.widget<OnboardingLogo>(logoFinderInjected);
-      expect(logoWidgetInjected.height, 112); // Our custom value
+      expect(logoWidgetInjected.containerSize, 112); // Our custom value
 
-      // Verify custom gap width
-      final gapFinder = find.byType(Gap);
+      // Verify custom gap width - find Gap inside OnboardingHeader
+      final gapFinder = find.descendant(
+        of: find.byType(OnboardingHeader),
+        matching: find.byType(Gap),
+      );
+      expect(gapFinder, findsOneWidget);
       final gap = tester.widget<Gap>(gapFinder);
       expect(gap.mainAxisExtent, 32); // Our custom value
 
@@ -349,20 +437,13 @@ void main() {
     });
 
     testWidgets('renders correct logo via its imageKey', (tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: Builder(
-              builder: (context) => const OnboardingHeader(),
-            ),
-          ),
-        ),
-      );
+      await tester.pumpWidget(buildTestApp(const OnboardingHeader()));
 
       // Find Image by key
-      final imageWidget = tester.widget<Image>(
-        find.byKey(const Key('onboarding_header_image')),
-      );
+      final imageFinder = find.byKey(const Key('onboarding_header_image'));
+      expect(imageFinder, findsOneWidget);
+
+      final imageWidget = tester.widget<Image>(imageFinder);
 
       // Assert image provider type and path
       expect(imageWidget.image, isA<AssetImage>());

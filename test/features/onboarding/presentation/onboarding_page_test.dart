@@ -4,6 +4,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:ksk_app/core/asset/app_image.dart';
@@ -442,6 +443,32 @@ class OnboardingPageCallback {
   }
 }
 
+// Helper function to wrap widgets with ScreenUtilInit for testing
+Widget buildTestApp({
+  required Widget child,
+  required StackRouter router,
+  MockOnboardingCubit? cubit,
+}) {
+  final wrappedChild = cubit != null
+      ? BlocProvider<OnboardingCubit>.value(
+          value: cubit,
+          child: child,
+        )
+      : child;
+
+  return ScreenUtilInit(
+    designSize: const Size(360, 800),
+    minTextAdapt: true,
+    splitScreenMode: true,
+    builder: (_, __) => MaterialApp(
+      home: MockRouter(
+        router: router,
+        child: wrappedChild,
+      ),
+    ),
+  );
+}
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -555,16 +582,12 @@ void main() {
       final state = OnboardingState(slides: createTestSlides());
       when(() => mockOnboardingCubit.state).thenReturn(state);
 
-      // Build widget with StackRouter
+      // Build widget with ScreenUtilInit
       await tester.pumpWidget(
-        MaterialApp(
-          home: MockRouter(
-            router: mockStackRouter,
-            child: BlocProvider<OnboardingCubit>.value(
-              value: mockOnboardingCubit,
-              child: const OnboardingPage(),
-            ),
-          ),
+        buildTestApp(
+          router: mockStackRouter,
+          cubit: mockOnboardingCubit,
+          child: const OnboardingPage(),
         ),
       );
 
@@ -590,16 +613,12 @@ void main() {
       tester.view.devicePixelRatio = 1.0;
       addTearDown(tester.view.resetPhysicalSize);
 
-      // Build widget with StackRouter
+      // Build widget with ScreenUtilInit
       await tester.pumpWidget(
-        MaterialApp(
-          home: MockRouter(
-            router: mockStackRouter,
-            child: BlocProvider<OnboardingCubit>.value(
-              value: mockOnboardingCubit,
-              child: const OnboardingPage(),
-            ),
-          ),
+        buildTestApp(
+          router: mockStackRouter,
+          cubit: mockOnboardingCubit,
+          child: const OnboardingPage(),
         ),
       );
       await tester.pumpAndSettle();
@@ -620,16 +639,12 @@ void main() {
       tester.view.devicePixelRatio = 1.0;
       addTearDown(tester.view.resetPhysicalSize);
 
-      // Build widget with StackRouter
+      // Build widget with ScreenUtilInit
       await tester.pumpWidget(
-        MaterialApp(
-          home: MockRouter(
-            router: mockStackRouter,
-            child: BlocProvider<OnboardingCubit>.value(
-              value: mockOnboardingCubit,
-              child: const OnboardingPage(),
-            ),
-          ),
+        buildTestApp(
+          router: mockStackRouter,
+          cubit: mockOnboardingCubit,
+          child: const OnboardingPage(),
         ),
       );
       await tester.pumpAndSettle();
@@ -644,16 +659,12 @@ void main() {
       final state = OnboardingState(slides: createTestSlides());
       when(() => mockOnboardingCubit.state).thenReturn(state);
 
-      // Build widget with StackRouter
+      // Build widget with ScreenUtilInit
       await tester.pumpWidget(
-        MaterialApp(
-          home: MockRouter(
-            router: mockStackRouter,
-            child: BlocProvider<OnboardingCubit>.value(
-              value: mockOnboardingCubit,
-              child: const OnboardingPage(),
-            ),
-          ),
+        buildTestApp(
+          router: mockStackRouter,
+          cubit: mockOnboardingCubit,
+          child: const OnboardingPage(),
         ),
       );
       await tester.pumpAndSettle();
@@ -672,16 +683,12 @@ void main() {
       when(() => mockOnboardingCubit.state).thenReturn(state);
       when(() => mockStackRouter.replace(any())).thenAnswer((_) async => null);
 
-      // Build widget with StackRouter
+      // Build widget with ScreenUtilInit
       await tester.pumpWidget(
-        MaterialApp(
-          home: MockRouter(
-            router: mockStackRouter,
-            child: BlocProvider<OnboardingCubit>.value(
-              value: mockOnboardingCubit,
-              child: const OnboardingPage(),
-            ),
-          ),
+        buildTestApp(
+          router: mockStackRouter,
+          cubit: mockOnboardingCubit,
+          child: const OnboardingPage(),
         ),
       );
       await tester.pumpAndSettle();
@@ -711,16 +718,12 @@ void main() {
           .thenAnswer((_) async {});
       when(() => mockStackRouter.replace(any())).thenAnswer((_) async => null);
 
-      // Build widget with StackRouter
+      // Build widget with ScreenUtilInit
       await tester.pumpWidget(
-        MaterialApp(
-          home: MockRouter(
-            router: mockStackRouter,
-            child: BlocProvider<OnboardingCubit>.value(
-              value: mockOnboardingCubit,
-              child: const OnboardingPage(),
-            ),
-          ),
+        buildTestApp(
+          router: mockStackRouter,
+          cubit: mockOnboardingCubit,
+          child: const OnboardingPage(),
         ),
       );
       await tester.pumpAndSettle();
@@ -740,16 +743,12 @@ void main() {
       when(() => mockOnboardingCubit.state).thenReturn(state);
       when(() => mockStackRouter.replace(any())).thenAnswer((_) async => null);
 
-      // Build widget with StackRouter
+      // Build widget with ScreenUtilInit
       await tester.pumpWidget(
-        MaterialApp(
-          home: MockRouter(
-            router: mockStackRouter,
-            child: BlocProvider<OnboardingCubit>.value(
-              value: mockOnboardingCubit,
-              child: const OnboardingPage(),
-            ),
-          ),
+        buildTestApp(
+          router: mockStackRouter,
+          cubit: mockOnboardingCubit,
+          child: const OnboardingPage(),
         ),
       );
       await tester.pumpAndSettle();
@@ -768,16 +767,12 @@ void main() {
       final state = OnboardingState(slides: createTestSlides());
       when(() => mockOnboardingCubit.state).thenReturn(state);
 
-      // Build widget with StackRouter
+      // Build widget with ScreenUtilInit
       await tester.pumpWidget(
-        MaterialApp(
-          home: MockRouter(
-            router: mockStackRouter,
-            child: BlocProvider<OnboardingCubit>.value(
-              value: mockOnboardingCubit,
-              child: const OnboardingPage(),
-            ),
-          ),
+        buildTestApp(
+          router: mockStackRouter,
+          cubit: mockOnboardingCubit,
+          child: const OnboardingPage(),
         ),
       );
       await tester.pumpAndSettle();
@@ -797,16 +792,12 @@ void main() {
       when(() => mockOnboardingCubit.state).thenReturn(state);
       when(() => mockOnboardingCubit.updatePage(any())).thenReturn(null);
 
-      // Build widget with StackRouter
+      // Build widget with ScreenUtilInit
       await tester.pumpWidget(
-        MaterialApp(
-          home: MockRouter(
-            router: mockStackRouter,
-            child: BlocProvider<OnboardingCubit>.value(
-              value: mockOnboardingCubit,
-              child: const OnboardingPage(),
-            ),
-          ),
+        buildTestApp(
+          router: mockStackRouter,
+          cubit: mockOnboardingCubit,
+          child: const OnboardingPage(),
         ),
       );
 
@@ -839,16 +830,12 @@ void main() {
           .thenAnswer((_) async {});
       when(() => mockStackRouter.replace(any())).thenAnswer((_) async => null);
 
-      // Build widget with StackRouter
+      // Build widget with ScreenUtilInit
       await tester.pumpWidget(
-        MaterialApp(
-          home: MockRouter(
-            router: mockStackRouter,
-            child: BlocProvider<OnboardingCubit>.value(
-              value: mockOnboardingCubit,
-              child: const OnboardingPage(),
-            ),
-          ),
+        buildTestApp(
+          router: mockStackRouter,
+          cubit: mockOnboardingCubit,
+          child: const OnboardingPage(),
         ),
       );
       await tester.pumpAndSettle();
@@ -871,16 +858,12 @@ void main() {
       when(() => mockOnboardingCubit.state).thenReturn(state);
       when(() => mockOnboardingCubit.nextPage()).thenReturn(null);
 
-      // Build widget with StackRouter
+      // Build widget with ScreenUtilInit
       await tester.pumpWidget(
-        MaterialApp(
-          home: MockRouter(
-            router: mockStackRouter,
-            child: BlocProvider<OnboardingCubit>.value(
-              value: mockOnboardingCubit,
-              child: const OnboardingPage(),
-            ),
-          ),
+        buildTestApp(
+          router: mockStackRouter,
+          cubit: mockOnboardingCubit,
+          child: const OnboardingPage(),
         ),
       );
       await tester.pumpAndSettle();
@@ -902,16 +885,12 @@ void main() {
           .thenAnswer((_) async {});
       when(() => mockStackRouter.replace(any())).thenAnswer((_) async => null);
 
-      // Build widget with StackRouter
+      // Build widget with ScreenUtilInit
       await tester.pumpWidget(
-        MaterialApp(
-          home: MockRouter(
-            router: mockStackRouter,
-            child: BlocProvider<OnboardingCubit>.value(
-              value: mockOnboardingCubit,
-              child: const OnboardingPage(),
-            ),
-          ),
+        buildTestApp(
+          router: mockStackRouter,
+          cubit: mockOnboardingCubit,
+          child: const OnboardingPage(),
         ),
       );
       await tester.pumpAndSettle();
@@ -943,16 +922,12 @@ void main() {
           .thenAnswer((_) async {});
       when(() => mockStackRouter.replace(any())).thenAnswer((_) async => null);
 
-      // Build widget with StackRouter
+      // Build widget with ScreenUtilInit
       await tester.pumpWidget(
-        MaterialApp(
-          home: MockRouter(
-            router: mockStackRouter,
-            child: BlocProvider<OnboardingCubit>.value(
-              value: mockOnboardingCubit,
-              child: const OnboardingPage(),
-            ),
-          ),
+        buildTestApp(
+          router: mockStackRouter,
+          cubit: mockOnboardingCubit,
+          child: const OnboardingPage(),
         ),
       );
       await tester.pumpAndSettle();
@@ -990,16 +965,12 @@ void main() {
           .thenAnswer((_) async {});
       when(() => mockStackRouter.replace(any())).thenAnswer((_) async => null);
 
-      // Build widget with StackRouter
+      // Build widget with ScreenUtilInit
       await tester.pumpWidget(
-        MaterialApp(
-          home: MockRouter(
-            router: mockStackRouter,
-            child: BlocProvider<OnboardingCubit>.value(
-              value: mockOnboardingCubit,
-              child: const OnboardingPage(),
-            ),
-          ),
+        buildTestApp(
+          router: mockStackRouter,
+          cubit: mockOnboardingCubit,
+          child: const OnboardingPage(),
         ),
       );
       await tester.pumpAndSettle();
@@ -1047,16 +1018,12 @@ void main() {
           .thenAnswer((_) async {});
       when(() => mockStackRouter.replace(any())).thenAnswer((_) async => null);
 
-      // Build widget with StackRouter
+      // Build widget with ScreenUtilInit
       await tester.pumpWidget(
-        MaterialApp(
-          home: MockRouter(
-            router: mockStackRouter,
-            child: BlocProvider<OnboardingCubit>.value(
-              value: mockOnboardingCubit,
-              child: const OnboardingPage(),
-            ),
-          ),
+        buildTestApp(
+          router: mockStackRouter,
+          cubit: mockOnboardingCubit,
+          child: const OnboardingPage(),
         ),
       );
       await tester.pumpAndSettle();

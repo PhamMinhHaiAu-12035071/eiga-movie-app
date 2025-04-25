@@ -1,28 +1,57 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get_it/get_it.dart';
 import 'package:ksk_app/core/asset/app_image.dart';
+import 'package:ksk_app/core/styles/colors/app_colors.dart';
 
 /// Logo widget used in the onboarding screen
 class OnboardingLogo extends StatelessWidget {
-  /// Creates an OnboardingLogo with specified height
+  /// Creates an OnboardingLogo with optional custom size
   const OnboardingLogo({
-    required this.height,
+    this.containerSize,
+    this.imageSize,
+    this.borderRadius,
+    this.containerColor,
     super.key,
   });
 
-  /// The height of the logo
-  final double height;
+  /// The size of the container (width = height)
+  final double? containerSize;
+
+  /// The size of the image (width = height)
+  final double? imageSize;
+
+  /// The border radius of the container
+  final double? borderRadius;
+
+  /// The background color of the container
+  final Color? containerColor;
 
   @override
   Widget build(BuildContext context) {
+    final colors = GetIt.I<AppColors>();
+
     return Semantics(
       label: 'App logo - EIGA',
-      child: SizedBox(
-        key: const Key('onboarding_logo_image'),
-        height: height,
-        child: AppImage.of(context).onboarding.logo.image(
-              key: const Key('onboarding_header_image'),
-              fit: BoxFit.contain,
-            ),
+      child: Container(
+        key: const Key('onboarding_logo_container'),
+        width: containerSize ?? 59.sp,
+        height: containerSize ?? 59.sp,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(borderRadius ?? 12.r),
+          color: containerColor ?? colors.white,
+        ),
+        child: Center(
+          child: SizedBox(
+            key: const Key('onboarding_logo_image'),
+            width: imageSize ?? 37.sp,
+            height: imageSize ?? 37.sp,
+            child: AppImage.of(context).onboarding.logo.image(
+                  key: const Key('onboarding_header_image'),
+                  fit: BoxFit.contain,
+                ),
+          ),
+        ),
       ),
     );
   }

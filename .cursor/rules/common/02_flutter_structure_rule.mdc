@@ -817,11 +817,37 @@ final animationDuration = AppDurations.medium;
 2. **Views**: Major sections of UI
 3. **Widgets**: Reusable components
 
+## Utility Package Usage
+
+1. **Direct Usage Preferred**
+   - Prefer direct usage of utility packages over creating wrapper widgets
+   - Avoid unnecessary abstraction layers that don't add significant value
+   - Example:
+     ```dart
+     // PREFERRED: Direct usage
+     Gap(16)
+     
+     // AVOID: Unnecessary wrapper
+     HorizontalGap(width: 16)
+     ```
+
+2. **When to Create Wrappers**
+   - Only create wrapper components when they:
+     - Add significant customization or business logic
+     - Combine multiple utilities in a meaningful way
+     - Provide standardized usage patterns across the app
+     - Enhance type safety or developer experience
+
+3. **Recommended Utility Packages**
+   - `gap` for spacing in UI layouts
+   - `flutter_screenutil` for responsive sizing
+   - `dartx` for extension methods on core Dart types
+   - `collection` for advanced collection operations
+   - `logger` for structured logging
+   - `basic_utils` for common utility operations
+
 ## Testing Structure
 
-Test directory should mirror the lib structure:
-
-```
 test/
 ├── core/                      # Tests for core functionality
 ├── features/                  # Tests for features

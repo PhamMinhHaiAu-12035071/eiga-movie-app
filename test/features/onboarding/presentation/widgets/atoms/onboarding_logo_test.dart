@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:ksk_app/core/asset/app_image.dart';
+import 'package:ksk_app/core/styles/colors/app_colors.dart';
 import 'package:ksk_app/features/onboarding/presentation/widgets/atoms/onboarding_logo.dart';
 import 'package:ksk_app/generated/assets.gen.dart';
 import 'package:mocktail/mocktail.dart';
@@ -62,13 +64,35 @@ class MockAppImage extends Mock implements AppImage {
   OnboardingImages get onboarding => _mockOnboarding;
 }
 
+class MockAppColors extends Mock implements AppColors {
+  @override
+  MaterialColor get white => const MaterialColor(
+        0xFFFFFFFF, // White color
+        <int, Color>{
+          50: Colors.white,
+          100: Colors.white,
+          200: Colors.white,
+          300: Colors.white,
+          400: Colors.white,
+          500: Colors.white,
+          600: Colors.white,
+          700: Colors.white,
+          800: Colors.white,
+          900: Colors.white,
+        },
+      );
+}
+
 void main() {
   late MockAppImage mockAppImage;
+  late MockAppColors mockAppColors;
 
   setUpAll(() {
-    // Register AppImage once for all tests in this file
+    // Register mocks once for all tests in this file
     mockAppImage = MockAppImage();
+    mockAppColors = MockAppColors();
     GetIt.I.registerSingleton<AppImage>(mockAppImage);
+    GetIt.I.registerSingleton<AppColors>(mockAppColors);
   });
 
   tearDownAll(() {
@@ -76,33 +100,110 @@ void main() {
   });
 
   group('OnboardingLogo Atom', () {
-    testWidgets('renders correctly with given height', (tester) async {
-      const testHeight = 100.0;
+    Widget buildTestApp(Widget widget) {
+      return MaterialApp(
+        home: Scaffold(
+          body: widget,
+        ),
+      );
+    }
 
+    testWidgets('renders correctly with default parameters', (tester) async {
+      // Initialize ScreenUtil for the test
       await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(
-            body: OnboardingLogo(height: testHeight),
-          ),
+        ScreenUtilInit(
+          designSize: const Size(360, 800),
+          minTextAdapt: true,
+          splitScreenMode: true,
+          builder: (_, __) => buildTestApp(const OnboardingLogo()),
         ),
       );
 
-      // Verify SizedBox with correct height
-      final sizedBoxFinder = find.byType(SizedBox);
-      expect(sizedBoxFinder, findsOneWidget);
-      final sizedBox = tester.widget<SizedBox>(sizedBoxFinder);
-      expect(sizedBox.height, testHeight);
+      // Verify Container has correct size and border radius
+      final containerFinder =
+          find.byKey(const Key('onboarding_logo_container'));
+      expect(containerFinder, findsOneWidget);
+
+      final container = tester.widget<Container>(containerFinder);
+      expect(container.constraints?.maxWidth, 59.sp);
+      expect(container.constraints?.maxHeight, 59.sp);
+
+      final boxDecoration = container.decoration! as BoxDecoration;
+      expect((boxDecoration.borderRadius! as BorderRadius).topLeft.x, 12.r);
+
+      // Verify container background color
+      expect(boxDecoration.color, mockAppColors.white);
+
+      // Verify SizedBox for image has correct size
+      final imageSizedBoxFinder =
+          find.byKey(const Key('onboarding_logo_image'));
+      expect(imageSizedBoxFinder, findsOneWidget);
+
+      final imageSizedBox = tester.widget<SizedBox>(imageSizedBoxFinder);
+      expect(imageSizedBox.width, 37.sp);
+      expect(imageSizedBox.height, 37.sp);
 
       // Verify Image is rendered
       expect(find.byType(Image), findsOneWidget);
     });
 
+    testWidgets('renders correctly with custom parameters', (tester) async {
+      const testContainerSize = 100.0;
+      const testImageSize = 60.0;
+      const testBorderRadius = 20.0;
+      const testContainerColor = Colors.blue;
+
+      await tester.pumpWidget(
+        ScreenUtilInit(
+          designSize: const Size(360, 800),
+          minTextAdapt: true,
+          splitScreenMode: true,
+          builder: (_, __) => buildTestApp(
+            const OnboardingLogo(
+              containerSize: testContainerSize,
+              imageSize: testImageSize,
+              borderRadius: testBorderRadius,
+              containerColor: testContainerColor,
+            ),
+          ),
+        ),
+      );
+
+      // Verify Container with correct size and border radius
+      final containerFinder =
+          find.byKey(const Key('onboarding_logo_container'));
+      expect(containerFinder, findsOneWidget);
+
+      final container = tester.widget<Container>(containerFinder);
+      expect(container.constraints?.maxWidth, testContainerSize);
+      expect(container.constraints?.maxHeight, testContainerSize);
+
+      final boxDecoration = container.decoration! as BoxDecoration;
+      expect(
+        (boxDecoration.borderRadius! as BorderRadius).topLeft.x,
+        testBorderRadius,
+      );
+
+      // Verify custom background color
+      expect(boxDecoration.color, testContainerColor);
+
+      // Verify SizedBox with correct size
+      final imageSizedBoxFinder =
+          find.byKey(const Key('onboarding_logo_image'));
+      expect(imageSizedBoxFinder, findsOneWidget);
+
+      final imageSizedBox = tester.widget<SizedBox>(imageSizedBoxFinder);
+      expect(imageSizedBox.width, testImageSize);
+      expect(imageSizedBox.height, testImageSize);
+    });
+
     testWidgets('applies correct semantics', (tester) async {
       await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(
-            body: OnboardingLogo(height: 50),
-          ),
+        ScreenUtilInit(
+          designSize: const Size(360, 800),
+          minTextAdapt: true,
+          splitScreenMode: true,
+          builder: (_, __) => buildTestApp(const OnboardingLogo()),
         ),
       );
 
@@ -120,23 +221,15 @@ void main() {
         ),
       );
       expect(semanticsFinder, findsOneWidget);
-
-      // Check if the specific test key exists within the logo widget
-      expect(
-        find.descendant(
-          of: logoFinder,
-          matching: find.byKey(const Key('onboarding_logo_image')),
-        ),
-        findsOneWidget,
-      );
     });
 
     testWidgets('Image uses BoxFit.contain and correct key', (tester) async {
       await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(
-            body: OnboardingLogo(height: 50),
-          ),
+        ScreenUtilInit(
+          designSize: const Size(360, 800),
+          minTextAdapt: true,
+          splitScreenMode: true,
+          builder: (_, __) => buildTestApp(const OnboardingLogo()),
         ),
       );
 
@@ -149,10 +242,11 @@ void main() {
 
     testWidgets('Image uses correct asset path', (tester) async {
       await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(
-            body: OnboardingLogo(height: 50),
-          ),
+        ScreenUtilInit(
+          designSize: const Size(360, 800),
+          minTextAdapt: true,
+          splitScreenMode: true,
+          builder: (_, __) => buildTestApp(const OnboardingLogo()),
         ),
       );
 
