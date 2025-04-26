@@ -65,17 +65,31 @@
   - Removed HorizontalGap Widgetbook component and its reference in directories.dart
   - Deleted horizontal_gap_test.dart as it's no longer needed
   - Simplified codebase by eliminating unnecessary abstraction
-- ✅ Refactored OnboardingHeader widget:
-  - Changed from Padding to Container for better structure
-  - Added transparent color property for consistent styling
-  - Maintained the same padding and layout structure
-  - Updated corresponding unit tests to verify the new implementation
-  - Updated Widgetbook component for proper display and testing
-- ✅ Updated OnboardingHeader unit tests:
-  - Changed widget type checks from Padding to Container
-  - Added verification for transparent color property
-  - Maintained all existing style, layout and content tests
-  - Ensured 100% test coverage for updated implementation
+- ✅ Refactored HeaderTitleGroup component:
+  - Added `spacing` property (default 3.29) to control gap between title and subtitle
+  - Uses `Gap(spacing.h)` for responsive spacing between elements
+  - Maintained consistent structure with title on top, subtitle below
+  - Updated widgetbook component to include spacing slider for easy adjustment
+  - Implemented comprehensive tests to verify spacing behavior
+  - Ensured 100% test coverage for both default and custom spacing values
+- ✅ Refactored OnboardingHeader component:
+  - Simplified structure to use Row as the root element (removed ColoredBox and Padding)
+  - Renamed `gapWidth` parameter to `spacing` for better consistency
+  - Changed default spacing value to 14.0 
+  - Changed image size calculation to 63% of container size (was 60%)
+  - Updated widgetbook component to use the new parameters
+  - Uses ScreenUtil for responsive spacing with `spacing.w`
+  - Updated unit tests to verify the new structure and parameters
+  - Ensured 100% test coverage for the updated implementation
+- ✅ Refactored OnboardingHeader unit tests:
+  - Completely rewrote tests to match the new simplified structure
+  - Removed tests for ColoredBox and Padding (now removed from the component)
+  - Added specific tests for default spacing value (14.0.w)
+  - Added test for custom spacing via constructor
+  - Added test for custom title and subtitle
+  - Added more verification for HeaderTitleGroup integration
+  - Used specific widget finders to identify Gap widgets correctly
+  - Fixed tests to properly handle ScreenUtil responsive units
 - ✅ Refactored lib/core directory structure:
   - Organized into clear, focused subdirectories (di, router, asset, styles, sizes, durations, themes)
   - Split DI modules for clearer separation of concerns
@@ -233,6 +247,7 @@
 2. Implement widget tests for remaining onboarding components:
    - ✅ OnboardingHeader (Completed with 100% coverage)
    - ✅ OnboardingLogo (Completed with 100% coverage)
+   - ✅ HeaderTitleGroup (Completed with 100% coverage)
    - OnboardingNextButton
 3. Implement unit tests for:
    - OnboardingCubit
@@ -245,16 +260,11 @@
    - Create testing guidelines document
    - Update widget test templates
    - Standardize mock implementations
+   - ✅ Document ScreenUtil testing patterns (Completed)
 6. Complete remaining widgetbook integration:
    - ✅ Add showcase for OnboardingHeader (Completed)
+   - ✅ Add showcase for HeaderTitleGroup (Completed)
    - Add showcases for NextButton and other components
-   - Ensure consistent styling between app and widgetbook
-   - Document widget usage patterns in widgetbook
-7. Optimize test performance:
-   - Refactor setup and teardown procedures
-   - Improve mock implementation efficiency
-   - Enhance test data generation
-8. **Apply updated rules regarding responsive/orientation handling to future features.**
 
 ## Current Challenges
 1. Widget Finding:

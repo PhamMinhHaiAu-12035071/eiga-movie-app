@@ -297,15 +297,57 @@ We use the BLoC pattern (via `flutter_bloc`) for state management:
      ```
    - Use UI interactions in tests rather than direct callback invocation:
      ```dart
-     // Prefer this:
-     await tester.tap(find.text('Next'));
-     await tester.pumpAndSettle();
-     
-     // Over this:
-     final view = tester.widget<MyView>(find.byType(MyView));
-     view.onNextPressed();
+     await tester.tap(find.byType(NextButton));
      ```
-   - **Ensure test coverage for orientation-specific behavior**
+
+4. **Testing Components with ScreenUtil**
+   - **Use ScreenUtilInit in test builders to support responsive sizing**
+   - Create a helper function to wrap test widgets with ScreenUtil:
+     ```dart
+     Widget buildTestWidget(Widget child) {
+       return ScreenUtilInit(
+         designSize: const Size(360, 800),
+         minTextAdapt: true,
+         splitScreenMode: true,
+         builder: (_, __) => MaterialApp(
+           home: Scaffold(
+             body: child,
+           ),
+         ),
+       );
+     }
+     ```
+   - Use the helper to properly initialize ScreenUtil in tests:
+     ```dart
+     await tester.pumpWidget(
+       buildTestWidget(
+         const HeaderTitleGroup(
+           title: 'Test Title',
+           subtitle: 'Test Subtitle',
+           spacing: 5.0, // Will be converted to 5.0.h by ScreenUtil
+         ),
+       ),
+     );
+     ```
+   - When checking for Gap widgets that use ScreenUtil values, use specific widget predicates:
+     ```dart
+     final gapFinder = find.byWidgetPredicate(
+       (widget) => widget is Gap && widget.mainAxisExtent == 5.0.h,
+     );
+     expect(gapFinder, findsOneWidget);
+     ```
+   - Be specific when finding widgets in complex hierarchies:
+     ```dart
+     // Find a Gap inside a specific Row
+     final rowFinder = find.byType(Row);
+     final gapInRow = find.descendant(
+       of: rowFinder,
+       matching: find.byWidgetPredicate(
+         (widget) => widget is Gap && widget.mainAxisExtent == 14.0.w,
+       ),
+     );
+     expect(gapInRow, findsOneWidget);
+     ```
 
 ## Error Handling
 
