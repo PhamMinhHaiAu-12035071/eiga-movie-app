@@ -6,7 +6,7 @@ import 'package:ksk_app/core/sizes/app_sizes.dart';
 import 'package:ksk_app/core/styles/app_text_styles.dart';
 import 'package:ksk_app/core/styles/colors/app_colors.dart';
 import 'package:ksk_app/features/onboarding/domain/models/onboarding_info.dart';
-import 'package:ksk_app/features/onboarding/presentation/widgets/onboarding_dot_indicator.dart';
+import 'package:ksk_app/features/onboarding/presentation/widgets/molecules/dot_indicator_row.dart';
 
 /// Widget that displays the onboarding content in landscape orientation
 class OnboardingLandscapeView extends StatelessWidget {
@@ -128,7 +128,7 @@ class OnboardingLandscapeView extends StatelessWidget {
                     // Dot indicators
                     Flexible(
                       flex: 370,
-                      child: OnboardingDotIndicator(
+                      child: DotIndicatorRow(
                         pageCount: slides.length,
                         currentIndex: currentPage,
                       ),

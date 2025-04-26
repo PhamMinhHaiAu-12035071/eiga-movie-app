@@ -8,7 +8,7 @@ import 'package:ksk_app/core/sizes/app_sizes.dart';
 import 'package:ksk_app/core/styles/app_text_styles.dart';
 import 'package:ksk_app/core/styles/colors/app_colors.dart';
 import 'package:ksk_app/features/onboarding/domain/models/onboarding_info.dart';
-import 'package:ksk_app/features/onboarding/presentation/widgets/onboarding_dot_indicator.dart';
+import 'package:ksk_app/features/onboarding/presentation/widgets/molecules/dot_indicator_row.dart';
 import 'package:ksk_app/features/onboarding/presentation/widgets/onboarding_next_button.dart';
 import 'package:ksk_app/features/onboarding/presentation/widgets/onboarding_page_view.dart';
 import 'package:ksk_app/features/onboarding/presentation/widgets/onboarding_portrait_view.dart';
@@ -273,7 +273,7 @@ void main() {
       expect(find.byType(OnboardingPageView), findsOneWidget);
 
       // Verify dot indicator exists
-      expect(find.byType(OnboardingDotIndicator), findsOneWidget);
+      expect(find.byType(DotIndicatorRow), findsOneWidget);
 
       // Verify Next button text
       expect(find.text('Next'), findsOneWidget);
@@ -340,12 +340,11 @@ void main() {
       await tester.pumpAndSettle();
 
       // Verify the dot indicator is showing the correct page count
-      final dotIndicator = find.byType(OnboardingDotIndicator);
+      final dotIndicator = find.byType(DotIndicatorRow);
       expect(dotIndicator, findsOneWidget);
 
-      // Verify the OnboardingDotIndicator was created with correct parameters
-      final dotIndicatorWidget =
-          tester.widget<OnboardingDotIndicator>(dotIndicator);
+      // Verify the DotIndicatorRow was created with correct parameters
+      final dotIndicatorWidget = tester.widget<DotIndicatorRow>(dotIndicator);
       expect(dotIndicatorWidget.pageCount, 2);
       expect(dotIndicatorWidget.currentIndex, 0);
     });
