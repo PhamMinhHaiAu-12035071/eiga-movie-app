@@ -1,7 +1,11 @@
+import 'package:ksk_app/widgetbook/components/onboarding/atoms/dot_indicator_atom_component.dart'
+    show getDotIndicatorAtomComponent;
 import 'package:ksk_app/widgetbook/components/onboarding/atoms/header_subtitle_component.dart';
 import 'package:ksk_app/widgetbook/components/onboarding/atoms/header_title_component.dart';
 import 'package:ksk_app/widgetbook/components/onboarding/atoms/onboarding_logo_component.dart';
 import 'package:ksk_app/widgetbook/components/onboarding/dot_indicator_component.dart';
+import 'package:ksk_app/widgetbook/components/onboarding/molecules/dot_indicator_row_component.dart'
+    show getDotIndicatorRowComponent;
 import 'package:ksk_app/widgetbook/components/onboarding/molecules/header_title_group_component.dart';
 import 'package:ksk_app/widgetbook/components/onboarding/onboarding_component.dart';
 import 'package:ksk_app/widgetbook/components/onboarding/onboarding_next_button_component.dart';
@@ -24,6 +28,7 @@ final List<WidgetbookNode> directories = [
           getOnboardingLogoComponent(),
           getHeaderTitleComponent(),
           getHeaderSubtitleComponent(),
+          getDotIndicatorAtomComponent(),
         ],
       ),
       // Molecules
@@ -31,6 +36,7 @@ final List<WidgetbookNode> directories = [
         name: 'Molecules',
         children: [
           getHeaderTitleGroupComponent(),
+          getDotIndicatorRowComponent(),
         ],
       ),
       // Organisms

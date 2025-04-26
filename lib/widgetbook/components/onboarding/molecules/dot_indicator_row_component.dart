@@ -8,28 +8,33 @@ WidgetbookComponent getDotIndicatorRowComponent() {
     name: 'DotIndicatorRow',
     useCases: [
       WidgetbookUseCase(
-        name: 'Page 0/3',
-        builder: (context) => const Center(
-          child: DotIndicatorRow(pageCount: 3, currentIndex: 0),
-        ),
-      ),
-      WidgetbookUseCase(
-        name: 'Page 1/3',
-        builder: (context) => const Center(
-          child: DotIndicatorRow(pageCount: 3, currentIndex: 1),
-        ),
-      ),
-      WidgetbookUseCase(
-        name: 'Page 2/3',
-        builder: (context) => const Center(
-          child: DotIndicatorRow(pageCount: 3, currentIndex: 2),
-        ),
-      ),
-      WidgetbookUseCase(
-        name: '5 pages',
-        builder: (context) => const Center(
-          child: DotIndicatorRow(pageCount: 5, currentIndex: 2),
-        ),
+        name: 'Interactive',
+        builder: (context) {
+          final pageCount = context.knobs.int.slider(
+            label: 'Page count',
+            description: 'Total number of pages',
+            initialValue: 3,
+            min: 1,
+            max: 10,
+            divisions: 9,
+          );
+
+          final rawIndex = context.knobs.int.slider(
+            label: 'Current index',
+            description: 'Active page indicator',
+            max: 9,
+            divisions: 9,
+          );
+
+          final currentIndex = rawIndex.clamp(0, pageCount - 1);
+
+          return Center(
+            child: DotIndicatorRow(
+              pageCount: pageCount,
+              currentIndex: currentIndex,
+            ),
+          );
+        },
       ),
     ],
   );
