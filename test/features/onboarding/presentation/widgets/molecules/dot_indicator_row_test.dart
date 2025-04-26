@@ -4,7 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:ksk_app/core/durations/app_durations.dart';
 import 'package:ksk_app/core/sizes/app_sizes.dart';
 import 'package:ksk_app/core/styles/colors/app_colors.dart';
-import 'package:ksk_app/features/onboarding/presentation/widgets/atoms/dot_indicator_atom.dart';
+import 'package:ksk_app/features/onboarding/presentation/widgets/atoms/dot_indicator.dart';
 import 'package:ksk_app/features/onboarding/presentation/widgets/molecules/dot_indicator_row.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -81,7 +81,7 @@ void main() {
     testWidgets('should render correct number of dots', (tester) async {
       await tester.pumpWidget(buildTestWidget(pageCount: 3, currentIndex: 0));
 
-      final dotFinder = find.byType(DotIndicatorAtom);
+      final dotFinder = find.byType(DotIndicator);
       expect(dotFinder, findsNWidgets(3));
     });
 
@@ -89,9 +89,8 @@ void main() {
         (tester) async {
       await tester.pumpWidget(buildTestWidget(pageCount: 3, currentIndex: 1));
 
-      final dots = tester
-          .widgetList<DotIndicatorAtom>(find.byType(DotIndicatorAtom))
-          .toList();
+      final dots =
+          tester.widgetList<DotIndicator>(find.byType(DotIndicator)).toList();
 
       expect(dots[0].isActive, isFalse);
       expect(dots[1].isActive, isTrue);
@@ -108,19 +107,18 @@ void main() {
     testWidgets('should handle edge cases - zero page count', (tester) async {
       await tester.pumpWidget(buildTestWidget(pageCount: 0, currentIndex: 0));
 
-      final dotFinder = find.byType(DotIndicatorAtom);
+      final dotFinder = find.byType(DotIndicator);
       expect(dotFinder, findsNothing);
     });
 
     testWidgets('should handle edge cases - large page count', (tester) async {
       await tester.pumpWidget(buildTestWidget(pageCount: 10, currentIndex: 5));
 
-      final dotFinder = find.byType(DotIndicatorAtom);
+      final dotFinder = find.byType(DotIndicator);
       expect(dotFinder, findsNWidgets(10));
 
-      final dots = tester
-          .widgetList<DotIndicatorAtom>(find.byType(DotIndicatorAtom))
-          .toList();
+      final dots =
+          tester.widgetList<DotIndicator>(find.byType(DotIndicator)).toList();
       expect(dots[5].isActive, isTrue);
     });
 
@@ -128,12 +126,11 @@ void main() {
         (tester) async {
       await tester.pumpWidget(buildTestWidget(pageCount: 3, currentIndex: 5));
 
-      final dotFinder = find.byType(DotIndicatorAtom);
+      final dotFinder = find.byType(DotIndicator);
       expect(dotFinder, findsNWidgets(3));
 
-      final dots = tester
-          .widgetList<DotIndicatorAtom>(find.byType(DotIndicatorAtom))
-          .toList();
+      final dots =
+          tester.widgetList<DotIndicator>(find.byType(DotIndicator)).toList();
 
       // All dots should be inactive if currentIndex is out of bounds
       for (final dot in dots) {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ksk_app/features/onboarding/presentation/widgets/atoms/dot_indicator_atom.dart';
+import 'package:ksk_app/features/onboarding/presentation/widgets/atoms/dot_indicator.dart';
 
 /// Widget that displays a row of dot indicators for page position
 class DotIndicatorRow extends StatelessWidget {
@@ -22,7 +22,7 @@ class DotIndicatorRow extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: List.generate(
         pageCount,
-        (index) => DotIndicatorAtom(
+        (index) => DotIndicator(
           isActive: index == currentIndex,
         ),
       ),
