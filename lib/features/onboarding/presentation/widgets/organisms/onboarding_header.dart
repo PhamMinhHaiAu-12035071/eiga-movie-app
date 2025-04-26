@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get_it/get_it.dart';
 import 'package:ksk_app/core/sizes/app_sizes.dart';
@@ -13,8 +14,7 @@ class OnboardingHeader extends StatelessWidget {
     super.key,
     this.title = 'EIGA',
     this.subtitle = 'CINEMA UI KIT.',
-    this.gapWidth,
-    this.sizes,
+    this.spacing = 14.0,
   });
 
   /// The title text to display
@@ -24,35 +24,26 @@ class OnboardingHeader extends StatelessWidget {
   final String subtitle;
 
   /// Custom gap width between logo and text
-  final double? gapWidth;
-
-  /// The app sizes for dimensions
-  final AppSizes? sizes;
+  final double spacing;
 
   @override
   Widget build(BuildContext context) {
-    final sizes = this.sizes ?? GetIt.I<AppSizes>();
+    final sizes = GetIt.I<AppSizes>();
+    final imageSize = sizes.v56 * 0.63; // 63% of container size
 
-    return ColoredBox(
-      color: Colors.transparent,
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: sizes.h32),
-        child: Row(
-          children: [
-            OnboardingLogo(
-              key: const Key('onboarding_header_logo'),
-              containerSize: sizes.v56,
-              imageSize:
-                  sizes.v56 * 0.6, // Make image size 60% of container size
-            ),
-            Gap(gapWidth ?? sizes.h16),
-            HeaderTitleGroup(
-              title: title,
-              subtitle: subtitle,
-            ),
-          ],
+    return Row(
+      children: [
+        OnboardingLogo(
+          key: const Key('onboarding_header_logo'),
+          containerSize: sizes.v56,
+          imageSize: imageSize,
         ),
-      ),
+        Gap(spacing.w),
+        HeaderTitleGroup(
+          title: title,
+          subtitle: subtitle,
+        ),
+      ],
     );
   }
 }

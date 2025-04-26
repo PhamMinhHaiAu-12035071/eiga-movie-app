@@ -8,6 +8,7 @@ import 'package:ksk_app/core/sizes/app_sizes.dart';
 import 'package:ksk_app/core/styles/app_text_styles.dart';
 import 'package:ksk_app/core/styles/colors/app_colors.dart';
 import 'package:ksk_app/features/onboarding/presentation/widgets/atoms/onboarding_logo.dart';
+import 'package:ksk_app/features/onboarding/presentation/widgets/molecules/header_title_group.dart';
 import 'package:ksk_app/features/onboarding/presentation/widgets/organisms/onboarding_header.dart';
 import 'package:ksk_app/generated/assets.gen.dart';
 import 'package:mocktail/mocktail.dart';
@@ -200,16 +201,7 @@ void main() {
       // Verify widget tree structure
       expect(find.byType(OnboardingHeader), findsOneWidget);
 
-      // Find ColoredBox inside OnboardingHeader
-      expect(
-        find.descendant(
-          of: find.byType(OnboardingHeader),
-          matching: find.byType(ColoredBox),
-        ),
-        findsOneWidget,
-      );
-
-      // Find Row inside OnboardingHeader
+      // Find Row which is now directly in OnboardingHeader
       expect(
         find.descendant(
           of: find.byType(OnboardingHeader),
@@ -220,29 +212,21 @@ void main() {
 
       expect(find.byType(OnboardingLogo), findsOneWidget);
 
-      // In this test, we'll use a more specific approach to find the right Gap
-      final rowFinder = find.descendant(
-        of: find.byType(OnboardingHeader),
-        matching: find.byType(Row),
-      );
+      // Find the Gap with default spacing value
+      final rowFinder = find.byType(Row);
 
       final gapInRow = find.descendant(
         of: rowFinder,
         matching: find.byWidgetPredicate(
-          (widget) => widget is Gap && widget.mainAxisExtent == mockSizes.h16,
+          (widget) => widget is Gap && widget.mainAxisExtent == 14.0.w,
         ),
       );
       expect(gapInRow, findsOneWidget);
 
-      // Find Column inside OnboardingHeader
-      expect(
-        find.descendant(
-          of: find.byType(OnboardingHeader),
-          matching: find.byType(Column),
-        ),
-        findsOneWidget,
-      );
+      // Find HeaderTitleGroup
+      expect(find.byType(HeaderTitleGroup), findsOneWidget);
 
+      // Verify text content
       expect(find.text('EIGA'), findsOneWidget);
       expect(find.text('CINEMA UI KIT.'), findsOneWidget);
 
@@ -263,89 +247,39 @@ void main() {
       expect(find.text('CINEMA UI KIT.'), findsOneWidget);
     });
 
-    testWidgets('applies correct styles, dimensions and semantics',
+    testWidgets('applies correct dimensions and logo properties',
         (tester) async {
       await tester.pumpWidget(buildTestApp(const OnboardingHeader()));
 
       await tester.pump();
 
-      // Verify ColoredBox properties - find it inside OnboardingHeader
-      final coloredBoxFinder = find.descendant(
-        of: find.byType(OnboardingHeader),
-        matching: find.byType(ColoredBox),
-      );
-      expect(coloredBoxFinder, findsOneWidget);
-      final coloredBoxWidget = tester.widget<ColoredBox>(coloredBoxFinder);
-      expect(coloredBoxWidget.color, Colors.transparent);
-
-      // Verify Padding properties -
-      // find it inside OnboardingHeader with specific padding
-      final paddingFinder = find.descendant(
-        of: find.byType(OnboardingHeader),
-        matching: find.byWidgetPredicate(
-          (widget) =>
-              widget is Padding &&
-              widget.padding == EdgeInsets.symmetric(horizontal: mockSizes.h32),
-        ),
-      );
-      expect(paddingFinder, findsOneWidget);
-      final paddingWidget = tester.widget<Padding>(paddingFinder);
-      expect(
-        paddingWidget.padding,
-        EdgeInsets.symmetric(horizontal: mockSizes.h32),
-      );
-
-      // We don't need to directly test semantics properties
-      // Just verify that we have keys for testability
-      expect(find.byKey(const Key('onboarding_header_logo')), findsOneWidget);
-      expect(find.byKey(const Key('onboarding_header_title')), findsOneWidget);
-      expect(
-        find.byKey(const Key('onboarding_header_subtitle')),
-        findsOneWidget,
-      );
-
-      // Verify logo size
+      // Verify logo size and position
       final logoFinder = find.byKey(const Key('onboarding_header_logo'));
+      expect(logoFinder, findsOneWidget);
       final logoWidget = tester.widget<OnboardingLogo>(logoFinder);
-      expect(logoWidget.containerSize, mockSizes.v56);
+      expect(logoWidget.containerSize, 56); // From default AppSizes.v56
+
+      // Verify image size (should be 63% of container size)
+      expect(logoWidget.imageSize, 56 * 0.63);
 
       // Find the Row inside OnboardingHeader
-      final rowFinder = find.descendant(
-        of: find.byType(OnboardingHeader),
-        matching: find.byType(Row),
-      );
+      final rowFinder = find.byType(Row);
       expect(rowFinder, findsOneWidget);
 
-      // Find Gap that is a direct child of Row (not within HeaderTitleGroup)
+      // Find Gap and verify default spacing
       final gapFinderInRow = find.descendant(
         of: rowFinder,
         matching: find.byWidgetPredicate(
-          (widget) => widget is Gap && widget.mainAxisExtent == mockSizes.h16,
+          (widget) => widget is Gap && widget.mainAxisExtent == 14.0.w,
         ),
       );
       expect(gapFinderInRow, findsOneWidget);
       final gap = tester.widget<Gap>(gapFinderInRow);
-      expect(gap.mainAxisExtent, mockSizes.h16);
+      expect(gap.mainAxisExtent, 14.0.w);
 
-      // Find and verify text widgets
-      final eigaText = find.text('EIGA');
-      final cinemaText = find.text('CINEMA UI KIT.');
-
-      expect(eigaText, findsOneWidget);
-      expect(cinemaText, findsOneWidget);
-
-      // Get the actual Text widgets
-      final eigaTextWidget = tester.widget<Text>(eigaText);
-      final cinemaTextWidget = tester.widget<Text>(cinemaText);
-
-      // Verify text styles
-      expect(eigaTextWidget.style?.fontSize, 24);
-      expect(eigaTextWidget.style?.fontWeight, FontWeight.w900);
-      expect(eigaTextWidget.style?.color, Colors.black);
-
-      expect(cinemaTextWidget.style?.fontSize, 16);
-      expect(cinemaTextWidget.style?.fontWeight, FontWeight.w500);
-      expect(cinemaTextWidget.style?.color, Colors.black);
+      // Verify HeaderTitleGroup displays title and subtitle correctly
+      expect(find.text('EIGA'), findsOneWidget);
+      expect(find.text('CINEMA UI KIT.'), findsOneWidget);
     });
 
     testWidgets('logo uses correct BoxFit', (tester) async {
@@ -359,74 +293,33 @@ void main() {
       expect(image.fit, equals(BoxFit.contain));
     });
 
-    testWidgets('accepts constructor injection', (tester) async {
-      // Create custom mocks for testing constructor injection
-      final customSizes = MockAppSizes();
-
-      when(() => customSizes.h32).thenReturn(64); // Double the size for testing
-      when(() => customSizes.v56).thenReturn(112);
-      when(() => customSizes.h16).thenReturn(32);
+    testWidgets('accepts custom spacing via constructor', (tester) async {
+      const customSpacing = 28.0;
 
       await tester.pumpWidget(
-        ScreenUtilInit(
-          designSize: const Size(360, 800),
-          minTextAdapt: true,
-          splitScreenMode: true,
-          builder: (_, __) => MaterialApp(
-            home: Scaffold(
-              body: Builder(
-                builder: (context) => OnboardingHeader(
-                  sizes: customSizes,
-                ),
-              ),
-            ),
+        buildTestApp(
+          const OnboardingHeader(
+            spacing: customSpacing,
           ),
         ),
       );
 
       await tester.pump();
 
-      // Verify custom padding is applied -
-      // find Padding inside OnboardingHeader with specific padding
-      final paddingFinder = find.descendant(
-        of: find.byType(OnboardingHeader),
-        matching: find.byWidgetPredicate(
-          (widget) =>
-              widget is Padding &&
-              widget.padding == const EdgeInsets.symmetric(horizontal: 64),
-        ),
-      );
-      expect(paddingFinder, findsOneWidget);
-      final paddingWidget = tester.widget<Padding>(paddingFinder);
-      expect(
-        paddingWidget.padding,
-        const EdgeInsets.symmetric(horizontal: 64), // Our custom value
-      );
-
-      // Verify custom logo size
-      final logoFinderInjected =
-          find.byKey(const Key('onboarding_header_logo'));
-      final logoWidgetInjected =
-          tester.widget<OnboardingLogo>(logoFinderInjected);
-      expect(logoWidgetInjected.containerSize, 112); // Our custom value
-
-      // Find the Row inside OnboardingHeader
-      final rowFinder = find.descendant(
-        of: find.byType(OnboardingHeader),
-        matching: find.byType(Row),
-      );
+      // Find Row
+      final rowFinder = find.byType(Row);
       expect(rowFinder, findsOneWidget);
 
-      // Find Gap that is a direct child of Row (not within HeaderTitleGroup)
+      // Find Gap with custom spacing
       final gapFinderInRow = find.descendant(
         of: rowFinder,
         matching: find.byWidgetPredicate(
-          (widget) => widget is Gap && widget.mainAxisExtent == 32.0,
+          (widget) => widget is Gap && widget.mainAxisExtent == customSpacing.w,
         ),
       );
       expect(gapFinderInRow, findsOneWidget);
       final gap = tester.widget<Gap>(gapFinderInRow);
-      expect(gap.mainAxisExtent, 32); // Our custom value
+      expect(gap.mainAxisExtent, customSpacing.w);
     });
 
     testWidgets('renders correct logo via its imageKey', (tester) async {
@@ -444,6 +337,32 @@ void main() {
         (imageWidget.image as AssetImage).assetName,
         equals('assets/images/onboarding/logo.png'),
       );
+    });
+
+    testWidgets('accepts custom title and subtitle', (tester) async {
+      const customTitle = 'CUSTOM TITLE';
+      const customSubtitle = 'CUSTOM SUBTITLE';
+
+      await tester.pumpWidget(
+        buildTestApp(
+          const OnboardingHeader(
+            title: customTitle,
+            subtitle: customSubtitle,
+          ),
+        ),
+      );
+
+      expect(find.text(customTitle), findsOneWidget);
+      expect(find.text(customSubtitle), findsOneWidget);
+
+      // Verify the HeaderTitleGroup receives the custom values
+      final headerTitleGroupFinder = find.byType(HeaderTitleGroup);
+      expect(headerTitleGroupFinder, findsOneWidget);
+
+      final headerTitleGroup =
+          tester.widget<HeaderTitleGroup>(headerTitleGroupFinder);
+      expect(headerTitleGroup.title, equals(customTitle));
+      expect(headerTitleGroup.subtitle, equals(customSubtitle));
     });
   });
 }

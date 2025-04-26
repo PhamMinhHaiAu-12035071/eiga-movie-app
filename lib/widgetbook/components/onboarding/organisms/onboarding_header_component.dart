@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart' show GetIt;
+import 'package:ksk_app/core/styles/colors/app_colors.dart' show AppColors;
 import 'package:ksk_app/features/onboarding/presentation/widgets/organisms/onboarding_header.dart';
 import 'package:ksk_app/widgetbook/mocks/mock_app_image.dart';
 import 'package:widgetbook/widgetbook.dart';
@@ -24,19 +26,19 @@ WidgetbookComponent getOnboardingHeaderComponent() {
             initialValue: 'CINEMA UI KIT.',
           );
 
-          // Use slider directly for gap adjustment
-          final gapWidth = context.knobs.double.slider(
-            label: 'Gap Width',
-            description: 'Adjust the width of the gap between logo and text',
+          // Use slider directly for spacing adjustment
+          final spacing = context.knobs.double.slider(
+            label: 'Spacing',
+            description: 'Adjust the spacing between logo and text',
             min: 8,
-            max: 48,
-            initialValue: 16, // Default value
-            divisions: 40,
+            max: 32,
+            initialValue: 14, // Default value from component
+            divisions: 24,
           );
 
           return MockAppImage.provider(
             child: Scaffold(
-              backgroundColor: Colors.white,
+              backgroundColor: GetIt.I<AppColors>().white,
               body: SafeArea(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -45,7 +47,7 @@ WidgetbookComponent getOnboardingHeaderComponent() {
                     OnboardingHeader(
                       title: title,
                       subtitle: subtitle,
-                      gapWidth: gapWidth,
+                      spacing: spacing,
                     ),
                   ],
                 ),

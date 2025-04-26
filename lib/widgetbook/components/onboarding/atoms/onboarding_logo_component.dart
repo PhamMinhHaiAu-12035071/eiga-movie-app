@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart' show GetIt;
+import 'package:ksk_app/core/styles/colors/app_colors.dart' show AppColors;
 import 'package:ksk_app/features/onboarding/presentation/widgets/atoms/onboarding_logo.dart';
 import 'package:ksk_app/widgetbook/mocks/mock_app_image.dart';
 import 'package:widgetbook/widgetbook.dart';
@@ -47,7 +49,7 @@ WidgetbookComponent getOnboardingLogoComponent() {
           // OnboardingLogo depends on AppImage
           return MockAppImage.provider(
             child: Scaffold(
-              backgroundColor: Colors.grey.shade200,
+              backgroundColor: GetIt.I<AppColors>().grey.shade200,
               body: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
