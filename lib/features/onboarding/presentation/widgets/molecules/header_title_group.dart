@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gap/gap.dart' show Gap;
 import 'package:ksk_app/features/onboarding/presentation/widgets/atoms/header_subtitle.dart';
 import 'package:ksk_app/features/onboarding/presentation/widgets/atoms/header_title.dart';
 
@@ -8,6 +10,7 @@ class HeaderTitleGroup extends StatelessWidget {
   const HeaderTitleGroup({
     required this.title,
     required this.subtitle,
+    this.spacing = 3.29,
     super.key,
   });
 
@@ -17,6 +20,9 @@ class HeaderTitleGroup extends StatelessWidget {
   /// The subtitle text to display
   final String subtitle;
 
+  /// The spacing between the title and subtitle
+  final double spacing;
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -25,6 +31,7 @@ class HeaderTitleGroup extends StatelessWidget {
         HeaderTitle(
           text: title,
         ),
+        Gap(spacing.h),
         HeaderSubtitle(
           text: subtitle,
         ),

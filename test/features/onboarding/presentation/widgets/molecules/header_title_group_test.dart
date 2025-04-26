@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:gap/gap.dart';
 import 'package:get_it/get_it.dart';
 import 'package:ksk_app/core/styles/app_text_styles.dart';
 import 'package:ksk_app/core/styles/colors/app_colors.dart';
@@ -12,6 +14,22 @@ import 'package:mocktail/mocktail.dart';
 class MockAppTextStyles extends Mock implements AppTextStyles {}
 
 class MockAppColors extends Mock implements AppColors {}
+
+// Helper to build widgets with ScreenUtil initialized
+Widget buildTestWidget(Widget child) {
+  return ScreenUtilInit(
+    designSize: const Size(360, 800),
+    minTextAdapt: true,
+    splitScreenMode: true,
+    builder: (_, __) {
+      return MaterialApp(
+        home: Scaffold(
+          body: child,
+        ),
+      );
+    },
+  );
+}
 
 void main() {
   late MockAppTextStyles mockTextStyles;
@@ -48,12 +66,10 @@ void main() {
     testWidgets('renders Column with HeaderTitle and HeaderSubtitle',
         (tester) async {
       await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(
-            body: HeaderTitleGroup(
-              title: 'Main Title',
-              subtitle: 'Sub Title',
-            ),
+        buildTestWidget(
+          const HeaderTitleGroup(
+            title: 'Main Title',
+            subtitle: 'Sub Title',
           ),
         ),
       );
@@ -69,6 +85,11 @@ void main() {
       expect(find.byType(HeaderSubtitle), findsOneWidget);
       expect(find.text('Main Title'), findsOneWidget);
       expect(find.text('Sub Title'), findsOneWidget);
+
+      // Verify default spacing
+      expect(find.byType(Gap), findsOneWidget);
+      final gapWidget = tester.widget<Gap>(find.byType(Gap));
+      expect(gapWidget.mainAxisExtent, 3.29.h); // Default spacing
     });
 
     testWidgets('correctly passes title and subtitle to children',
@@ -77,12 +98,10 @@ void main() {
       const testSubtitle = 'Injected Subtitle';
 
       await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(
-            body: HeaderTitleGroup(
-              title: testTitle,
-              subtitle: testSubtitle,
-            ),
+        buildTestWidget(
+          const HeaderTitleGroup(
+            title: testTitle,
+            subtitle: testSubtitle,
           ),
         ),
       );
@@ -102,6 +121,26 @@ void main() {
       final headerSubtitle = tester.widget<HeaderSubtitle>(subtitleFinder);
       expect(headerTitle.text, testTitle);
       expect(headerSubtitle.text, testSubtitle);
+    });
+
+    testWidgets('accepts custom spacing between title and subtitle',
+        (tester) async {
+      const customSpacing = 10.0;
+
+      await tester.pumpWidget(
+        buildTestWidget(
+          const HeaderTitleGroup(
+            title: 'Test Title',
+            subtitle: 'Test Subtitle',
+            spacing: customSpacing,
+          ),
+        ),
+      );
+
+      // Verify custom spacing is applied
+      expect(find.byType(Gap), findsOneWidget);
+      final gapWidget = tester.widget<Gap>(find.byType(Gap));
+      expect(gapWidget.mainAxisExtent, customSpacing.h);
     });
   });
 }

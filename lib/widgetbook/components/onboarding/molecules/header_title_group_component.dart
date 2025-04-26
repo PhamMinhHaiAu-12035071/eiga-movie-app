@@ -28,6 +28,15 @@ WidgetbookComponent getHeaderTitleGroupComponent() {
             initialValue: 'CINEMA UI KIT.',
           );
 
+          final spacing = context.knobs.double.slider(
+            label: 'Spacing',
+            description: 'Gap between title and subtitle',
+            initialValue: 3.29,
+            min: 1,
+            max: 10,
+            divisions: 9,
+          );
+
           return Scaffold(
             backgroundColor: appColors.white,
             body: Center(
@@ -41,6 +50,7 @@ WidgetbookComponent getHeaderTitleGroupComponent() {
                     HeaderTitleGroup(
                       title: title,
                       subtitle: subtitle,
+                      spacing: spacing,
                     ),
                   ],
                 ),

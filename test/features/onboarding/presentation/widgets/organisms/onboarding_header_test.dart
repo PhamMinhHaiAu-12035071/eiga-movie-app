@@ -219,7 +219,20 @@ void main() {
       );
 
       expect(find.byType(OnboardingLogo), findsOneWidget);
-      expect(find.byType(Gap), findsOneWidget);
+
+      // In this test, we'll use a more specific approach to find the right Gap
+      final rowFinder = find.descendant(
+        of: find.byType(OnboardingHeader),
+        matching: find.byType(Row),
+      );
+
+      final gapInRow = find.descendant(
+        of: rowFinder,
+        matching: find.byWidgetPredicate(
+          (widget) => widget is Gap && widget.mainAxisExtent == mockSizes.h16,
+        ),
+      );
+      expect(gapInRow, findsOneWidget);
 
       // Find Column inside OnboardingHeader
       expect(
@@ -296,13 +309,22 @@ void main() {
       final logoWidget = tester.widget<OnboardingLogo>(logoFinder);
       expect(logoWidget.containerSize, mockSizes.v56);
 
-      // Verify gap width - find Gap inside OnboardingHeader
-      final gapFinder = find.descendant(
+      // Find the Row inside OnboardingHeader
+      final rowFinder = find.descendant(
         of: find.byType(OnboardingHeader),
-        matching: find.byType(Gap),
+        matching: find.byType(Row),
       );
-      expect(gapFinder, findsOneWidget);
-      final gap = tester.widget<Gap>(gapFinder);
+      expect(rowFinder, findsOneWidget);
+
+      // Find Gap that is a direct child of Row (not within HeaderTitleGroup)
+      final gapFinderInRow = find.descendant(
+        of: rowFinder,
+        matching: find.byWidgetPredicate(
+          (widget) => widget is Gap && widget.mainAxisExtent == mockSizes.h16,
+        ),
+      );
+      expect(gapFinderInRow, findsOneWidget);
+      final gap = tester.widget<Gap>(gapFinderInRow);
       expect(gap.mainAxisExtent, mockSizes.h16);
 
       // Find and verify text widgets
@@ -388,13 +410,22 @@ void main() {
           tester.widget<OnboardingLogo>(logoFinderInjected);
       expect(logoWidgetInjected.containerSize, 112); // Our custom value
 
-      // Verify custom gap width - find Gap inside OnboardingHeader
-      final gapFinder = find.descendant(
+      // Find the Row inside OnboardingHeader
+      final rowFinder = find.descendant(
         of: find.byType(OnboardingHeader),
-        matching: find.byType(Gap),
+        matching: find.byType(Row),
       );
-      expect(gapFinder, findsOneWidget);
-      final gap = tester.widget<Gap>(gapFinder);
+      expect(rowFinder, findsOneWidget);
+
+      // Find Gap that is a direct child of Row (not within HeaderTitleGroup)
+      final gapFinderInRow = find.descendant(
+        of: rowFinder,
+        matching: find.byWidgetPredicate(
+          (widget) => widget is Gap && widget.mainAxisExtent == 32.0,
+        ),
+      );
+      expect(gapFinderInRow, findsOneWidget);
+      final gap = tester.widget<Gap>(gapFinderInRow);
       expect(gap.mainAxisExtent, 32); // Our custom value
     });
 
