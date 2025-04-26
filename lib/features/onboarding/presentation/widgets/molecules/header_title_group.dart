@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ksk_app/core/styles/app_text_styles.dart';
-import 'package:ksk_app/core/styles/colors/app_colors.dart';
 import 'package:ksk_app/features/onboarding/presentation/widgets/atoms/header_subtitle.dart';
 import 'package:ksk_app/features/onboarding/presentation/widgets/atoms/header_title.dart';
 
@@ -11,8 +9,6 @@ class HeaderTitleGroup extends StatelessWidget {
     required this.title,
     required this.subtitle,
     super.key,
-    this.textStyles,
-    this.colors,
   });
 
   /// The title text to display
@@ -21,12 +17,6 @@ class HeaderTitleGroup extends StatelessWidget {
   /// The subtitle text to display
   final String subtitle;
 
-  /// The app text styles
-  final AppTextStyles? textStyles;
-
-  /// The app colors
-  final AppColors? colors;
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -34,16 +24,9 @@ class HeaderTitleGroup extends StatelessWidget {
       children: [
         HeaderTitle(
           text: title,
-          textStyle: textStyles?.headingXl(
-            fontWeight: FontWeight.w900,
-            color: colors?.slateBlue,
-          ),
-          color: colors?.slateBlue,
         ),
         HeaderSubtitle(
           text: subtitle,
-          textStyles: textStyles,
-          colors: colors,
         ),
       ],
     );

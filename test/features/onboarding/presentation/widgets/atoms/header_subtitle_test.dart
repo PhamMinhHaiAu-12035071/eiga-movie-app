@@ -49,7 +49,7 @@ void main() {
       const testText = 'Test Subtitle';
 
       await tester.pumpWidget(
-        const MaterialApp(
+        MaterialApp(
           home: Scaffold(
             body: HeaderSubtitle(text: testText),
           ),
@@ -66,7 +66,7 @@ void main() {
 
     testWidgets('uses styles from GetIt by default', (tester) async {
       await tester.pumpWidget(
-        const MaterialApp(
+        MaterialApp(
           home: Scaffold(
             body: HeaderSubtitle(text: 'Default Style'),
           ),
@@ -79,32 +79,20 @@ void main() {
       expect(textWidget.style?.color, Colors.green);
     });
 
-    testWidgets('accepts constructor injection for styles and colors',
-        (tester) async {
-      final customTextStyles = MockAppTextStyles();
-      final customColors = MockAppColors();
-
-      when(() => customColors.slateBlue).thenReturn(Colors.orange);
-      when(
-        () => customTextStyles.headingSm(
-          fontWeight: any(named: 'fontWeight'),
-          color: any(named: 'color'),
-        ),
-      ).thenReturn(
-        const TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-          color: Colors.orange,
-        ),
+    testWidgets('accepts custom text style and color', (tester) async {
+      const customTextStyle = TextStyle(
+        fontSize: 18,
+        fontWeight: FontWeight.bold,
       );
+      const customColor = Colors.orange;
 
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
             body: HeaderSubtitle(
               text: 'Injected Style',
-              textStyles: customTextStyles,
-              colors: customColors,
+              textStyle: customTextStyle,
+              color: customColor,
             ),
           ),
         ),
@@ -113,22 +101,13 @@ void main() {
       final textWidget = tester.widget<Text>(find.text('Injected Style'));
       expect(textWidget.style?.fontSize, 18);
       expect(textWidget.style?.fontWeight, FontWeight.bold);
-      expect(textWidget.style?.color, Colors.orange);
-
-      // Verify the mocks were called
-      verify(() => customColors.slateBlue).called(1);
-      verify(
-        () => customTextStyles.headingSm(
-          fontWeight: FontWeight.w500,
-          color: Colors.orange,
-        ),
-      ).called(1);
+      expect(textWidget.style?.color, customColor);
     });
 
     testWidgets('uses default maxLines value when not specified',
         (tester) async {
       await tester.pumpWidget(
-        const MaterialApp(
+        MaterialApp(
           home: Scaffold(
             body: HeaderSubtitle(text: 'Default MaxLines'),
           ),
@@ -143,7 +122,7 @@ void main() {
       const customMaxLines = 3;
 
       await tester.pumpWidget(
-        const MaterialApp(
+        MaterialApp(
           home: Scaffold(
             body: HeaderSubtitle(
               text: 'Custom MaxLines',
@@ -160,7 +139,7 @@ void main() {
     testWidgets('uses default textAlign value when not specified',
         (tester) async {
       await tester.pumpWidget(
-        const MaterialApp(
+        MaterialApp(
           home: Scaffold(
             body: HeaderSubtitle(text: 'Default TextAlign'),
           ),
@@ -175,7 +154,7 @@ void main() {
       const customTextAlign = TextAlign.center;
 
       await tester.pumpWidget(
-        const MaterialApp(
+        MaterialApp(
           home: Scaffold(
             body: HeaderSubtitle(
               text: 'Custom TextAlign',

@@ -71,77 +71,37 @@ void main() {
       expect(find.text('Sub Title'), findsOneWidget);
     });
 
-    testWidgets('passes injected styles and colors down to children',
+    testWidgets('correctly passes title and subtitle to children',
         (tester) async {
-      final customTextStyles = MockAppTextStyles();
-      final customColors = MockAppColors();
+      const testTitle = 'Injected Title';
+      const testSubtitle = 'Injected Subtitle';
 
-      // Setup specific return values for injected mocks
-      when(() => customColors.slateBlue).thenReturn(Colors.purple);
-      when(
-        () => customTextStyles.headingXl(
-          fontWeight: any(named: 'fontWeight'),
-          color: Colors.purple,
-        ),
-      ).thenReturn(const TextStyle(fontSize: 30, color: Colors.purple));
-      when(
-        () => customTextStyles.headingSm(
-          fontWeight: any(named: 'fontWeight'),
-          color: Colors.purple,
-        ),
-      ).thenReturn(const TextStyle(fontSize: 20, color: Colors.purple));
-
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: HeaderTitleGroup(
-              title: 'Injected Title',
-              subtitle: 'Injected Subtitle',
-              textStyles: customTextStyles,
-              colors: customColors,
-            ),
-          ),
-        ),
-      );
-
-      // We can't directly verify properties in HeaderTitle due to its new API
-      // But we can check the rendered text style which should reflect our style
-      final titleTextWidget = tester.widget<Text>(find.text('Injected Title'));
-      expect(titleTextWidget.style?.fontSize, 30);
-      expect(titleTextWidget.style?.color, Colors.purple);
-
-      // Verify HeaderSubtitle received injected styles
-      final headerSubtitle =
-          tester.widget<HeaderSubtitle>(find.byType(HeaderSubtitle));
-      expect(headerSubtitle.textStyles, customTextStyles);
-      expect(headerSubtitle.colors, customColors);
-      final subtitleTextWidget =
-          tester.widget<Text>(find.text('Injected Subtitle'));
-      expect(subtitleTextWidget.style?.fontSize, 20);
-      expect(subtitleTextWidget.style?.color, Colors.purple);
-    });
-
-    testWidgets('children use default styles when none are injected',
-        (tester) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
             body: HeaderTitleGroup(
-              title: 'Default Title',
-              subtitle: 'Default Subtitle',
+              title: testTitle,
+              subtitle: testSubtitle,
             ),
           ),
         ),
       );
 
-      // Verify HeaderTitle used default styles
-      final titleTextWidget = tester.widget<Text>(find.text('Default Title'));
-      expect(titleTextWidget.style?.fontSize, 24);
+      // Verify the correct texts are displayed
+      expect(find.text(testTitle), findsOneWidget);
+      expect(find.text(testSubtitle), findsOneWidget);
 
-      // Verify HeaderSubtitle used default styles
-      final subtitleTextWidget =
-          tester.widget<Text>(find.text('Default Subtitle'));
-      expect(subtitleTextWidget.style?.fontSize, 16);
+      // Verify HeaderTitle and HeaderSubtitle widgets exist
+      final titleFinder = find.byType(HeaderTitle);
+      final subtitleFinder = find.byType(HeaderSubtitle);
+      expect(titleFinder, findsOneWidget);
+      expect(subtitleFinder, findsOneWidget);
+
+      // Verify the props were correctly passed
+      final headerTitle = tester.widget<HeaderTitle>(titleFinder);
+      final headerSubtitle = tester.widget<HeaderSubtitle>(subtitleFinder);
+      expect(headerTitle.text, testTitle);
+      expect(headerSubtitle.text, testSubtitle);
     });
   });
 }

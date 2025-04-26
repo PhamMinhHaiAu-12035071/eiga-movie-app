@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get_it/get_it.dart';
 import 'package:ksk_app/core/sizes/app_sizes.dart';
-import 'package:ksk_app/core/styles/app_text_styles.dart';
-import 'package:ksk_app/core/styles/colors/app_colors.dart';
 import 'package:ksk_app/features/onboarding/presentation/widgets/atoms/onboarding_logo.dart';
 import 'package:ksk_app/features/onboarding/presentation/widgets/molecules/header_title_group.dart';
 
@@ -17,8 +15,6 @@ class OnboardingHeader extends StatelessWidget {
     this.subtitle = 'CINEMA UI KIT.',
     this.gapWidth,
     this.sizes,
-    this.textStyles,
-    this.colors,
   });
 
   /// The title text to display
@@ -32,12 +28,6 @@ class OnboardingHeader extends StatelessWidget {
 
   /// The app sizes for dimensions
   final AppSizes? sizes;
-
-  /// The app text styles
-  final AppTextStyles? textStyles;
-
-  /// The app colors
-  final AppColors? colors;
 
   @override
   Widget build(BuildContext context) {
@@ -59,8 +49,6 @@ class OnboardingHeader extends StatelessWidget {
             HeaderTitleGroup(
               title: title,
               subtitle: subtitle,
-              textStyles: textStyles,
-              colors: colors,
             ),
           ],
         ),

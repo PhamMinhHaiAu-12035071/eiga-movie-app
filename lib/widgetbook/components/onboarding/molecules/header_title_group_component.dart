@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart' show GetIt;
+import 'package:ksk_app/core/styles/colors/app_colors.dart' show AppColors;
 import 'package:ksk_app/features/onboarding/presentation/widgets/molecules/header_title_group.dart';
-// Import the mock classes from header_title_component.dart
-import 'package:ksk_app/widgetbook/components/onboarding/atoms/header_title_component.dart';
 import 'package:widgetbook/widgetbook.dart';
 
 /// Returns a WidgetbookComponent for HeaderTitleGroup
@@ -12,6 +12,9 @@ WidgetbookComponent getHeaderTitleGroupComponent() {
       WidgetbookUseCase(
         name: 'Default',
         builder: (context) {
+          // Create mocks for the component
+          final appColors = GetIt.I<AppColors>();
+
           // Add knobs for customizing the title group
           final title = context.knobs.string(
             label: 'Title',
@@ -25,18 +28,8 @@ WidgetbookComponent getHeaderTitleGroupComponent() {
             initialValue: 'CINEMA UI KIT.',
           );
 
-          final textColor = context.knobs.color(
-            label: 'Text Color',
-            description: 'Color of the text',
-            initialValue: Colors.black,
-          );
-
-          // Create mocks for the component
-          final mockTextStyles = TextStylesMock();
-          final mockColors = ColorsMock(textColor);
-
           return Scaffold(
-            backgroundColor: Colors.white,
+            backgroundColor: appColors.white,
             body: Center(
               child: Padding(
                 padding: const EdgeInsets.all(24),
@@ -44,14 +37,10 @@ WidgetbookComponent getHeaderTitleGroupComponent() {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('Header Title Group Component:'),
-                    const SizedBox(height: 20),
-                    // Use the header title group with mocked dependencies
+                    // Use the header title group with proper styling
                     HeaderTitleGroup(
                       title: title,
                       subtitle: subtitle,
-                      textStyles: mockTextStyles,
-                      colors: mockColors,
                     ),
                   ],
                 ),

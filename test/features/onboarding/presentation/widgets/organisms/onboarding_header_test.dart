@@ -340,40 +340,10 @@ void main() {
     testWidgets('accepts constructor injection', (tester) async {
       // Create custom mocks for testing constructor injection
       final customSizes = MockAppSizes();
-      final customTextStyles = MockAppTextStyles();
-      final customColors = MockAppColors();
 
       when(() => customSizes.h32).thenReturn(64); // Double the size for testing
       when(() => customSizes.v56).thenReturn(112);
       when(() => customSizes.h16).thenReturn(32);
-
-      when(() => customColors.slateBlue).thenReturn(Colors.red);
-
-      when(
-        () => customTextStyles.headingXl(
-          fontWeight: any(named: 'fontWeight'),
-          color: any(named: 'color'),
-        ),
-      ).thenReturn(
-        const TextStyle(
-          fontSize: 30, // Different size for testing
-          fontWeight: FontWeight.w900,
-          color: Colors.red,
-        ),
-      );
-
-      when(
-        () => customTextStyles.headingSm(
-          fontWeight: any(named: 'fontWeight'),
-          color: any(named: 'color'),
-        ),
-      ).thenReturn(
-        const TextStyle(
-          fontSize: 20, // Different size for testing
-          fontWeight: FontWeight.w500,
-          color: Colors.red,
-        ),
-      );
 
       await tester.pumpWidget(
         ScreenUtilInit(
@@ -385,8 +355,6 @@ void main() {
               body: Builder(
                 builder: (context) => OnboardingHeader(
                   sizes: customSizes,
-                  textStyles: customTextStyles,
-                  colors: customColors,
                 ),
               ),
             ),
@@ -428,12 +396,6 @@ void main() {
       expect(gapFinder, findsOneWidget);
       final gap = tester.widget<Gap>(gapFinder);
       expect(gap.mainAxisExtent, 32); // Our custom value
-
-      // Verify custom text styles
-      final eigaText = find.text('EIGA');
-      final eigaTextWidget = tester.widget<Text>(eigaText);
-      expect(eigaTextWidget.style?.fontSize, 30); // Our custom value
-      expect(eigaTextWidget.style?.color, Colors.red); // Our custom value
     });
 
     testWidgets('renders correct logo via its imageKey', (tester) async {
