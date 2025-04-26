@@ -62,6 +62,9 @@ void main() {
         find.byKey(const Key('onboarding_header_subtitle')),
         findsOneWidget,
       );
+
+      // Verify Semantics is present
+      expect(find.byType(Semantics), findsWidgets);
     });
 
     testWidgets('uses styles from GetIt by default', (tester) async {
@@ -166,6 +169,75 @@ void main() {
 
       final textWidget = tester.widget<Text>(find.text('Custom TextAlign'));
       expect(textWidget.textAlign, customTextAlign);
+    });
+
+    testWidgets('uses default overflow value when not specified',
+        (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: HeaderSubtitle(text: 'Default Overflow'),
+          ),
+        ),
+      );
+
+      final textWidget = tester.widget<Text>(find.text('Default Overflow'));
+      expect(textWidget.overflow, TextOverflow.ellipsis);
+    });
+
+    testWidgets('accepts custom overflow value', (tester) async {
+      const customOverflow = TextOverflow.fade;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: HeaderSubtitle(
+              text: 'Custom Overflow',
+              overflow: customOverflow,
+            ),
+          ),
+        ),
+      );
+
+      final textWidget = tester.widget<Text>(find.text('Custom Overflow'));
+      expect(textWidget.overflow, customOverflow);
+    });
+
+    testWidgets('throws assertion error when text is empty', (tester) async {
+      expect(
+        () => HeaderSubtitle(text: ''),
+        throwsA(
+          isA<AssertionError>().having(
+            (e) => e.message,
+            'message',
+            contains('Header subtitle must not be empty'),
+          ),
+        ),
+      );
+    });
+
+    testWidgets('throws assertion error when maxLines is <= 0', (tester) async {
+      expect(
+        () => HeaderSubtitle(text: 'Valid Text', maxLines: 0),
+        throwsA(
+          isA<AssertionError>().having(
+            (e) => e.message,
+            'message',
+            contains('maxLines must be positive'),
+          ),
+        ),
+      );
+
+      expect(
+        () => HeaderSubtitle(text: 'Valid Text', maxLines: -1),
+        throwsA(
+          isA<AssertionError>().having(
+            (e) => e.message,
+            'message',
+            contains('maxLines must be positive'),
+          ),
+        ),
+      );
     });
   });
 }
