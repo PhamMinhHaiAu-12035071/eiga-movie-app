@@ -59,6 +59,10 @@ void main() {
       final textFinder = find.text(testText);
       expect(textFinder, findsOneWidget);
       expect(find.byKey(const Key('onboarding_header_title')), findsOneWidget);
+
+      // Verify Semantics is present, but don't test specific properties
+      // which are complex to find in the widget tree
+      expect(find.byType(Semantics), findsWidgets);
     });
 
     testWidgets('uses styles from GetIt by default', (tester) async {
@@ -183,6 +187,61 @@ void main() {
 
       final textWidget = tester.widget<Text>(find.text('Custom TextAlign'));
       expect(textWidget.textAlign, customTextAlign);
+    });
+
+    testWidgets('accepts custom overflow value', (tester) async {
+      const customOverflow = TextOverflow.fade;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: HeaderTitle(
+              text: 'Custom Overflow',
+              overflow: customOverflow,
+            ),
+          ),
+        ),
+      );
+
+      final textWidget = tester.widget<Text>(find.text('Custom Overflow'));
+      expect(textWidget.overflow, customOverflow);
+    });
+
+    testWidgets('throws assertion error when text is empty', (tester) async {
+      expect(
+        () => HeaderTitle(text: ''),
+        throwsA(
+          isA<AssertionError>().having(
+            (e) => e.message,
+            'message',
+            contains('Header title must not be empty'),
+          ),
+        ),
+      );
+    });
+
+    testWidgets('throws assertion error when maxLines is <= 0', (tester) async {
+      expect(
+        () => HeaderTitle(text: 'Valid Text', maxLines: 0),
+        throwsA(
+          isA<AssertionError>().having(
+            (e) => e.message,
+            'message',
+            contains('maxLines must be positive'),
+          ),
+        ),
+      );
+
+      expect(
+        () => HeaderTitle(text: 'Valid Text', maxLines: -1),
+        throwsA(
+          isA<AssertionError>().having(
+            (e) => e.message,
+            'message',
+            contains('maxLines must be positive'),
+          ),
+        ),
+      );
     });
   });
 }

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
-import 'package:ksk_app/core/styles/app_text_styles.dart';
-import 'package:ksk_app/core/styles/colors/app_colors.dart';
+import 'package:ksk_app/utils/context_x.dart';
 
 /// Title widget used in the onboarding header
 class HeaderTitle extends StatelessWidget {
@@ -13,7 +11,9 @@ class HeaderTitle extends StatelessWidget {
     this.color,
     this.maxLines = 1,
     this.textAlign = TextAlign.start,
-  }) : assert(text.trim().isNotEmpty, 'Header title must not be empty');
+    this.overflow = TextOverflow.ellipsis,
+  })  : assert(text.trim().isNotEmpty, 'Header title must not be empty'),
+        assert(maxLines > 0, 'maxLines must be positive');
 
   /// The text to display as the title
   final String text;
@@ -25,20 +25,20 @@ class HeaderTitle extends StatelessWidget {
   final Color? color;
 
   /// The maximum number of lines for the title
-  final int? maxLines;
+  final int maxLines;
 
   /// The text alignment for the title
-  final TextAlign? textAlign;
+  final TextAlign textAlign;
+
+  /// The overflow behavior for the text
+  final TextOverflow overflow;
 
   /// Builds the effective text style for the header
-  TextStyle _buildHeaderStyle() {
-    final appTextStyles = GetIt.I<AppTextStyles>();
-    final appColors = GetIt.I<AppColors>();
-
-    final effectiveColor = color ?? appColors.slateBlue;
+  TextStyle _buildHeaderStyle(BuildContext context) {
+    final effectiveColor = color ?? context.colors.slateBlue;
 
     return (textStyle ??
-            appTextStyles.headingXl(
+            context.textStyles.headingXl(
               fontWeight: FontWeight.w900,
             ))
         .copyWith(color: effectiveColor);
@@ -46,13 +46,17 @@ class HeaderTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      text,
-      key: const Key('onboarding_header_title'),
-      style: _buildHeaderStyle(),
-      textAlign: textAlign,
-      maxLines: maxLines,
-      overflow: TextOverflow.ellipsis,
+    return Semantics(
+      header: true,
+      label: text,
+      child: Text(
+        text,
+        key: const Key('onboarding_header_title'),
+        style: _buildHeaderStyle(context),
+        textAlign: textAlign,
+        maxLines: maxLines,
+        overflow: overflow,
+      ),
     );
   }
 }
