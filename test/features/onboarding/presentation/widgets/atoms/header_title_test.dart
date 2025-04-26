@@ -153,5 +153,36 @@ void main() {
       expect(textWidget.maxLines, customMaxLines);
       expect(textWidget.overflow, TextOverflow.ellipsis);
     });
+
+    testWidgets('applies default textAlign of TextAlign.start', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: HeaderTitle(text: 'Default TextAlign'),
+          ),
+        ),
+      );
+
+      final textWidget = tester.widget<Text>(find.text('Default TextAlign'));
+      expect(textWidget.textAlign, TextAlign.start);
+    });
+
+    testWidgets('accepts custom textAlign value', (tester) async {
+      const customTextAlign = TextAlign.center;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: HeaderTitle(
+              text: 'Custom TextAlign',
+              textAlign: customTextAlign,
+            ),
+          ),
+        ),
+      );
+
+      final textWidget = tester.widget<Text>(find.text('Custom TextAlign'));
+      expect(textWidget.textAlign, customTextAlign);
+    });
   });
 }
