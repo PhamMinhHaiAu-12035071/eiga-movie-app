@@ -124,5 +124,69 @@ void main() {
         ),
       ).called(1);
     });
+
+    testWidgets('uses default maxLines value when not specified',
+        (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: HeaderSubtitle(text: 'Default MaxLines'),
+          ),
+        ),
+      );
+
+      final textWidget = tester.widget<Text>(find.text('Default MaxLines'));
+      expect(textWidget.maxLines, 1);
+    });
+
+    testWidgets('accepts custom maxLines value', (tester) async {
+      const customMaxLines = 3;
+
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: HeaderSubtitle(
+              text: 'Custom MaxLines',
+              maxLines: customMaxLines,
+            ),
+          ),
+        ),
+      );
+
+      final textWidget = tester.widget<Text>(find.text('Custom MaxLines'));
+      expect(textWidget.maxLines, customMaxLines);
+    });
+
+    testWidgets('uses default textAlign value when not specified',
+        (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: HeaderSubtitle(text: 'Default TextAlign'),
+          ),
+        ),
+      );
+
+      final textWidget = tester.widget<Text>(find.text('Default TextAlign'));
+      expect(textWidget.textAlign, TextAlign.start);
+    });
+
+    testWidgets('accepts custom textAlign value', (tester) async {
+      const customTextAlign = TextAlign.center;
+
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: HeaderSubtitle(
+              text: 'Custom TextAlign',
+              textAlign: customTextAlign,
+            ),
+          ),
+        ),
+      );
+
+      final textWidget = tester.widget<Text>(find.text('Custom TextAlign'));
+      expect(textWidget.textAlign, customTextAlign);
+    });
   });
 }

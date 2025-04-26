@@ -11,6 +11,8 @@ class HeaderSubtitle extends StatelessWidget {
     super.key,
     this.textStyles,
     this.colors,
+    this.maxLines = 1,
+    this.textAlign = TextAlign.start,
   });
 
   /// The text to display as the subtitle
@@ -21,6 +23,12 @@ class HeaderSubtitle extends StatelessWidget {
 
   /// The app colors
   final AppColors? colors;
+
+  /// The maximum number of lines for the subtitle
+  final int? maxLines;
+
+  /// The text alignment for the subtitle
+  final TextAlign? textAlign;
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +42,8 @@ class HeaderSubtitle extends StatelessWidget {
         fontWeight: FontWeight.w500,
         color: colors.slateBlue,
       ),
+      maxLines: maxLines,
+      textAlign: textAlign,
     );
   }
 }
