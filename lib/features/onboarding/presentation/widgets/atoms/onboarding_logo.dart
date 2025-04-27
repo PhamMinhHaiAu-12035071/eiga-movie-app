@@ -45,33 +45,33 @@ class OnboardingLogo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.colors;
-    final boxSize = containerSize ?? context.sizes.h56;
-    final imageSize = this.imageSize ?? context.sizes.h32;
-    final borderRadius = this.borderRadius ?? context.sizes.r12;
-    final containerColor = this.containerColor ?? colors.white;
+    final effectiveContainerSize = containerSize ?? context.sizes.h56;
+    final effectiveImageSize = imageSize ?? context.sizes.h32;
+    final effectiveBorderRadius = borderRadius ?? context.sizes.r12;
+    final effectiveColor =
+        containerColor ?? Theme.of(context).colorScheme.surface;
 
     return Semantics(
       header: false,
       button: false,
       label: _label,
-      child: Container(
-        key: _logoContainerKey,
-        width: boxSize,
-        height: boxSize,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(borderRadius),
-          color: containerColor,
-        ),
-        child: Center(
-          child: SizedBox(
-            key: _logoImageContainerKey,
-            width: imageSize,
-            height: imageSize,
-            child: AppImage.of(context).onboarding.logo.image(
-                  key: const Key('onboarding_logo_image'),
-                  fit: BoxFit.contain,
-                ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(effectiveBorderRadius),
+        child: Container(
+          key: _logoContainerKey,
+          width: effectiveContainerSize,
+          height: effectiveContainerSize,
+          color: effectiveColor,
+          child: Center(
+            child: SizedBox(
+              key: _logoImageContainerKey,
+              width: effectiveImageSize,
+              height: effectiveImageSize,
+              child: AppImage.of(context).onboarding.logo.image(
+                    key: const Key('onboarding_logo_image'),
+                    fit: BoxFit.contain,
+                  ),
+            ),
           ),
         ),
       ),

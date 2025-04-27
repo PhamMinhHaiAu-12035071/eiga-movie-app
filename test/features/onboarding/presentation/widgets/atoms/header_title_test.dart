@@ -44,8 +44,7 @@ void main() {
   });
 
   group('HeaderTitle Atom', () {
-    testWidgets(
-        'renders Text widget with correct text, key, and semanticsLabel',
+    testWidgets('renders Text widget with correct text, key, and semantics',
         (tester) async {
       const testText = 'Test Title';
 
@@ -61,12 +60,15 @@ void main() {
       expect(textFinder, findsOneWidget);
       expect(find.byKey(const Key('onboarding_header_title')), findsOneWidget);
 
-      // Get the Text widget and verify semanticsLabel
-      final textWidget = tester.widget<Text>(textFinder);
-      expect(textWidget.semanticsLabel, testText);
-
-      // Verify Semantics is present
-      expect(find.byType(Semantics), findsWidgets);
+      // Check that semantics properties are set correctly
+      final semanticsWidget = tester.widget<Semantics>(
+        find.descendant(
+          of: find.byType(HeaderTitle),
+          matching: find.byType(Semantics),
+        ),
+      );
+      expect(semanticsWidget.properties.header, isTrue);
+      expect(semanticsWidget.properties.label, testText);
     });
 
     testWidgets('uses styles from GetIt by default', (tester) async {
@@ -86,23 +88,6 @@ void main() {
 
     testWidgets('accepts constructor injection for styles and colors',
         (tester) async {
-      final customTextStyles = MockAppTextStyles();
-      final customColors = MockAppColors();
-
-      when(() => customColors.slateBlue).thenReturn(Colors.red);
-      when(
-        () => customTextStyles.headingXl(
-          fontWeight: any(named: 'fontWeight'),
-          color: any(named: 'color'),
-        ),
-      ).thenReturn(
-        const TextStyle(
-          fontSize: 30,
-          fontWeight: FontWeight.bold,
-          color: Colors.red,
-        ),
-      );
-
       // Create the text style that will be passed to HeaderTitle
       const customTextStyle = TextStyle(
         fontSize: 30,
@@ -218,7 +203,7 @@ void main() {
           isA<AssertionError>().having(
             (e) => e.message,
             'message',
-            contains('Header title must not be empty'),
+            contains('Header text must not be empty'),
           ),
         ),
       );
@@ -246,6 +231,24 @@ void main() {
           ),
         ),
       );
+    });
+
+    // Additional test for isHeader getter
+    test('should have isHeader = true', () {
+      const widget = HeaderTitle(text: 'Test');
+      expect(widget.isHeader, isTrue);
+    });
+
+    // Additional test for textKey getter
+    test('should have correct textKey', () {
+      const widget = HeaderTitle(text: 'Test');
+      expect(widget.textKey, const Key('onboarding_header_title'));
+    });
+
+    // Additional test for semanticLabel getter
+    test('should have semanticLabel equal to text', () {
+      const widget = HeaderTitle(text: 'Test Label');
+      expect(widget.semanticLabel, 'Test Label');
     });
   });
 }

@@ -63,8 +63,15 @@ void main() {
         findsOneWidget,
       );
 
-      // Verify Semantics is present
-      expect(find.byType(Semantics), findsWidgets);
+      // Check that semantics properties are set correctly
+      final semanticsWidget = tester.widget<Semantics>(
+        find.descendant(
+          of: find.byType(HeaderSubtitle),
+          matching: find.byType(Semantics),
+        ),
+      );
+      expect(semanticsWidget.properties.header, isFalse); // Not a header
+      expect(semanticsWidget.properties.label, testText);
     });
 
     testWidgets('uses styles from GetIt by default', (tester) async {
@@ -210,7 +217,7 @@ void main() {
           isA<AssertionError>().having(
             (e) => e.message,
             'message',
-            contains('Header subtitle must not be empty'),
+            contains('Header text must not be empty'),
           ),
         ),
       );
@@ -238,6 +245,18 @@ void main() {
           ),
         ),
       );
+    });
+
+    // Additional test for isHeader getter
+    test('should have isHeader = false', () {
+      const widget = HeaderSubtitle(text: 'Test');
+      expect(widget.isHeader, isFalse);
+    });
+
+    // Additional test for textKey getter
+    test('should have correct textKey', () {
+      const widget = HeaderSubtitle(text: 'Test');
+      expect(widget.textKey, const Key('onboarding_header_subtitle'));
     });
   });
 }

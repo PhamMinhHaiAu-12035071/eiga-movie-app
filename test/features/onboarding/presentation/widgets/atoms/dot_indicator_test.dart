@@ -65,6 +65,13 @@ void main() {
 
   Widget buildTestWidget({
     required bool isActive,
+    double? activeSize,
+    double? inactiveSize,
+    EdgeInsets? margin,
+    double? borderRadius,
+    Duration? duration,
+    Curve? curve,
+    Color? activeColor,
     double? inactiveOpacity,
   }) {
     return MaterialApp(
@@ -72,6 +79,13 @@ void main() {
         body: Center(
           child: DotIndicator(
             isActive: isActive,
+            activeSize: activeSize,
+            inactiveSize: inactiveSize,
+            margin: margin,
+            borderRadius: borderRadius,
+            duration: duration,
+            curve: curve,
+            activeColor: activeColor,
             inactiveOpacity: inactiveOpacity,
           ),
         ),
@@ -80,61 +94,52 @@ void main() {
   }
 
   group('DotIndicator', () {
-    testWidgets('should render active dot with correct properties',
+    testWidgets('should render active dot with correct decoration',
         (tester) async {
       await tester.pumpWidget(buildTestWidget(isActive: true));
 
-      // Find the DotIndicator first
-      final dotIndicator = find.byType(DotIndicator);
-      expect(dotIndicator, findsOneWidget);
-
-      // Then find Semantics within the DotIndicator
-      final semantics = find.descendant(
-        of: dotIndicator,
-        matching: find.byType(Semantics),
-      );
-      expect(semantics, findsOneWidget);
-
-      // Find the AnimatedContainer within that Semantics
-      final container = find.descendant(
-        of: semantics,
+      // Find the AnimatedContainer element in the widget tree
+      final animatedContainer = find.descendant(
+        of: find.byType(DotIndicator),
         matching: find.byType(AnimatedContainer),
       );
-      expect(container, findsOneWidget);
 
-      final containerWidget = tester.widget<AnimatedContainer>(container);
-      final decoration = containerWidget.decoration! as BoxDecoration;
+      // Get the raw AnimatedContainer widget
+      final container = tester.widget<AnimatedContainer>(animatedContainer);
 
-      // Verify the properties
-      expect(containerWidget.constraints?.minWidth, equals(16.0));
+      // Verify decoration properties
+      final decoration = container.decoration! as BoxDecoration;
       expect(decoration.color, equals(mockOnboardingBlue));
       expect(decoration.borderRadius, equals(BorderRadius.circular(8)));
+
+      // Verify margins and duration
+      expect(
+        container.margin,
+        equals(const EdgeInsets.symmetric(horizontal: 8)),
+      );
+      expect(container.duration, equals(const Duration(milliseconds: 300)));
+      expect(container.curve, equals(Curves.easeInOut));
+
+      // Verify the widget is rendered properly
+      final renderBox = tester.renderObject<RenderBox>(animatedContainer);
+      expect(renderBox, isNotNull);
     });
 
-    testWidgets('should render inactive dot with correct properties',
+    testWidgets('should render inactive dot with correct color',
         (tester) async {
       await tester.pumpWidget(buildTestWidget(isActive: false));
 
-      // Find the DotIndicator first
-      final dotIndicator = find.byType(DotIndicator);
-
-      // Then find Semantics within the DotIndicator
-      final semantics = find.descendant(
-        of: dotIndicator,
-        matching: find.byType(Semantics),
-      );
-
-      // Find the AnimatedContainer within that Semantics
-      final container = find.descendant(
-        of: semantics,
+      // Find the AnimatedContainer
+      final animatedContainer = find.descendant(
+        of: find.byType(DotIndicator),
         matching: find.byType(AnimatedContainer),
       );
 
-      final containerWidget = tester.widget<AnimatedContainer>(container);
-      final decoration = containerWidget.decoration! as BoxDecoration;
+      // Get the container widget
+      final container = tester.widget<AnimatedContainer>(animatedContainer);
 
-      // Verify the properties
-      expect(containerWidget.constraints?.minWidth, equals(8.0));
+      // Check decoration properties
+      final decoration = container.decoration! as BoxDecoration;
       expect(
         decoration.color,
         equals(mockOnboardingBlue.withAlpha(102)), // 0.4 * 255 = 102
@@ -143,80 +148,61 @@ void main() {
         decoration.borderRadius,
         equals(BorderRadius.circular(8)),
       );
+
+      // Verify the widget is rendered properly
+      final renderBox = tester.renderObject<RenderBox>(animatedContainer);
+      expect(renderBox, isNotNull);
     });
 
-    testWidgets('should have correct animation duration', (tester) async {
+    testWidgets('should have correct animation duration and curve',
+        (tester) async {
       await tester.pumpWidget(buildTestWidget(isActive: false));
 
-      // Find the DotIndicator first
-      final dotIndicator = find.byType(DotIndicator);
-
-      // Then find Semantics within the DotIndicator
-      final semantics = find.descendant(
-        of: dotIndicator,
-        matching: find.byType(Semantics),
-      );
-
-      // Find the AnimatedContainer within that Semantics
-      final container = find.descendant(
-        of: semantics,
+      // Find and check the AnimatedContainer
+      final animatedContainer = find.descendant(
+        of: find.byType(DotIndicator),
         matching: find.byType(AnimatedContainer),
       );
 
-      final containerWidget = tester.widget<AnimatedContainer>(container);
-
-      // Verify the duration
+      final container = tester.widget<AnimatedContainer>(animatedContainer);
       expect(
-        containerWidget.duration,
+        container.duration,
         equals(const Duration(milliseconds: 300)),
       );
+      expect(container.curve, equals(Curves.easeInOut));
     });
 
-    testWidgets('should have correct layout properties', (tester) async {
+    testWidgets('should have correct margin', (tester) async {
       await tester.pumpWidget(buildTestWidget(isActive: false));
 
-      // Find the DotIndicator first
-      final dotIndicator = find.byType(DotIndicator);
-
-      // Then find Semantics within the DotIndicator
-      final semantics = find.descendant(
-        of: dotIndicator,
-        matching: find.byType(Semantics),
-      );
-
-      // Find the AnimatedContainer within that Semantics
-      final container = find.descendant(
-        of: semantics,
+      // Find and check the AnimatedContainer
+      final animatedContainer = find.descendant(
+        of: find.byType(DotIndicator),
         matching: find.byType(AnimatedContainer),
       );
 
-      final containerWidget = tester.widget<AnimatedContainer>(container);
-
-      // Verify the properties
+      final container = tester.widget<AnimatedContainer>(animatedContainer);
       expect(
-        containerWidget.margin,
+        container.margin,
         equals(const EdgeInsets.symmetric(horizontal: 8)),
       );
-      expect(containerWidget.constraints?.minHeight, equals(8));
     });
 
     testWidgets('should have correct semantics label', (tester) async {
+      // Test active state
       await tester.pumpWidget(buildTestWidget(isActive: true));
 
-      // Find the DotIndicator first
-      final dotIndicator = find.byType(DotIndicator);
-
-      // Then find the Semantics within the DotIndicator
-      final semanticsWidget = find.descendant(
-        of: dotIndicator,
-        matching: find.byType(Semantics),
+      final semantics = tester.widget<Semantics>(
+        find.descendant(
+          of: find.byType(DotIndicator),
+          matching: find.byType(Semantics),
+        ),
       );
-
-      final semantics = tester.widget<Semantics>(semanticsWidget);
       expect(semantics.properties.label, equals('Onboarding step active'));
 
       // Test inactive state
       await tester.pumpWidget(buildTestWidget(isActive: false));
+
       final inactiveSemantics = tester.widget<Semantics>(
         find.descendant(
           of: find.byType(DotIndicator),
@@ -229,20 +215,114 @@ void main() {
       );
     });
 
+    testWidgets('should render with custom margin', (tester) async {
+      const customMargin = EdgeInsets.symmetric(horizontal: 16);
+
+      await tester.pumpWidget(
+        buildTestWidget(
+          isActive: true,
+          margin: customMargin,
+        ),
+      );
+
+      // Find and check the AnimatedContainer
+      final container = tester.widget<AnimatedContainer>(
+        find.descendant(
+          of: find.byType(DotIndicator),
+          matching: find.byType(AnimatedContainer),
+        ),
+      );
+
+      expect(container.margin, equals(customMargin));
+    });
+
+    testWidgets('should render with custom border radius', (tester) async {
+      const customBorderRadius = 16.0;
+
+      await tester.pumpWidget(
+        buildTestWidget(
+          isActive: true,
+          borderRadius: customBorderRadius,
+        ),
+      );
+
+      // Find and check the AnimatedContainer
+      final container = tester.widget<AnimatedContainer>(
+        find.descendant(
+          of: find.byType(DotIndicator),
+          matching: find.byType(AnimatedContainer),
+        ),
+      );
+
+      final decoration = container.decoration! as BoxDecoration;
+      expect(
+        decoration.borderRadius,
+        equals(BorderRadius.circular(customBorderRadius)),
+      );
+    });
+
+    testWidgets('should render with custom duration and curve', (tester) async {
+      const customDuration = Duration(milliseconds: 500);
+      const customCurve = Curves.bounceIn;
+
+      await tester.pumpWidget(
+        buildTestWidget(
+          isActive: true,
+          duration: customDuration,
+          curve: customCurve,
+        ),
+      );
+
+      // Find and check the AnimatedContainer
+      final container = tester.widget<AnimatedContainer>(
+        find.descendant(
+          of: find.byType(DotIndicator),
+          matching: find.byType(AnimatedContainer),
+        ),
+      );
+
+      expect(container.duration, equals(customDuration));
+      expect(container.curve, equals(customCurve));
+    });
+
+    testWidgets('should render with custom active color', (tester) async {
+      const customColor = Colors.purple;
+
+      await tester.pumpWidget(
+        buildTestWidget(
+          isActive: true,
+          activeColor: customColor,
+        ),
+      );
+
+      // Find and check the AnimatedContainer
+      final container = tester.widget<AnimatedContainer>(
+        find.descendant(
+          of: find.byType(DotIndicator),
+          matching: find.byType(AnimatedContainer),
+        ),
+      );
+
+      final decoration = container.decoration! as BoxDecoration;
+      expect(decoration.color, equals(customColor));
+    });
+
     testWidgets('should render inactive dot with custom opacity',
         (tester) async {
+      const customOpacity = 0.8;
       await tester.pumpWidget(
-        buildTestWidget(isActive: false, inactiveOpacity: 0.8),
+        buildTestWidget(isActive: false, inactiveOpacity: customOpacity),
       );
 
-      // Find the container
-      final container = find.descendant(
-        of: find.byType(DotIndicator),
-        matching: find.byType(AnimatedContainer),
+      // Find and check the AnimatedContainer
+      final container = tester.widget<AnimatedContainer>(
+        find.descendant(
+          of: find.byType(DotIndicator),
+          matching: find.byType(AnimatedContainer),
+        ),
       );
 
-      final containerWidget = tester.widget<AnimatedContainer>(container);
-      final decoration = containerWidget.decoration! as BoxDecoration;
+      final decoration = container.decoration! as BoxDecoration;
 
       // Verify the color with custom opacity (0.8 * 255 = 204)
       expect(

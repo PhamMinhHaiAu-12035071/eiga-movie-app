@@ -4,15 +4,13 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:ksk_app/core/asset/app_image.dart';
 import 'package:ksk_app/core/sizes/app_sizes.dart';
-import 'package:ksk_app/core/styles/colors/app_colors.dart';
 import 'package:ksk_app/features/onboarding/presentation/widgets/atoms/onboarding_logo.dart';
 import 'package:ksk_app/generated/assets.gen.dart';
 import 'package:mocktail/mocktail.dart';
 
-// Mocks for dependencies (can be shared or moved to a helper file)
+// Mocks for dependencies
 class MockAssetGenImage extends Mock implements AssetGenImage {
-  final String _mockPath =
-      'assets/images/onboarding/logo.png'; // Store mock path
+  final String _mockPath = 'assets/images/onboarding/logo.png';
 
   @override
   Image image({
@@ -41,8 +39,7 @@ class MockAssetGenImage extends Mock implements AssetGenImage {
     int? cacheHeight,
   }) =>
       Image.asset(
-        // Use Image.asset
-        _mockPath, // Use the mock path
+        _mockPath,
         key: key,
         fit: fit,
         width: width,
@@ -50,7 +47,7 @@ class MockAssetGenImage extends Mock implements AssetGenImage {
       );
 
   @override
-  String get path => _mockPath; // Return the mock path
+  String get path => _mockPath;
 }
 
 class MockOnboardingImages extends Mock implements OnboardingImages {
@@ -63,25 +60,6 @@ class MockAppImage extends Mock implements AppImage {
   final _mockOnboarding = MockOnboardingImages();
   @override
   OnboardingImages get onboarding => _mockOnboarding;
-}
-
-class MockAppColors extends Mock implements AppColors {
-  @override
-  MaterialColor get white => const MaterialColor(
-        0xFFFFFFFF, // White color
-        <int, Color>{
-          50: Colors.white,
-          100: Colors.white,
-          200: Colors.white,
-          300: Colors.white,
-          400: Colors.white,
-          500: Colors.white,
-          600: Colors.white,
-          700: Colors.white,
-          800: Colors.white,
-          900: Colors.white,
-        },
-      );
 }
 
 class MockAppSizes extends Mock implements AppSizes {
@@ -97,16 +75,13 @@ class MockAppSizes extends Mock implements AppSizes {
 
 void main() {
   late MockAppImage mockAppImage;
-  late MockAppColors mockAppColors;
   late MockAppSizes mockAppSizes;
 
   setUpAll(() {
     // Register mocks once for all tests in this file
     mockAppImage = MockAppImage();
-    mockAppColors = MockAppColors();
     mockAppSizes = MockAppSizes();
     GetIt.I.registerSingleton<AppImage>(mockAppImage);
-    GetIt.I.registerSingleton<AppColors>(mockAppColors);
     GetIt.I.registerSingleton<AppSizes>(mockAppSizes);
   });
 
@@ -116,7 +91,11 @@ void main() {
 
   group('OnboardingLogo Atom', () {
     Widget buildTestApp(Widget widget) {
+      // Use a theme with a defined surface color for testing
       return MaterialApp(
+        theme: ThemeData(
+          colorScheme: const ColorScheme.light(),
+        ),
         home: Scaffold(
           body: widget,
         ),
@@ -139,36 +118,36 @@ void main() {
         ),
       );
 
-      // Verify Container has correct size and border radius
-      final containerFinder = find.descendant(
-        of: find.byType(OnboardingLogo),
-        matching: find.byType(Container),
-      );
+      // Verify container exists
+      final containerFinder =
+          find.byKey(const Key('onboarding_logo_container'));
       expect(containerFinder, findsOneWidget);
 
+      // Verify container has correct size
       final container = tester.widget<Container>(containerFinder);
       expect(container.constraints?.maxWidth, 56);
       expect(container.constraints?.maxHeight, 56);
+      expect(container.color, Colors.white); // Theme surface color
 
-      final boxDecoration = container.decoration! as BoxDecoration;
-      expect((boxDecoration.borderRadius! as BorderRadius).topLeft.x, 12);
-
-      // Verify container background color
-      expect(boxDecoration.color, mockAppColors.white);
+      // Verify container is wrapped with ClipRRect with correct border radius
+      final clipRRectFinder = find.ancestor(
+        of: containerFinder,
+        matching: find.byType(ClipRRect),
+      );
+      expect(clipRRectFinder, findsOneWidget);
+      final clipRRect = tester.widget<ClipRRect>(clipRRectFinder);
+      expect(clipRRect.borderRadius, BorderRadius.circular(12));
 
       // Verify SizedBox for image has correct size
-      final imageSizedBoxFinder = find.descendant(
-        of: find.byType(OnboardingLogo),
-        matching: find.byType(SizedBox),
-      );
+      final imageSizedBoxFinder =
+          find.byKey(const Key('onboarding_logo_image_container'));
       expect(imageSizedBoxFinder, findsOneWidget);
-
       final imageSizedBox = tester.widget<SizedBox>(imageSizedBoxFinder);
       expect(imageSizedBox.width, 32);
       expect(imageSizedBox.height, 32);
 
       // Verify Image is rendered
-      expect(find.byType(Image), findsOneWidget);
+      expect(find.byKey(const Key('onboarding_logo_image')), findsOneWidget);
     });
 
     testWidgets('renders correctly with custom parameters', (tester) async {
@@ -193,33 +172,30 @@ void main() {
         ),
       );
 
-      // Verify Container with correct size and border radius
-      final containerFinder = find.descendant(
-        of: find.byType(OnboardingLogo),
-        matching: find.byType(Container),
-      );
+      // Verify container with correct size
+      final containerFinder =
+          find.byKey(const Key('onboarding_logo_container'));
       expect(containerFinder, findsOneWidget);
-
       final container = tester.widget<Container>(containerFinder);
       expect(container.constraints?.maxWidth, testContainerSize);
       expect(container.constraints?.maxHeight, testContainerSize);
 
-      final boxDecoration = container.decoration! as BoxDecoration;
-      expect(
-        (boxDecoration.borderRadius! as BorderRadius).topLeft.x,
-        testBorderRadius,
-      );
-
       // Verify custom background color
-      expect(boxDecoration.color, testContainerColor);
+      expect(container.color, testContainerColor);
+
+      // Verify ClipRRect with custom border radius
+      final clipRRectFinder = find.ancestor(
+        of: containerFinder,
+        matching: find.byType(ClipRRect),
+      );
+      expect(clipRRectFinder, findsOneWidget);
+      final clipRRect = tester.widget<ClipRRect>(clipRRectFinder);
+      expect(clipRRect.borderRadius, BorderRadius.circular(testBorderRadius));
 
       // Verify SizedBox with correct size
-      final imageSizedBoxFinder = find.descendant(
-        of: find.byType(OnboardingLogo),
-        matching: find.byType(SizedBox),
-      );
+      final imageSizedBoxFinder =
+          find.byKey(const Key('onboarding_logo_image_container'));
       expect(imageSizedBoxFinder, findsOneWidget);
-
       final imageSizedBox = tester.widget<SizedBox>(imageSizedBoxFinder);
       expect(imageSizedBox.width, testImageSize);
       expect(imageSizedBox.height, testImageSize);
@@ -306,8 +282,6 @@ void main() {
       );
     });
 
-    // NEW TESTS BELOW
-
     testWidgets('uses correct key for container', (tester) async {
       await tester.pumpWidget(
         ScreenUtilInit(
@@ -352,7 +326,6 @@ void main() {
 
     testWidgets('only overrides containerSize', (tester) async {
       const customSize = 80.0;
-      // Also need to provide imageSize that's less than customSize
       const imageSize = 40.0;
 
       await tester.pumpWidget(
@@ -376,10 +349,17 @@ void main() {
       expect(container.constraints?.maxWidth, customSize);
       expect(container.constraints?.maxHeight, customSize);
 
-      // Check other properties remain default
-      final boxDecoration = container.decoration! as BoxDecoration;
-      expect((boxDecoration.borderRadius! as BorderRadius).topLeft.x, 12);
-      expect(boxDecoration.color, mockAppColors.white);
+      // Check container color is default (from theme)
+      expect(container.color, Colors.white);
+
+      // Check border radius is default
+      final clipRRect = tester.widget<ClipRRect>(
+        find.ancestor(
+          of: find.byKey(const Key('onboarding_logo_container')),
+          matching: find.byType(ClipRRect),
+        ),
+      );
+      expect(clipRRect.borderRadius, BorderRadius.circular(12));
 
       // Check image size is as provided
       final imageSizedBox = tester.widget<SizedBox>(
@@ -391,7 +371,6 @@ void main() {
 
     testWidgets('only overrides imageSize', (tester) async {
       const customImgSize = 50.0;
-      // Make container size larger than image size to satisfy the assertion
       const containerSize = 70.0;
 
       await tester.pumpWidget(
@@ -415,16 +394,13 @@ void main() {
       expect(imageSizedBox.width, customImgSize);
       expect(imageSizedBox.height, customImgSize);
 
-      // Check container properties remain as set
+      // Check container properties
       final container = tester.widget<Container>(
         find.byKey(const Key('onboarding_logo_container')),
       );
       expect(container.constraints?.maxWidth, containerSize);
       expect(container.constraints?.maxHeight, containerSize);
-
-      final boxDecoration = container.decoration! as BoxDecoration;
-      expect((boxDecoration.borderRadius! as BorderRadius).topLeft.x, 12);
-      expect(boxDecoration.color, mockAppColors.white);
+      expect(container.color, Colors.white); // Default from theme
     });
 
     testWidgets('only overrides borderRadius', (tester) async {
@@ -446,19 +422,21 @@ void main() {
       );
 
       // Check border radius is overridden
+      final clipRRect = tester.widget<ClipRRect>(
+        find.ancestor(
+          of: find.byKey(const Key('onboarding_logo_container')),
+          matching: find.byType(ClipRRect),
+        ),
+      );
+      expect(clipRRect.borderRadius, BorderRadius.circular(customRadius));
+
+      // Check other properties remain default
       final container = tester.widget<Container>(
         find.byKey(const Key('onboarding_logo_container')),
       );
-      final boxDecoration = container.decoration! as BoxDecoration;
-      expect(
-        (boxDecoration.borderRadius! as BorderRadius).topLeft.x,
-        customRadius,
-      );
-
-      // Check other properties remain default
       expect(container.constraints?.maxWidth, 56);
       expect(container.constraints?.maxHeight, 56);
-      expect(boxDecoration.color, mockAppColors.white);
+      expect(container.color, Colors.white); // Default from theme
 
       // Check image size remains default
       final imageSizedBox = tester.widget<SizedBox>(
@@ -490,13 +468,19 @@ void main() {
       final container = tester.widget<Container>(
         find.byKey(const Key('onboarding_logo_container')),
       );
-      final boxDecoration = container.decoration! as BoxDecoration;
-      expect(boxDecoration.color, customColor);
+      expect(container.color, customColor);
 
       // Check other properties remain default
       expect(container.constraints?.maxWidth, 56);
       expect(container.constraints?.maxHeight, 56);
-      expect((boxDecoration.borderRadius! as BorderRadius).topLeft.x, 12);
+
+      final clipRRect = tester.widget<ClipRRect>(
+        find.ancestor(
+          of: find.byKey(const Key('onboarding_logo_container')),
+          matching: find.byType(ClipRRect),
+        ),
+      );
+      expect(clipRRect.borderRadius, BorderRadius.circular(12));
 
       // Check image size remains default
       final imageSizedBox = tester.widget<SizedBox>(
@@ -536,14 +520,14 @@ void main() {
       // Find SizedBox inside Center
       final sizedBoxFinder = find.descendant(
         of: centerFinder,
-        matching: find.byType(SizedBox),
+        matching: find.byKey(const Key('onboarding_logo_image_container')),
       );
       expect(sizedBoxFinder, findsOneWidget);
 
       // Find Image inside SizedBox
       final imageFinder = find.descendant(
         of: sizedBoxFinder,
-        matching: find.byType(Image),
+        matching: find.byKey(const Key('onboarding_logo_image')),
       );
       expect(imageFinder, findsOneWidget);
     });

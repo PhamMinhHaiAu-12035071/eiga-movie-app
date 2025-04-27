@@ -50,29 +50,29 @@ class DotIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final activeSize = this.activeSize ?? context.sizes.h16;
-    final inactiveSize = this.inactiveSize ?? context.sizes.h8;
-    final margin =
-        this.margin ?? EdgeInsets.symmetric(horizontal: context.sizes.h8);
-    final borderRadius = this.borderRadius ?? context.sizes.r8;
-    final duration = this.duration ?? context.durations.medium;
-    final curve = this.curve ?? Curves.easeInOut;
-    final baseColor = activeColor ?? context.colors.onboardingBlue;
-    final inactiveOpacity = this.inactiveOpacity ?? 0.4;
-    final inactiveColor = baseColor.withAlpha((inactiveOpacity * 255).round());
+    final effectiveActiveSize = activeSize ?? context.sizes.h16;
+    final effectiveInactiveSize = inactiveSize ?? context.sizes.h8;
+    final effectiveMargin =
+        margin ?? EdgeInsets.symmetric(horizontal: context.sizes.h8);
+    final effectiveBorderRadius = borderRadius ?? context.sizes.r8;
+    final effectiveDuration = duration ?? context.durations.medium;
+    final effectiveCurve = curve ?? Curves.easeInOut;
+    final base = activeColor ?? context.colors.onboardingBlue;
+    final effInactiveOpacity = inactiveOpacity ?? .4;
+    final effInactiveColor = base.withAlpha((effInactiveOpacity * 255).round());
 
     return Semantics(
       container: true,
       label: 'Onboarding step ${isActive ? 'active' : 'inactive'}',
       child: AnimatedContainer(
-        duration: duration,
-        curve: curve,
-        margin: margin,
-        height: inactiveSize,
-        width: isActive ? activeSize : inactiveSize,
+        duration: effectiveDuration,
+        curve: effectiveCurve,
+        margin: effectiveMargin,
+        height: effectiveInactiveSize,
+        width: isActive ? effectiveActiveSize : effectiveInactiveSize,
         decoration: BoxDecoration(
-          color: isActive ? baseColor : inactiveColor,
-          borderRadius: BorderRadius.circular(borderRadius),
+          color: isActive ? base : effInactiveColor,
+          borderRadius: BorderRadius.circular(effectiveBorderRadius),
         ),
       ),
     );
