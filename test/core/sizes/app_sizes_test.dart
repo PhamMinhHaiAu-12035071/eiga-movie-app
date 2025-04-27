@@ -33,6 +33,7 @@ void main() {
     expect(appSizes.r4, equals(4.r));
     expect(appSizes.r8, equals(8.r));
     expect(appSizes.r12, equals(12.r));
+    expect(appSizes.r14, equals(14.r));
     expect(appSizes.r16, equals(16.r));
     expect(appSizes.r20, equals(20.r));
     expect(appSizes.r24, equals(24.r));
@@ -52,6 +53,7 @@ void main() {
     expect(appSizes.v4, equals(4.h));
     expect(appSizes.v8, equals(8.h));
     expect(appSizes.v12, equals(12.h));
+    expect(appSizes.v14, equals(14.h));
     expect(appSizes.v16, equals(16.h));
     expect(appSizes.v20, equals(20.h));
     expect(appSizes.v24, equals(24.h));
@@ -71,6 +73,7 @@ void main() {
     expect(appSizes.h4, equals(4.w));
     expect(appSizes.h8, equals(8.w));
     expect(appSizes.h12, equals(12.w));
+    expect(appSizes.h14, equals(14.w));
     expect(appSizes.h16, equals(16.w));
     expect(appSizes.h20, equals(20.w));
     expect(appSizes.h24, equals(24.w));

@@ -40,6 +40,14 @@ class AppSizesImpl implements AppSizes {
   @override
   double get h12 => 12.w;
 
+  // 14 pixel variations
+  @override
+  double get r14 => 14.r;
+  @override
+  double get v14 => 14.h;
+  @override
+  double get h14 => 14.w;
+
   // 16 pixel variations
   @override
   double get r16 => 16.r;

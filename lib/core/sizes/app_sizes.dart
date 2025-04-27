@@ -28,6 +28,11 @@ abstract class AppSizes {
   double get v12;
   double get h12;
 
+  // 14 pixel variations
+  double get r14;
+  double get v14;
+  double get h14;
+
   // 16 pixel variations
   double get r16;
   double get v16;
