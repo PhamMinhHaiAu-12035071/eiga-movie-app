@@ -1,28 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:ksk_app/features/onboarding/presentation/widgets/onboarding_dot_indicator.dart';
+import 'package:ksk_app/features/onboarding/presentation/widgets/molecules/dot_indicator_row.dart';
 import 'package:widgetbook/widgetbook.dart';
 
-/// Returns a WidgetbookComponent for OnboardingDotIndicator
+/// Returns a WidgetbookComponent for DotIndicatorRow
 WidgetbookComponent getDotIndicatorComponent() {
   return WidgetbookComponent(
-    name: 'OnboardingDotIndicator',
+    name: 'DotIndicatorRow',
     useCases: [
       WidgetbookUseCase(
         name: 'Page 0/3',
         builder: (context) => const Center(
-          child: OnboardingDotIndicator(pageCount: 3, currentIndex: 0),
+          child: DotIndicatorRow(pageCount: 3, currentIndex: 0),
         ),
       ),
       WidgetbookUseCase(
         name: 'Page 1/3',
         builder: (context) => const Center(
-          child: OnboardingDotIndicator(pageCount: 3, currentIndex: 1),
+          child: DotIndicatorRow(pageCount: 3, currentIndex: 1),
         ),
       ),
       WidgetbookUseCase(
         name: 'Page 2/3',
         builder: (context) => const Center(
-          child: OnboardingDotIndicator(pageCount: 3, currentIndex: 2),
+          child: DotIndicatorRow(pageCount: 3, currentIndex: 2),
         ),
       ),
     ],
