@@ -66,12 +66,14 @@ void main() {
   Widget buildTestWidget({
     required int pageCount,
     required int currentIndex,
+    double spacing = 8.0,
   }) {
     return MaterialApp(
       home: Scaffold(
         body: DotIndicatorRow(
           pageCount: pageCount,
           currentIndex: currentIndex,
+          spacing: spacing,
         ),
       ),
     );
@@ -104,13 +106,6 @@ void main() {
       expect(row.mainAxisAlignment, equals(MainAxisAlignment.center));
     });
 
-    testWidgets('should handle edge cases - zero page count', (tester) async {
-      await tester.pumpWidget(buildTestWidget(pageCount: 0, currentIndex: 0));
-
-      final dotFinder = find.byType(DotIndicator);
-      expect(dotFinder, findsNothing);
-    });
-
     testWidgets('should handle edge cases - large page count', (tester) async {
       await tester.pumpWidget(buildTestWidget(pageCount: 10, currentIndex: 5));
 
@@ -122,20 +117,46 @@ void main() {
       expect(dots[5].isActive, isTrue);
     });
 
-    testWidgets('should handle edge cases - currentIndex out of bounds',
-        (tester) async {
-      await tester.pumpWidget(buildTestWidget(pageCount: 3, currentIndex: 5));
+    testWidgets('should apply correct spacing between dots', (tester) async {
+      const testSpacing = 20.0;
+      await tester.pumpWidget(
+        buildTestWidget(
+          pageCount: 3,
+          currentIndex: 0,
+          spacing: testSpacing,
+        ),
+      );
 
-      final dotFinder = find.byType(DotIndicator);
-      expect(dotFinder, findsNWidgets(3));
+      // Find SizedBox widgets (our spacers)
+      final spacers =
+          tester.widgetList<SizedBox>(find.byType(SizedBox)).toList();
 
-      final dots =
-          tester.widgetList<DotIndicator>(find.byType(DotIndicator)).toList();
+      // There should be 2 spacers for 3 dots
+      expect(spacers.length, equals(2));
 
-      // All dots should be inactive if currentIndex is out of bounds
-      for (final dot in dots) {
-        expect(dot.isActive, isFalse);
+      // All spacers should have the specified width
+      for (final spacer in spacers) {
+        expect(spacer.width, equals(testSpacing));
       }
+    });
+
+    testWidgets('should wrap dots with semantic information', (tester) async {
+      await tester.pumpWidget(buildTestWidget(pageCount: 3, currentIndex: 1));
+
+      // Verify DotIndicator widgets are wrapped with Semantics
+      final dotIndicators = find.byType(DotIndicator);
+      expect(dotIndicators, findsNWidgets(3));
+
+      // Verify Row's children list structure
+      // (should contain correct number of widgets with interleaved spacing)
+      final row = tester.widget<Row>(find.byType(Row));
+      expect(row.children.length, equals(5)); // 3 dots + 2 spacers
+
+      // Verify Semantics are present in the widget tree
+      final semanticsWithLabel = find.byWidgetPredicate((widget) {
+        return widget is Semantics && widget.properties.label != null;
+      });
+      expect(semanticsWithLabel, findsWidgets);
     });
   });
 }

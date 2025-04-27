@@ -8,7 +8,7 @@ WidgetbookComponent getDotIndicatorRowComponent() {
     name: 'DotIndicatorRow',
     useCases: [
       WidgetbookUseCase(
-        name: 'Interactive',
+        name: 'Default',
         builder: (context) {
           final pageCount = context.knobs.int.slider(
             label: 'Page count',
@@ -26,12 +26,21 @@ WidgetbookComponent getDotIndicatorRowComponent() {
             divisions: 9,
           );
 
+          final spacing = context.knobs.double.slider(
+            label: 'Spacing',
+            description: 'Space between dots',
+            initialValue: 8,
+            max: 32,
+            divisions: 32,
+          );
+
           final currentIndex = rawIndex.clamp(0, pageCount - 1);
 
           return Center(
             child: DotIndicatorRow(
               pageCount: pageCount,
               currentIndex: currentIndex,
+              spacing: spacing,
             ),
           );
         },
