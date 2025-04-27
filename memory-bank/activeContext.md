@@ -113,6 +113,20 @@
   - Added more verification for HeaderTitleGroup integration
   - Used specific widget finders to identify Gap widgets correctly
   - Fixed tests to properly handle ScreenUtil responsive units
+- ✅ Enhanced OnboardingNextButton with shadow effect and improved architecture:
+  - Added soft shadow under the button for better visual depth and user experience
+  - Applied BoxShadow with configurable parameters (color, blurRadius, offset)
+  - Refactored to use BuildContext extensions instead of direct GetIt dependency injection
+  - Removed unused isLastPage parameter to simplify the API
+  - Updated unit tests to match these changes and maintain 100% coverage
+  - Used context.sizes, context.colors, and context.textStyles for cleaner implementation
+  - Comprehensive unit tests verify the shadow properties and rendering
+- ✅ Added comprehensive documentation to OnboardingHeader widget:
+  - Enhanced class-level and method documentation with clear explanations
+  - Properly documented all parameters with their purpose and default values
+  - Added usage examples to make implementation clearer for other developers
+  - Used proper dartdoc syntax with cross-references to related widgets
+  - Explained the image size ratio calculation for better maintainability
 - ✅ Refactored lib/core directory structure:
   - Organized into clear, focused subdirectories (di, router, asset, styles, sizes, durations, themes)
   - Split DI modules for clearer separation of concerns
@@ -281,6 +295,14 @@
    - **Optimize layouts based on orientation (vertical vs horizontal flow)**
    - **Maintain consistent UX across orientations**
 
+8. **UI Enhancement Patterns**:
+   - **Use BoxShadow for elevating important buttons and card elements**
+   - **Apply subtle shadows with semi-transparent colors (alpha 64-128)**
+   - **Use blurRadius and offset to create natural looking shadows**
+   - **Prefer BuildContext extensions over direct GetIt dependency injection**
+   - **Remove unused parameters to keep APIs clean and minimal**
+   - **Document all components thoroughly for better developer experience**
+
 ## Next Steps
 1. Implement updated tests for refactored core components:
    - DI module tests
@@ -292,7 +314,7 @@
    - ✅ OnboardingHeader (Completed with 100% coverage)
    - ✅ OnboardingLogo (Completed with 100% coverage)
    - ✅ HeaderTitleGroup (Completed with 100% coverage)
-   - OnboardingNextButton (Pending)
+   - ✅ OnboardingNextButton (Completed with 100% coverage)
 3. **Implement Movie Browse feature**:
    - Create domain models and repositories
    - Implement application layer (BLoC/Cubit)
@@ -351,9 +373,11 @@
 - **Use `tester.binding.window.physicalSizeTestValue` to properly set orientation in tests**
 - **When updating widgets, always update tests to match implementation changes**
 - **For subtle implementation changes, verify test coverage remains at 100%**
+- **Document UI components thoroughly with proper dartdoc format**
+- **When enhancing visual appearance, test rendering properties thoroughly**
 
 ## Active Work
-We are currently focused on implementing a comprehensive testing strategy for the refactored core components and completing all onboarding widget tests. Recently completed the OnboardingHeader tests to match implementation changes, successfully maintaining 100% test coverage while transitioning from Padding to Container-based implementation.
+We are currently focused on implementing a comprehensive testing strategy for the refactored core components and completing all onboarding widget tests. Recently completed enhancements to the OnboardingNextButton including shadow effects and transitioned from direct GetIt usage to context extensions, while maintaining 100% test coverage.
 
 ## Technical Debt
 - Some tests need updating to match refactored code structure
