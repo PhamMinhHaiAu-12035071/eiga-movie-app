@@ -65,14 +65,14 @@ class DotIndicatorRow extends StatelessWidget {
   /// đánh dấu khác biệt.
   Widget _dotList(BuildContext context) {
     final effectiveSpacing = spacing ?? context.sizes.h8;
-    final children = <Widget>[];
-    for (var i = 0; i < pageCount; i++) {
-      if (i > 0) children.add(Gap(effectiveSpacing));
-      children.add(_buildDot(context, i));
-    }
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: children,
+      children: [
+        for (var i = 0; i < pageCount; i++) ...[
+          if (i > 0) Gap(effectiveSpacing),
+          _buildDot(context, i),
+        ],
+      ],
     );
   }
 
