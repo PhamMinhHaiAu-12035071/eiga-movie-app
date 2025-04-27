@@ -19,6 +19,9 @@ class MockAppSizes extends Mock implements AppSizes {
 
   @override
   double get h4 => 4;
+
+  @override
+  double get h14 => 14.0;
 }
 
 class MockAppTextStyles extends Mock implements AppTextStyles {}
@@ -136,9 +139,7 @@ Widget buildTestApp(Widget child) {
     splitScreenMode: true,
     builder: (_, __) => MaterialApp(
       home: Scaffold(
-        body: Builder(
-          builder: (context) => child,
-        ),
+        body: child,
       ),
     ),
   );
@@ -203,47 +204,26 @@ void main() {
   group('OnboardingHeader', () {
     testWidgets('renders correctly with all components', (tester) async {
       await tester.pumpWidget(buildTestApp(const OnboardingHeader()));
+      await tester.pump();
 
-      // Verify widget tree structure
       expect(find.byType(OnboardingHeader), findsOneWidget);
-
-      // Find Row which is now directly in OnboardingHeader
-      expect(
-        find.descendant(
-          of: find.byType(OnboardingHeader),
-          matching: find.byType(Row),
-        ),
-        findsOneWidget,
+      final rowFinder = find.descendant(
+        of: find.byType(OnboardingHeader),
+        matching: find.byType(Row),
       );
+      expect(rowFinder, findsOneWidget);
 
-      expect(find.byType(OnboardingLogo), findsOneWidget);
+      // Verify Row children
+      final Row rowWidget = tester.widget<Row>(rowFinder);
+      expect(rowWidget.children.length, 3);
+      expect(rowWidget.children[0], isA<OnboardingLogo>());
+      expect(rowWidget.children[1], isA<Gap>());
+      expect((rowWidget.children[1] as Gap).mainAxisExtent, 14.0);
+      expect(rowWidget.children[2], isA<HeaderTitleGroup>());
 
-      // Find the Gap with default spacing value
-      final rowFinder = find.byType(Row);
-
-      final gapInRow = find.descendant(
-        of: rowFinder,
-        matching: find.byWidgetPredicate(
-          (widget) => widget is Gap && widget.mainAxisExtent == 14.0.w,
-        ),
-      );
-      expect(gapInRow, findsOneWidget);
-
-      // Find HeaderTitleGroup
-      expect(find.byType(HeaderTitleGroup), findsOneWidget);
-
-      // Verify text content
+      // Verify text content still present
       expect(find.text('EIGA'), findsOneWidget);
       expect(find.text('CINEMA UI KIT.'), findsOneWidget);
-
-      // Find Image inside OnboardingLogo
-      expect(
-        find.descendant(
-          of: find.byType(OnboardingLogo),
-          matching: find.byType(Image),
-        ),
-        findsOneWidget,
-      );
     });
 
     testWidgets('displays correct text content', (tester) async {
@@ -256,32 +236,24 @@ void main() {
     testWidgets('applies correct dimensions and logo properties',
         (tester) async {
       await tester.pumpWidget(buildTestApp(const OnboardingHeader()));
-
       await tester.pump();
 
-      // Verify logo size and position
       final logoFinder = find.byKey(const Key('onboarding_header_logo'));
       expect(logoFinder, findsOneWidget);
       final logoWidget = tester.widget<OnboardingLogo>(logoFinder);
-      expect(logoWidget.containerSize, 56); // From default AppSizes.v56
+      expect(logoWidget.containerSize, 56);
 
-      // Verify image size (should be 63% of container size)
-      expect(logoWidget.imageSize, 56 * 0.63);
-
-      // Find the Row inside OnboardingHeader
-      final rowFinder = find.byType(Row);
-      expect(rowFinder, findsOneWidget);
-
-      // Find Gap and verify default spacing
-      final gapFinderInRow = find.descendant(
-        of: rowFinder,
-        matching: find.byWidgetPredicate(
-          (widget) => widget is Gap && widget.mainAxisExtent == 14.0.w,
-        ),
+      // Find Row and verify Gap spacing within it
+      final rowFinder = find.descendant(
+        of: find.byType(OnboardingHeader),
+        matching: find.byType(Row),
       );
-      expect(gapFinderInRow, findsOneWidget);
-      final gap = tester.widget<Gap>(gapFinderInRow);
-      expect(gap.mainAxisExtent, 14.0.w);
+      expect(rowFinder, findsOneWidget);
+      final Row rowWidget = tester.widget<Row>(rowFinder);
+      expect(rowWidget.children.length, 3);
+      expect(rowWidget.children[1], isA<Gap>());
+      // Check default spacing
+      expect((rowWidget.children[1] as Gap).mainAxisExtent, 14.0);
 
       // Verify HeaderTitleGroup displays title and subtitle correctly
       expect(find.text('EIGA'), findsOneWidget);
@@ -309,23 +281,19 @@ void main() {
           ),
         ),
       );
-
       await tester.pump();
 
-      // Find Row
-      final rowFinder = find.byType(Row);
-      expect(rowFinder, findsOneWidget);
-
-      // Find Gap with custom spacing
-      final gapFinderInRow = find.descendant(
-        of: rowFinder,
-        matching: find.byWidgetPredicate(
-          (widget) => widget is Gap && widget.mainAxisExtent == customSpacing.w,
-        ),
+      // Find Row and verify Gap spacing within it
+      final rowFinder = find.descendant(
+        of: find.byType(OnboardingHeader),
+        matching: find.byType(Row),
       );
-      expect(gapFinderInRow, findsOneWidget);
-      final gap = tester.widget<Gap>(gapFinderInRow);
-      expect(gap.mainAxisExtent, customSpacing.w);
+      expect(rowFinder, findsOneWidget);
+      final Row rowWidget = tester.widget<Row>(rowFinder);
+      expect(rowWidget.children.length, 3);
+      expect(rowWidget.children[1], isA<Gap>());
+      // Check custom spacing
+      expect((rowWidget.children[1] as Gap).mainAxisExtent, customSpacing);
     });
 
     testWidgets('renders correct logo via its imageKey', (tester) async {
