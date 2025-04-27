@@ -29,16 +29,7 @@ class OnboardingLogo extends StatelessWidget {
     this.testId,
     this.imageTestId,
     super.key,
-  })  : assert(
-          imageSize == null ||
-              containerSize == null ||
-              imageSize <= containerSize,
-          'When both provided, imageSize must ≤ containerSize',
-        ),
-        assert(
-          containerSize != null || imageSize != null,
-          'Either containerSize or imageSize must be provided',
-        );
+  });
 
   /// The size of the container (width = height)
   final double? containerSize;

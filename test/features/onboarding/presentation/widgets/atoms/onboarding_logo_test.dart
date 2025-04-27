@@ -533,24 +533,70 @@ void main() {
     });
 
     // Test for the assertion with small imageSize
-    testWidgets('enforces imageSize <= containerSize assertion',
+    testWidgets('accepts any imageSize and containerSize values',
         (tester) async {
-      expect(
-        () => OnboardingLogo(
-          containerSize: 50,
-          imageSize: 60, // Larger than container size
+      // Tạo OnboardingLogo với imageSize lớn hơn containerSize
+      // (điều này được chấp nhận sau khi xóa assertion)
+      await tester.pumpWidget(
+        ScreenUtilInit(
+          designSize: const Size(360, 800),
+          minTextAdapt: true,
+          splitScreenMode: true,
+          builder: (_, __) => buildTestApp(
+            const OnboardingLogo(
+              containerSize: 50,
+              imageSize: 60, // Larger than container size
+            ),
+          ),
         ),
-        throwsAssertionError,
       );
+
+      // Verify container với kích thước được chỉ định
+      final container = tester.widget<Container>(
+        find.byKey(const Key('onboarding_logo_container')),
+      );
+      expect(container.constraints?.maxWidth, 50);
+      expect(container.constraints?.maxHeight, 50);
+
+      // Verify image size được chỉ định (lớn hơn container)
+      final imageSizedBox = tester.widget<SizedBox>(
+        find.byKey(const Key('onboarding_logo_image_container')),
+      );
+      expect(imageSizedBox.width, 60);
+      expect(imageSizedBox.height, 60);
     });
 
-    // Test for the assertion requiring either containerSize or imageSize
-    testWidgets('enforces either containerSize or imageSize must be provided',
+    // Test case cho cả hai giá trị null sẽ sử dụng giá trị mặc định
+    testWidgets(
+        'uses default values when both containerSize and imageSize are null',
         (tester) async {
-      expect(
-        OnboardingLogo.new,
-        throwsAssertionError,
+      await tester.pumpWidget(
+        ScreenUtilInit(
+          designSize: const Size(360, 800),
+          minTextAdapt: true,
+          splitScreenMode: true,
+          builder: (_, __) => buildTestApp(
+            const OnboardingLogo(),
+          ),
+        ),
       );
+
+      // Verify container với kích thước mặc định
+      final container = tester.widget<Container>(
+        find.byKey(const Key('onboarding_logo_container')),
+      );
+      expect(
+        container.constraints?.maxWidth,
+        56,
+      ); // Giá trị mặc định từ context.sizes.h56
+      expect(container.constraints?.maxHeight, 56);
+
+      // Verify image size mặc định
+      final imageSizedBox = tester.widget<SizedBox>(
+        find.byKey(const Key('onboarding_logo_image_container')),
+      );
+      expect(imageSizedBox.width, 32); // Giá trị mặc định từ context.sizes.h32
+      expect(imageSizedBox.height, 32);
     });
 
     // Thêm test case cho semanticLabel tùy chỉnh
