@@ -21,7 +21,7 @@ class MockAppSizes extends Mock implements AppSizes {
   double get h4 => 4;
 
   @override
-  double get h14 => 14.0;
+  double get h14 => 14;
 }
 
 class MockAppTextStyles extends Mock implements AppTextStyles {}
@@ -214,7 +214,7 @@ void main() {
       expect(rowFinder, findsOneWidget);
 
       // Verify Row children
-      final Row rowWidget = tester.widget<Row>(rowFinder);
+      final rowWidget = tester.widget<Row>(rowFinder);
       expect(rowWidget.children.length, 3);
       expect(rowWidget.children[0], isA<OnboardingLogo>());
       expect(rowWidget.children[1], isA<Gap>());
@@ -249,7 +249,7 @@ void main() {
         matching: find.byType(Row),
       );
       expect(rowFinder, findsOneWidget);
-      final Row rowWidget = tester.widget<Row>(rowFinder);
+      final rowWidget = tester.widget<Row>(rowFinder);
       expect(rowWidget.children.length, 3);
       expect(rowWidget.children[1], isA<Gap>());
       // Check default spacing
@@ -289,7 +289,7 @@ void main() {
         matching: find.byType(Row),
       );
       expect(rowFinder, findsOneWidget);
-      final Row rowWidget = tester.widget<Row>(rowFinder);
+      final rowWidget = tester.widget<Row>(rowFinder);
       expect(rowWidget.children.length, 3);
       expect(rowWidget.children[1], isA<Gap>());
       // Check custom spacing
