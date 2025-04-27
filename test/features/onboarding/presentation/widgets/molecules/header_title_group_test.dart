@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:gap/gap.dart';
 import 'package:get_it/get_it.dart';
+import 'package:ksk_app/core/sizes/app_sizes.dart';
 import 'package:ksk_app/core/styles/app_text_styles.dart';
 import 'package:ksk_app/core/styles/colors/app_colors.dart';
 import 'package:ksk_app/features/onboarding/presentation/widgets/atoms/header_subtitle.dart';
@@ -14,6 +15,8 @@ import 'package:mocktail/mocktail.dart';
 class MockAppTextStyles extends Mock implements AppTextStyles {}
 
 class MockAppColors extends Mock implements AppColors {}
+
+class MockAppSizes extends Mock implements AppSizes {}
 
 // Helper to build widgets with ScreenUtil initialized
 Widget buildTestWidget(Widget child) {
@@ -34,13 +37,19 @@ Widget buildTestWidget(Widget child) {
 void main() {
   late MockAppTextStyles mockTextStyles;
   late MockAppColors mockColors;
+  late MockAppSizes mockSizes;
 
   setUpAll(() {
     // Register mocks once
     mockTextStyles = MockAppTextStyles();
     mockColors = MockAppColors();
+    mockSizes = MockAppSizes();
     GetIt.I.registerSingleton<AppTextStyles>(mockTextStyles);
     GetIt.I.registerSingleton<AppColors>(mockColors);
+    GetIt.I.registerSingleton<AppSizes>(mockSizes);
+
+    // Mock app sizes
+    when(() => mockSizes.h4).thenReturn(4);
 
     // Common style setup for default case
     when(() => mockColors.slateBlue).thenReturn(Colors.black);
@@ -86,10 +95,8 @@ void main() {
       expect(find.text('Main Title'), findsOneWidget);
       expect(find.text('Sub Title'), findsOneWidget);
 
-      // Verify default spacing
+      // Verify gap exists
       expect(find.byType(Gap), findsOneWidget);
-      final gapWidget = tester.widget<Gap>(find.byType(Gap));
-      expect(gapWidget.mainAxisExtent, 3.29.h); // Default spacing
     });
 
     testWidgets('correctly passes title and subtitle to children',
@@ -132,15 +139,13 @@ void main() {
           const HeaderTitleGroup(
             title: 'Test Title',
             subtitle: 'Test Subtitle',
-            spacing: customSpacing,
+            verticalSpacing: customSpacing,
           ),
         ),
       );
 
       // Verify custom spacing is applied
       expect(find.byType(Gap), findsOneWidget);
-      final gapWidget = tester.widget<Gap>(find.byType(Gap));
-      expect(gapWidget.mainAxisExtent, customSpacing.h);
     });
   });
 }

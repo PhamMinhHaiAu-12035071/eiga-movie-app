@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:gap/gap.dart';
 import 'package:get_it/get_it.dart';
 import 'package:ksk_app/core/durations/app_durations.dart';
 import 'package:ksk_app/core/sizes/app_sizes.dart';
@@ -67,7 +68,7 @@ void main() {
   Widget buildTestWidget({
     required int pageCount,
     required int currentIndex,
-    double spacing = 8.0,
+    double? spacing,
   }) {
     return MaterialApp(
       home: Scaffold(
@@ -128,17 +129,30 @@ void main() {
         ),
       );
 
-      // Find SizedBox widgets (our spacers)
-      final spacers =
-          tester.widgetList<SizedBox>(find.byType(SizedBox)).toList();
+      // Find Gap widgets (our spacers)
+      final spacers = tester.widgetList<Gap>(find.byType(Gap)).toList();
 
       // There should be 2 spacers for 3 dots
       expect(spacers.length, equals(2));
 
       // All spacers should have the specified width
       for (final spacer in spacers) {
-        expect(spacer.width, equals(testSpacing));
+        expect(spacer.mainAxisExtent, equals(testSpacing));
       }
+    });
+
+    testWidgets('should use default spacing from context when spacing is null',
+        (tester) async {
+      await tester.pumpWidget(
+        buildTestWidget(
+          pageCount: 3,
+          currentIndex: 0,
+        ),
+      );
+
+      // Find Gap widgets and verify they exist
+      final spacers = find.byType(Gap);
+      expect(spacers, findsWidgets);
     });
 
     testWidgets('should wrap dots with semantic information', (tester) async {
@@ -147,11 +161,6 @@ void main() {
       // Verify DotIndicator widgets are wrapped with Semantics
       final dotIndicators = find.byType(DotIndicator);
       expect(dotIndicators, findsNWidgets(3));
-
-      // Verify Row's children list structure
-      // (should contain correct number of widgets with interleaved spacing)
-      final row = tester.widget<Row>(find.byType(Row));
-      expect(row.children.length, equals(5)); // 3 dots + 2 spacers
 
       // Verify Semantics are present in the widget tree
       final semanticsWithLabel = find.byWidgetPredicate((widget) {

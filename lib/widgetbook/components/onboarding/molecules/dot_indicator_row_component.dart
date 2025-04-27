@@ -26,13 +26,21 @@ WidgetbookComponent getDotIndicatorRowComponent() {
             divisions: 9,
           );
 
-          final spacing = context.knobs.double.slider(
-            label: 'Spacing',
-            description: 'Space between dots',
-            initialValue: 8,
-            max: 32,
-            divisions: 32,
+          final useCustomSpacing = context.knobs.boolean(
+            label: 'Use custom spacing',
+            description: 'If false, will use default from context.sizes.h8',
           );
+
+          double? spacing;
+          if (useCustomSpacing) {
+            spacing = context.knobs.double.slider(
+              label: 'Spacing',
+              description: 'Space between dots (null uses default)',
+              initialValue: 8,
+              max: 32,
+              divisions: 32,
+            );
+          }
 
           final currentIndex = rawIndex.clamp(0, pageCount - 1);
 

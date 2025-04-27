@@ -28,8 +28,8 @@ WidgetbookComponent getHeaderTitleGroupComponent() {
             initialValue: 'CINEMA UI KIT.',
           );
 
-          final spacing = context.knobs.double.slider(
-            label: 'Spacing',
+          final verticalSpacing = context.knobs.double.slider(
+            label: 'Vertical Spacing',
             description: 'Gap between title and subtitle',
             initialValue: 3.29,
             min: 1,
@@ -50,7 +50,7 @@ WidgetbookComponent getHeaderTitleGroupComponent() {
                     HeaderTitleGroup(
                       title: title,
                       subtitle: subtitle,
-                      spacing: spacing,
+                      verticalSpacing: verticalSpacing,
                     ),
                   ],
                 ),

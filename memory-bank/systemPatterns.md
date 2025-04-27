@@ -272,6 +272,191 @@ Our onboarding feature demonstrates this pattern with:
 
 Both views maintain identical functionality and share common components (OnboardingHeader, OnboardingDotIndicator, OnboardingNextButton), ensuring consistent UX across orientations.
 
+## Widget Implementation Patterns
+
+### 1. Abstract Base Widgets
+
+We use abstract base classes for common widget functionality, enforcing consistent implementation across related components:
+
+```dart
+abstract class BaseHeaderText extends StatelessWidget {
+  const BaseHeaderText({
+    required this.text,
+    this.color,
+    this.maxLines = 1,
+    Key? key,
+  })  : assert(text.isNotEmpty),
+        assert(maxLines > 0),
+        super(key: key);
+
+  final String text;
+  final Color? color;
+  final int maxLines;
+
+  // Abstract properties that must be implemented by subclasses
+  TextStyle? get style;
+  Key get semanticKey;
+  String get semanticLabel;
+  bool get isHeader;
+
+  // Shared implementation for all subclasses
+  TextStyle buildTextStyle(BuildContext context) {
+    // Implementation...
+  }
+}
+```
+
+**Key principles:**
+- Use abstract classes to enforce implementation of required properties
+- Share common logic in the abstract class
+- Define clear interfaces with required and optional parameters
+- Use assertions to validate input parameters
+- Provide semantic information for accessibility
+
+### 2. Input Validation with Assertions
+
+We consistently use assertions to validate input parameters at construction time, preventing runtime errors:
+
+```dart
+const OnboardingLogo({
+  this.containerSize,
+  this.imageSize,
+  this.borderRadius,
+  this.containerColor,
+  Key? key,
+}) : assert(
+        containerSize == null || imageSize == null || containerSize >= imageSize,
+        'Container size must be greater than or equal to image size',
+      ),
+      super(key: key);
+```
+
+**Key principles:**
+- Validate logical constraints between related parameters
+- Provide clear error messages explaining the constraint
+- Use assertions during development to catch implementation errors early
+- Focus on validating parameters that could cause visual or functional issues
+
+### 3. Widget Keys for Testing
+
+We use consistent key naming and assignment for testability and accessibility:
+
+```dart
+@override
+Widget build(BuildContext context) {
+  return Container(
+    key: const Key('onboarding_logo_container'),
+    // Implementation...
+    child: Center(
+      child: SizedBox(
+        key: const Key('onboarding_logo_image_container'),
+        // Implementation...
+      ),
+    ),
+  );
+}
+```
+
+**Key principles:**
+- Use snake_case for key name strings
+- Include the widget name in the key for clarity
+- Add suffixes to distinguish between multiple keys in the same widget
+- Assign keys to critical widgets that need to be found in tests
+- Use consistent key naming across the application
+
+### 4. Context Extensions for Styling
+
+We leverage context extensions to access styles, colors, and dimensions:
+
+```dart
+@override
+TextStyle buildTextStyle(BuildContext context) {
+  return (isHeader ? context.textTheme.headlineLarge : context.textTheme.titleMedium)
+      ?.copyWith(color: color ?? context.colorScheme.primary);
+}
+```
+
+**Key principles:**
+- Use context extensions to access theme properties
+- Provide fallbacks for nullable parameters
+- Allow style customization while maintaining consistent defaults
+- Follow the material design system hierarchy
+- Keep styling code concise and readable
+
+### 5. Semantics for Accessibility
+
+We consistently incorporate semantics for accessibility:
+
+```dart
+@override
+Widget build(BuildContext context) {
+  return Semantics(
+    label: semanticLabel,
+    header: isHeader,
+    child: Text(
+      text,
+      style: buildTextStyle(context),
+      maxLines: maxLines,
+      overflow: TextOverflow.ellipsis,
+    ),
+  );
+}
+```
+
+**Key principles:**
+- Provide meaningful labels for screen readers
+- Use appropriate semantic properties (header, button, etc.)
+- Ensure all interactive elements have proper semantics
+- Make accessibility a core part of the widget design
+- Test with accessibility tools to verify proper implementation
+
+### 6. Parameter Flexibility with Defaults
+
+We design widgets with flexible parameters and sensible defaults:
+
+```dart
+const HeaderTitle({
+  required String text,
+  TextStyle? style,
+  Color? color,
+  int maxLines = 1,
+  Key? key,
+}) : super(
+        text: text,
+        color: color,
+        maxLines: maxLines,
+        key: key,
+      );
+```
+
+**Key principles:**
+- Required parameters for essential functionality
+- Optional parameters with sensible defaults
+- Clear parameter naming that reflects purpose
+- Consistent parameter order across related widgets
+- Use named parameters for better readability and maintainability
+
+### 7. Animation with AnimatedContainer
+
+We use AnimatedContainer for smooth transitions:
+
+```dart
+@override
+Widget build(BuildContext context) {
+  return AnimatedContainer(
+    duration: context.durations.fast,
+    // Implementation...
+  );
+}
+```
+
+**Key principles:**
+- Use built-in animation widgets when possible
+- Ensure consistent animation durations using context extensions
+- Prefer implicit animations for simple state changes
+- Use explicit animations for more complex sequences
+- Ensure animations are smooth and purposeful
+
 ## Utility Usage Patterns
 
 1. **Direct Package Usage**
