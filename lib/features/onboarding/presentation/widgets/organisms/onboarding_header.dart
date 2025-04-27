@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:ksk_app/core/sizes/app_sizes.dart' show AppSizes;
 import 'package:ksk_app/features/onboarding/presentation/widgets/atoms/onboarding_logo.dart';
 import 'package:ksk_app/features/onboarding/presentation/widgets/molecules/header_title_group.dart';
 import 'package:ksk_app/utils/context_x.dart';
 
 /// A header widget for the onboarding screens that displays the app's branding.
 ///
-/// This widget combines the [OnboardingLogo] with a [HeaderTitleGroup] in a row layout,
+/// This widget combines the [OnboardingLogo] with
+/// a [HeaderTitleGroup] in a row layout,
 /// creating a consistent branding element across onboarding screens.
 ///
 /// The header consists of:
@@ -27,7 +29,8 @@ class OnboardingHeader extends StatelessWidget {
   ///
   /// The [title] defaults to 'EIGA' if not specified.
   /// The [subtitle] defaults to 'CINEMA UI KIT.' if not specified.
-  /// The [spacing] between logo and text is optional and defaults to [AppSizes.h14].
+  /// The [spacing] between logo and text is optional
+  /// and defaults to [AppSizes.h14].
   const OnboardingHeader({
     super.key,
     this.title = 'EIGA',

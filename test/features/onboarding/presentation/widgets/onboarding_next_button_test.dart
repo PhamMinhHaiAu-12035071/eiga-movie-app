@@ -52,6 +52,9 @@ class MockAppColors extends Mock implements AppColors {
   Color get onboardingGradientEnd => const Color(0xFF5D84B4);
 }
 
+// Mock the BuildContext for extension methods
+class MockBuildContext extends Mock implements BuildContext {}
+
 void main() {
   late MockAppSizes mockAppSizes;
   late MockAppTextStyles mockAppTextStyles;
@@ -62,6 +65,7 @@ void main() {
     mockAppTextStyles = MockAppTextStyles();
     mockAppColors = MockAppColors();
 
+    // Register the dependencies with GetIt
     GetIt.I.registerSingleton<AppSizes>(mockAppSizes);
     GetIt.I.registerSingleton<AppTextStyles>(mockAppTextStyles);
     GetIt.I.registerSingleton<AppColors>(mockAppColors);
@@ -74,14 +78,12 @@ void main() {
   Widget buildTestWidget({
     required VoidCallback onPressed,
     required String text,
-    bool isLastPage = false,
   }) {
     return MaterialApp(
       home: Scaffold(
         body: OnboardingNextButton(
           onPressed: onPressed,
           text: text,
-          isLastPage: isLastPage,
         ),
       ),
     );
@@ -152,6 +154,12 @@ void main() {
         ],
       );
 
+      // Verify box shadow is correctly applied
+      expect(decoration.boxShadow, isNotNull);
+      expect(decoration.boxShadow!.length, 1);
+      expect(decoration.boxShadow![0].blurRadius, 15);
+      expect(decoration.boxShadow![0].offset, const Offset(0, 8));
+
       final buttonFinder = find.byType(ElevatedButton);
       final button = tester.widget<ElevatedButton>(buttonFinder);
 
@@ -206,20 +214,6 @@ void main() {
 
       expect(text.style?.color, mockAppColors.white);
       expect(text.style?.fontWeight, FontWeight.w500);
-    });
-
-    testWidgets('works correctly with isLastPage = true',
-        (WidgetTester tester) async {
-      await tester.pumpWidget(
-        buildTestWidget(
-          onPressed: () {},
-          text: 'Complete',
-          isLastPage: true,
-        ),
-      );
-
-      expect(find.text('Complete'), findsOneWidget);
-      expect(find.byType(OnboardingNextButton), findsOneWidget);
     });
   });
 }

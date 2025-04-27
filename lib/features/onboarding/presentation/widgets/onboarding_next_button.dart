@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
-import 'package:ksk_app/core/sizes/app_sizes.dart';
-import 'package:ksk_app/core/styles/app_text_styles.dart';
-import 'package:ksk_app/core/styles/colors/app_colors.dart';
+import 'package:ksk_app/utils/context_x.dart';
 
 /// Widget for the next button or completion button in onboarding
 class OnboardingNextButton extends StatelessWidget {
@@ -10,7 +7,6 @@ class OnboardingNextButton extends StatelessWidget {
   const OnboardingNextButton({
     required this.onPressed,
     required this.text,
-    this.isLastPage = false,
     super.key,
   });
 
@@ -20,49 +16,44 @@ class OnboardingNextButton extends StatelessWidget {
   /// Text displayed on the button
   final String text;
 
-  /// Whether this is the last page button
-  final bool isLastPage;
-
-  /// Access app sizes
-  AppSizes get _sizes => GetIt.I<AppSizes>();
-
-  /// Access app text styles
-  AppTextStyles get _textStyles => GetIt.I<AppTextStyles>();
-
-  /// Access app colors
-  AppColors get _colors => GetIt.I<AppColors>();
-
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: _sizes.h40),
+      padding: EdgeInsets.symmetric(horizontal: context.sizes.h40),
       child: Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(_sizes.borderRadiusMd),
+          borderRadius: BorderRadius.circular(context.sizes.borderRadiusMd),
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              _colors.onboardingGradientStart,
-              _colors.onboardingGradientEnd,
+              context.colors.onboardingGradientStart,
+              context.colors.onboardingGradientEnd,
             ],
           ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withAlpha(64),
+              blurRadius: 15,
+              offset: const Offset(0, 8),
+            ),
+          ],
         ),
         child: ElevatedButton(
           onPressed: onPressed,
           style: ElevatedButton.styleFrom(
-            foregroundColor: _colors.white,
-            backgroundColor: _colors.transparent,
-            shadowColor: _colors.transparent,
-            minimumSize: Size(double.infinity, _sizes.v56),
+            foregroundColor: context.colors.white,
+            backgroundColor: context.colors.transparent,
+            shadowColor: context.colors.transparent,
+            minimumSize: Size(double.infinity, context.sizes.v56),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(_sizes.borderRadiusMd),
+              borderRadius: BorderRadius.circular(context.sizes.borderRadiusMd),
             ),
           ),
           child: Text(
             text,
-            style: _textStyles.heading(
-              color: _colors.white,
+            style: context.textStyles.heading(
+              color: context.colors.white,
               fontWeight: FontWeight.w500,
             ),
           ),

@@ -82,7 +82,6 @@ class OnboardingPortraitView extends StatelessWidget {
           // Next or Get Started button
           OnboardingNextButton(
             text: isLastPage ? 'Get Started' : 'Next',
-            isLastPage: isLastPage,
             onPressed: onNextPressed,
           ),
 
