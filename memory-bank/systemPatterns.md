@@ -169,77 +169,108 @@ We use the BLoC pattern (via `flutter_bloc`) for state management:
 
 ## Responsive Design Patterns
 
-1. **Orientation Handling**
-   - **Pattern: Separate Views for Different Orientations**
-   - We use distinct view components for portrait and landscape layouts:
-     ```dart
-     Scaffold(
-       body: SafeArea(
-         child: orientation == Orientation.portrait
-             ? PortraitView(...)
-             : LandscapeView(...),
-       ),
-     )
-     ```
-   - Orientation is detected via `MediaQuery.of(context).orientation`
-   - All callbacks and data are passed consistently to both views
-   - Views are responsible for optimizing layouts for their orientation
+### 1. Orientation-Specific Components
 
-2. **View-Specific Layout Optimizations**
-   - **Portrait Views:** Optimize for vertical flow
-     - Vertical arrangement of components
-     - Full width utilization
-     - Scroll for content overflow
-   - **Landscape Views:** Optimize for horizontal flow
-     - Side-by-side arrangement of components
-     - Split screen approach
-     - Horizontal navigation when appropriate
+We use distinct view components for portrait and landscape layouts to optimize the user experience for each orientation:
 
-3. **Consistent UX Across Orientations**
-   - Core functionality remains identical between orientations
-   - Visual styling and branding stay consistent
-   - Only the layout and positioning are adjusted
+```dart
+// Standard naming convention
+class FeaturePortraitView extends StatelessWidget {
+  // Portrait-optimized layout implementation
+}
 
-4. **Example Implementation: Onboarding Feature**
-   ```dart
-   // In onboarding_page.dart
-   @override
-   Widget build(BuildContext context) {
-     return BlocProvider(
-       create: (_) => getIt<OnboardingCubit>(),
-       child: BlocBuilder<OnboardingCubit, OnboardingState>(
-         builder: (context, state) {
-           final orientation = MediaQuery.of(context).orientation;
-           
-           return Scaffold(
-             body: SafeArea(
-               child: orientation == Orientation.portrait
-                   ? OnboardingPortraitView(
-                       pageController: _pageController,
-                       slides: state.slides,
-                       currentPage: state.currentPage,
-                       isLastPage: state.isLastPage,
-                       onPageChanged: (index) => 
-                           context.read<OnboardingCubit>().updatePage(index),
-                       onNextPressed: () {
-                         if (state.isLastPage) {
-                           _finishOnboarding(context);
-                         } else {
-                           _nextPage(context);
-                         }
-                       },
-                       onSkipPressed: () => _finishOnboarding(context),
-                     )
-                   : OnboardingLandscapeView(
-                       // Same properties as portrait view
-                     ),
-             ),
-           );
-         },
-       ),
-     );
-   }
-   ```
+class FeatureLandscapeView extends StatelessWidget {
+  // Landscape-optimized layout implementation
+}
+```
+
+**Key principles:**
+- Use consistent naming pattern with `PortraitView` and `LandscapeView` suffixes
+- Maintain equivalent functionality between orientations
+- Optimize layout for the specific orientation
+- Share common widgets between orientations where possible
+- Use the same data and callback interfaces for both view types
+
+### 2. Orientation Detection
+
+We detect orientation and render the appropriate view component using MediaQuery:
+
+```dart
+@override
+Widget build(BuildContext context) {
+  final orientation = MediaQuery.of(context).orientation;
+  
+  return Scaffold(
+    body: SafeArea(
+      child: orientation == Orientation.portrait
+          ? FeaturePortraitView(/* common parameters */)
+          : FeatureLandscapeView(/* common parameters */),
+    ),
+  );
+}
+```
+
+For more reactive handling, we occasionally use OrientationBuilder:
+
+```dart
+OrientationBuilder(
+  builder: (context, orientation) {
+    return orientation == Orientation.portrait
+        ? FeaturePortraitView(/* common parameters */)
+        : FeatureLandscapeView(/* common parameters */);
+  },
+)
+```
+
+### 3. Layout Optimization Strategies
+
+**Portrait Layouts:**
+- Vertical flow using Column as primary container
+- Full width utilization for content
+- Vertical stacking with image-content-controls flow
+- Typical flex ratio: 3:5:2 (header:content:footer)
+- More vertical space for content than UI controls
+
+**Landscape Layouts:**
+- Horizontal flow using Row as primary container
+- Split screen approach with side-by-side content
+- Typical flex ratio: 4:6 or 5:7 (left:right)
+- Balance horizontal space between informational and interactive areas
+- Minimize vertical scrolling when possible
+
+### 4. Testing Orientation-Specific Views
+
+We test both orientation layouts separately:
+
+```dart
+testWidgets('renders correctly in portrait', (tester) async {
+  // Set portrait orientation
+  tester.binding.window.physicalSizeTestValue = const Size(1080, 1920);
+  tester.binding.window.devicePixelRatioTestValue = 1.0;
+  addTearDown(tester.binding.window.clearPhysicalSizeTestValue);
+  
+  // Test implementation...
+  
+  // Verify portrait view is rendered
+  expect(find.byType(FeaturePortraitView), findsOneWidget);
+});
+```
+
+### 5. Example: Onboarding Feature Implementation
+
+Our onboarding feature demonstrates this pattern with:
+
+- `OnboardingPortraitView`: Vertical layout with stacked elements
+  - Content flows top to bottom
+  - More space allocated to the image (flex: 3)
+  - Controls at the bottom of the screen
+
+- `OnboardingLandscapeView`: Horizontal layout with side-by-side elements
+  - Image on the left (flex: 5)
+  - Content and controls on the right (flex: 7)
+  - Optimized for horizontal space utilization
+
+Both views maintain identical functionality and share common components (OnboardingHeader, OnboardingDotIndicator, OnboardingNextButton), ensuring consistent UX across orientations.
 
 ## Utility Usage Patterns
 
@@ -248,155 +279,249 @@ We use the BLoC pattern (via `flutter_bloc`) for state management:
    - Example: Use `Gap` directly from the 'gap' package instead of creating custom wrappers
    ```dart
    // PREFERRED: Direct usage
-   Gap(16)
+   Gap(AppSizes.spacing16.h)
    
-   // AVOID: Unnecessary wrapper
-   CustomGap(width: 16)
+   // AVOID: Creating wrapper components
+   VerticalGap(size: AppSizes.spacing16)
    ```
-   - This approach reduces abstraction layers and simplifies the codebase
-   - Only create wrapper components when they add significant value or customization
 
-2. **Utility Library Selection**
-   - Use established packages for common utilities:
-     - `gap` for spacing in UI
-     - `flutter_screenutil` for responsive sizing
-     - `dartx` for extension methods
-     - `collection` for advanced collection operations
-     - `logger` for structured logging
+2. **Widget Extension Methods**
+   - Using extension methods to add functionality to widgets
+   - Example: Adding padding or margin to a widget
+   ```dart
+   extension WidgetX on Widget {
+     Widget withPadding(EdgeInsets padding) {
+       return Padding(
+         padding: padding,
+         child: this,
+       );
+     }
+   }
+   
+   // Usage
+   Text('Hello').withPadding(EdgeInsets.all(8.0))
+   ```
+
+3. **Context Extension Methods**
+   - Using extension methods on BuildContext for common operations
+   - Example: Accessing theme colors
+   ```dart
+   extension BuildContextX on BuildContext {
+     ThemeData get theme => Theme.of(this);
+     ColorScheme get colorScheme => theme.colorScheme;
+   }
+   
+   // Usage
+   Container(
+     color: context.colorScheme.background,
+   )
+   ```
 
 ## Testing Patterns
 
-1. **Unit Testing**
-   - All repositories and service implementations are unit tested
-   - Domain models and application layer logic have comprehensive tests
-   - Mockito or Mocktail is used for mocking dependencies
+1. **Mock Implementation Standards**
+   - Create consistent mock implementations for dependencies
+   - Use factory constructors for mock creation
+   - Ensure proper type definitions and return types
+   - Example: Mock color implementation
+   ```dart
+   class MockAppColors extends Mock implements AppColors {
+     @override
+     MaterialColor get primary => MaterialColor(
+       0xFF6200EE,
+       <int, Color>{
+         50: Color(0xFFF2E7FE),
+         100: Color(0xFFD7B7FD),
+         // ... other shades
+       },
+     );
+   }
+   ```
 
-2. **Widget Testing**
-   - Key components and screens have widget tests
-   - Test both basic rendering and interaction scenarios
-   - Mock dependencies using GetIt in test setup
-
-3. **Orientation Testing Strategy**
-   - **Test both portrait and landscape orientations separately**
-   - Set physical screen size to control orientation in tests:
-     ```dart
-     // Set portrait orientation
-     tester.binding.window.physicalSizeTestValue = const Size(800, 1600);
-     tester.binding.window.devicePixelRatioTestValue = 1.0;
-     addTearDown(tester.binding.window.clearPhysicalSizeTestValue);
+2. **Widget Test Structure**
+   - Follow a consistent test structure for all widgets
+   ```dart
+   group('Widget Tests', () {
+     setUp(() {
+       // Initialization
+     });
      
-     // Set landscape orientation
-     tester.binding.window.physicalSizeTestValue = const Size(1600, 800);
-     tester.binding.window.devicePixelRatioTestValue = 1.0;
-     addTearDown(tester.binding.window.clearPhysicalSizeTestValue);
-     ```
-   - Verify orientation-specific views appear correctly:
-     ```dart
-     expect(find.byType(OnboardingPortraitView), findsOneWidget);
-     expect(find.byType(OnboardingLandscapeView), findsNothing);
-     ```
-   - Use UI interactions in tests rather than direct callback invocation:
-     ```dart
-     await tester.tap(find.byType(NextButton));
-     ```
+     tearDown(() {
+       // Cleanup
+     });
+     
+     testWidgets('description', (tester) async {
+       // Widget setup
+       // Test execution
+       // Verification
+     });
+   });
+   ```
 
-4. **Testing Components with ScreenUtil**
-   - **Use ScreenUtilInit in test builders to support responsive sizing**
-   - Create a helper function to wrap test widgets with ScreenUtil:
-     ```dart
-     Widget buildTestWidget(Widget child) {
-       return ScreenUtilInit(
-         designSize: const Size(360, 800),
-         minTextAdapt: true,
-         splitScreenMode: true,
-         builder: (_, __) => MaterialApp(
-           home: Scaffold(
-             body: child,
-           ),
+3. **Response Mocking**
+   - Mock API responses using classes with test data
+   - Example: Mock repository implementation
+   ```dart
+   class MockUserRepository extends Mock implements UserRepository {
+     @override
+     Future<Either<UserError, User>> getUser(String id) async {
+       return right(
+         User(
+           id: '1',
+           name: 'Test User',
+           email: 'test@example.com',
          ),
        );
      }
-     ```
-   - Use the helper to properly initialize ScreenUtil in tests:
-     ```dart
-     await tester.pumpWidget(
-       buildTestWidget(
-         const HeaderTitleGroup(
-           title: 'Test Title',
-           subtitle: 'Test Subtitle',
-           spacing: 5.0, // Will be converted to 5.0.h by ScreenUtil
-         ),
-       ),
-     );
-     ```
-   - When checking for Gap widgets that use ScreenUtil values, use specific widget predicates:
-     ```dart
-     final gapFinder = find.byWidgetPredicate(
-       (widget) => widget is Gap && widget.mainAxisExtent == 5.0.h,
-     );
-     expect(gapFinder, findsOneWidget);
-     ```
-   - Be specific when finding widgets in complex hierarchies:
-     ```dart
-     // Find a Gap inside a specific Row
-     final rowFinder = find.byType(Row);
-     final gapInRow = find.descendant(
-       of: rowFinder,
-       matching: find.byWidgetPredicate(
-         (widget) => widget is Gap && widget.mainAxisExtent == 14.0.w,
-       ),
-     );
-     expect(gapInRow, findsOneWidget);
-     ```
+   }
+   ```
 
 ## Error Handling
 
-1. **Repository Error Model**
-   - Domain-specific error types returned via Either
-   - Explicit error mapping in repositories
-   - Consistent error patterns across features
+1. **Typed Errors**
+   - Using freezed to create typed error classes
+   ```dart
+   @freezed
+   class FeatureError with _$FeatureError {
+     const factory FeatureError.server([String? message]) = ServerError;
+     const factory FeatureError.network([String? message]) = NetworkError;
+     const factory FeatureError.unexpected([String? message]) = UnexpectedError;
+   }
+   ```
 
-2. **UI Error Handling**
-   - Error states managed in Cubit/BLoC state
-   - Consistent error UI patterns (snackbars, error widgets)
-   - Retry mechanisms implemented where appropriate
+2. **Either Pattern**
+   - Using Either from fpdart for result types
+   - Left side represents errors, right side represents success
+   ```dart
+   Future<Either<FeatureError, FeatureModel>> getFeature(String id);
+   ```
 
-## Styling System
+3. **Error Mapping**
+   - Mapping exceptions to typed errors
+   ```dart
+   FeatureError _mapExceptionToError(dynamic exception) {
+     if (exception is DioError) {
+       if (exception.type == DioErrorType.connectTimeout ||
+           exception.type == DioErrorType.other) {
+         return const FeatureError.network();
+       }
+       return FeatureError.server(exception.response?.statusMessage);
+     }
+     return const FeatureError.unexpected();
+   }
+   ```
 
-1. **Centralized Styling**
-   - Colors defined in `AppColors`
-   - Text styles defined in `AppTextStyles`
-   - Sizes and spacing in `AppSizes`
-   - Durations in `AppDurations`
-   - Theme data and extensions in `AppTheme`
+## Theme and Styling
 
-2. **Theme Extensions**
-   - Custom theme properties implemented via ThemeExtension
-   - Accessed through `Theme.of(context).extension<ExtensionType>()`
-   - Both light and dark mode supported
+1. **Theme Extensions**
+   - Using theme extensions to add custom theme properties
+   ```dart
+   class AppColorExtension extends ThemeExtension<AppColorExtension> {
+     final Color customColor1;
+     final Color customColor2;
+     
+     AppColorExtension({
+       required this.customColor1,
+       required this.customColor2,
+     });
+     
+     @override
+     ThemeExtension<AppColorExtension> copyWith({
+       Color? customColor1,
+       Color? customColor2,
+     }) {
+       return AppColorExtension(
+         customColor1: customColor1 ?? this.customColor1,
+         customColor2: customColor2 ?? this.customColor2,
+       );
+     }
+     
+     @override
+     ThemeExtension<AppColorExtension> lerp(
+       ThemeExtension<AppColorExtension>? other,
+       double t,
+     ) {
+       if (other is! AppColorExtension) {
+         return this;
+       }
+       
+       return AppColorExtension(
+         customColor1: Color.lerp(customColor1, other.customColor1, t)!,
+         customColor2: Color.lerp(customColor2, other.customColor2, t)!,
+       );
+     }
+   }
+   ```
 
-## Component Relationships
+2. **Centralized Style Definitions**
+   - All styles defined in dedicated classes
+   - No direct use of colors, text styles, or sizes in widgets
+   - Example: Accessing styles
+   ```dart
+   Text(
+     'Hello',
+     style: AppTextStyles.bodyMedium.copyWith(
+       color: AppColors.primary,
+     ),
+   )
+   ```
 
-The application follows a clear dependency flow, with each layer communicating only with adjacent layers:
+## Documentation
 
-1. Presentation → Application → Domain ← Infrastructure
+1. **README for Features**
+   - Each feature should have a README.md explaining its purpose and architecture
+   - Example structure:
+   ```
+   # Feature Name
+   
+   ## Overview
+   Brief description of the feature.
+   
+   ## Architecture
+   Description of how the feature is implemented.
+   
+   ## Components
+   List of main components and their roles.
+   
+   ## Testing
+   Information about how to test the feature.
+   ```
 
-2. Core systems (DI, Router, Styles) are accessed by all layers as needed
+2. **Code Comments**
+   - Using dartdoc comments for public APIs
+   - Example:
+   ```dart
+   /// Returns a user by ID.
+   ///
+   /// Parameters:
+   /// - [id]: The ID of the user to retrieve.
+   ///
+   /// Returns:
+   /// A [Future] that completes with an [Either] containing either a [UserError]
+   /// or a [User].
+   ///
+   /// Throws:
+   /// Nothing. Errors are returned in the [Either].
+   Future<Either<UserError, User>> getUser(String id);
+   ```
 
-3. Components in the same layer can communicate directly, but should generally minimize direct dependencies.
-
-The core principles of Clean Architecture are maintained, with dependencies flowing inward toward the domain layer. The domain layer defines interfaces that the infrastructure layer implements, ensuring that the domain remains isolated from external concerns.
-
-## Widgetbook Integration
-
-Widgetbook serves as a component library and development tool, showcasing UI components in isolation:
-
-1. **Structures**
-   - Components organized by feature and type
-   - Each widget has multiple use cases demonstrated
-   - Responsive layout testing with device frames
-
-2. **Developer Experience**
-   - Grid, alignment, and inspector add-ons available
-   - Device frame selection for various form factors
-   - Zoom controls for detailed inspection
+3. **Example Usage**
+   - Including example usage in comments for complex components
+   - Example:
+   ```dart
+   /// A widget that displays a custom button with a gradient background.
+   ///
+   /// Example:
+   /// ```dart
+   /// GradientButton(
+   ///   gradient: LinearGradient(
+   ///     colors: [Colors.blue, Colors.purple],
+   ///   ),
+   ///   onPressed: () => print('Button pressed'),
+   ///   child: Text('Press me'),
+   /// )
+   /// ```
+   class GradientButton extends StatelessWidget {
+     // Implementation...
+   }
+   ```

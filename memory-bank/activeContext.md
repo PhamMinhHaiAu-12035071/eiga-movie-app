@@ -14,6 +14,7 @@
 - Applying established widget testing patterns to core components
 - Addressing performance issues in widget tests
 - **Updating memory bank and rules (`@common`) to formalize orientation handling patterns.**
+- **Building and testing movie-related features (browse, details, ticket booking)**
 
 ## Recent Findings
 - ✅ Analyzed onboarding feature implementation:
@@ -135,6 +136,8 @@
 - ✅ Implemented proper teardown in widget tests to prevent test interference
 - ✅ Converted static methods to factory constructors in mock classes
 - ✅ Improved error handling in test assertions and validations
+- ✅ **Created movie discovery and browsing feature structure (in progress)**
+- ✅ **Established Cinema entity model for ticket booking feature (in progress)**
 
 ## Testing Patterns Established
 1. Mock Dependencies:
@@ -237,6 +240,14 @@
    - **Verify widget key consistency and correct usage**
    - **Test widget hierarchy to ensure proper component nesting**
 
+7. **Responsive Design Pattern**:
+   - **Use separate view components for significantly different layouts**
+   - **Create PortraitView and LandscapeView components when layouts differ**
+   - **Use MediaQuery or OrientationBuilder to detect orientation**
+   - **Share common components between orientations for consistency**
+   - **Optimize layouts based on orientation (vertical vs horizontal flow)**
+   - **Maintain consistent UX across orientations**
+
 ## Next Steps
 1. Implement updated tests for refactored core components:
    - DI module tests
@@ -248,23 +259,21 @@
    - ✅ OnboardingHeader (Completed with 100% coverage)
    - ✅ OnboardingLogo (Completed with 100% coverage)
    - ✅ HeaderTitleGroup (Completed with 100% coverage)
-   - OnboardingNextButton
-3. Implement unit tests for:
-   - OnboardingCubit
-   - OnboardingRepository
-4. Implement integration tests for full onboarding flow:
-   - Page navigation
-   - Persistence verification
-   - State management testing
-5. Document established test patterns for team reference:
-   - Create testing guidelines document
-   - Update widget test templates
-   - Standardize mock implementations
-   - ✅ Document ScreenUtil testing patterns (Completed)
-6. Complete remaining widgetbook integration:
-   - ✅ Add showcase for OnboardingHeader (Completed)
-   - ✅ Add showcase for HeaderTitleGroup (Completed)
-   - Add showcases for NextButton and other components
+   - OnboardingNextButton (Pending)
+3. **Implement Movie Browse feature**:
+   - Create domain models and repositories
+   - Implement application layer (BLoC/Cubit)
+   - Build UI components with responsive design
+   - Implement movie card and list components
+   - Add navigation to movie details
+4. **Implement Movie Details feature**:
+   - Create detail view with trailer support
+   - Add booking button integration
+   - Implement responsive layout with portrait/landscape views
+5. **Begin Ticket Booking feature**:
+   - Design seat selection interface
+   - Implement cinema, showtime, and seat models
+   - Create booking flow with state management
 
 ## Current Challenges
 1. Widget Finding:

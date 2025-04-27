@@ -46,6 +46,12 @@
   - ✅ Enhanced widgetbook developer experience:
     - ✅ Added InspectorAddon, GridAddon, AlignmentAddon, ZoomAddon for advanced layout/debugging
     - ✅ Greatly expanded DeviceFrameAddon list: now covers a wide range of iOS/Android phones and tablets (including iPhone12Mini, iPhone12ProMax, iPadAir4, iPadPro11Inches, iPad12InchesGen2/4, Samsung Galaxy A50, Sony Xperia 1 II, and generic small/medium/large devices)
+- ✅ **Established formal responsive design patterns**:
+  - ✅ **Created separate view components for portrait and landscape orientations**
+  - ✅ **Used MediaQuery and OrientationBuilder for orientation detection**
+  - ✅ **Implemented orientation-specific optimizations**
+  - ✅ **Maintained consistent UX across different orientations**
+  - ✅ **Standardized naming with `...PortraitView` and `...LandscapeView` suffixes**
 
 ### Feature Implementation
 - 🚧 Onboarding Feature (In Progress)
@@ -169,6 +175,33 @@
   - ✅ Fixed failing tests and ensured comprehensive test coverage
   - ✅ Updated environment configurations for movie app API endpoints
 
+- 🚧 **Movie Browse Feature (In Progress)**
+  - ✅ **Created initial domain models (Movie, Genre, Rating)**
+  - ✅ **Defined repository interfaces in domain layer**
+  - 🚧 **Building application layer with Cubit for state management**
+  - 🚧 **Designing UI components with responsive layout support**
+  - 🚧 **Creating movie card and list components**
+  - ❌ **Implementing API integration with movie service**
+  - ❌ **Adding filtering and sorting capabilities**
+  - ❌ **Writing tests for the feature**
+
+- 🚧 **Movie Details Feature (In Progress)**
+  - ✅ **Created domain models for detailed movie information**
+  - ✅ **Defined repository interfaces for fetching movie details**
+  - 🚧 **Building application layer with state management**
+  - 🚧 **Designing UI with separate portrait and landscape views**
+  - ❌ **Implementing trailer viewing functionality**
+  - ❌ **Adding booking integration**
+  - ❌ **Writing tests for the feature**
+
+- 🚧 **Ticket Booking Feature (In Progress)**
+  - ✅ **Created initial domain models (Cinema, Showtime, Seat)**
+  - 🚧 **Defining repository interfaces for booking operations**
+  - 🚧 **Planning UI components for seat selection interface**
+  - ❌ **Building booking flow**
+  - ❌ **Implementing payment integration**
+  - ❌ **Writing tests for the feature**
+
 ### Testing Infrastructure
 - ✅ Set up standardized test patterns for consistency
 - ✅ Created test helpers for common testing scenarios
@@ -236,6 +269,7 @@
   - ✅ Comprehensive device catalog for testing across form factors
 - ✅ Created proper directory structure and organization
 - 🚧 Next: Add remaining onboarding components (NextButton)
+- 🚧 Next: Add movie browse and details components
 
 ### CI/CD
 - ✅ Set up basic project structure
@@ -248,35 +282,35 @@
 ## In Progress
 
 ### Current Sprint Focus
-1. Updating tests for refactored core components
-   - 🚧 DI module tests (In Progress)
-   - 🚧 API module tests (In Progress)
-   - 🚧 Routing tests (In Progress)
-   - 🚧 Styles, sizes, durations tests (In Progress)
-   - 🚧 Theme tests with extensions (Planned)
+- 🚧 Completing movie feature implementations
+  - Building movie browsing UI components
+  - Implementing movie details page with trailer support
+  - Creating seat selection interface for ticket booking
+- 🚧 Enhancing responsive design support
+  - Formalizing responsive design patterns
+  - Ensuring portrait and landscape support for all screens
+  - Testing on various device sizes
+- 🚧 Improving test coverage
+  - Completing widget tests for OnboardingNextButton
+  - Implementing Cubit and Repository tests
+  - Creating integration tests for feature workflows
 
-2. Completing the onboarding feature testing
-   - ✅ OnboardingPage tests completed (100% coverage)
-   - ✅ OnboardingHeader tests completed (100% coverage)
-   - ✅ HeaderTitle tests completed (100% coverage)
-   - ✅ OnboardingLogo tests completed (100% coverage)
-   - 🚧 OnboardingNextButton tests (In Progress)
-   - 🚧 OnboardingCubit tests (Planned)
-   - 🚧 OnboardingRepository tests (Planned)
-   - 🚧 Integration tests for full onboarding flow (Planned)
+### Current Challenges
+- Balancing comprehensive test coverage with development velocity
+- Implementing responsive designs that work well across device sizes
+- Managing state in complex ticket booking flow
+- Establishing clean patterns for API integration
+- Ensuring smooth animations without performance issues
 
-3. Implementing testing best practices
-   - ✅ Established mock implementation standards
-   - ✅ Created consistent test pattern for all widgets
-   - ✅ Implemented proper teardown in tests
-   - ✅ Added orientation-specific testing procedures
-   - 🚧 Documenting test patterns (In Progress)
-
-4. Widgetbook component development
-   - ✅ Basic structure implemented 
-   - ✅ Core components added
-   - ✅ Header components (HeaderTitle, OnboardingHeader) completed with all controls
-   - 🚧 Additional components in progress (NextButton)
+## Future Plans
+- Complete movie browsing and detail features
+- Implement ticket booking workflow
+- Add payment integration
+- Create user profile management
+- Implement offline support for movie browsing
+- Add social sharing functionality
+- Explore performance optimizations
+- Implement analytics and crash reporting
 
 ## Remaining Work
 

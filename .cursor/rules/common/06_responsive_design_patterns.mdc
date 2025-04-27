@@ -1,0 +1,488 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# KSK App: Responsive Design Patterns
+
+## Core Principles
+
+1. **Orientation-Specific Components**
+   * Use separate view components for portrait and landscape orientations when layouts differ significantly
+   * Follow naming convention: `FeaturePortraitView` and `FeatureLandscapeView`
+   * Share common components between orientations for consistent UX
+   * Keep core functionality identical between orientations
+
+2. **Orientation Detection**
+   * Use `MediaQuery.of(context).orientation` for orientation detection
+   * Alternatively, use `OrientationBuilder` for more reactive orientation handling
+   * Select appropriate view based on detected orientation
+   ```dart
+   Scaffold(
+     body: MediaQuery.of(context).orientation == Orientation.portrait
+         ? FeaturePortraitView(...)
+         : FeatureLandscapeView(...),
+   )
+   ```
+
+3. **Layout Optimization**
+   * **Portrait Views**: Optimize for vertical flow
+     - Vertical arrangement of components
+     - Full width utilization
+     - Scroll for content overflow
+     - Typically uses Column as primary layout widget
+   * **Landscape Views**: Optimize for horizontal flow
+     - Side-by-side arrangement of components
+     - Split screen approach
+     - Horizontal navigation when appropriate
+     - Typically uses Row as primary layout widget
+   * Use appropriate flex ratios for each orientation
+
+4. **Consistent UX**
+   * Core functionality remains identical between orientations
+   * Visual styling and branding stay consistent
+   * Only the layout and positioning are adjusted
+   * Maintain accessibility standards in both orientations
+
+## Implementation Patterns
+
+### 1. Separate View Components
+
+Create distinct view components for portrait and landscape layouts:
+
+```dart
+class FeaturePortraitView extends StatelessWidget {
+  final FeatureData data;
+  final VoidCallback onAction;
+
+  const FeaturePortraitView({
+    super.key,
+    required this.data,
+    required this.onAction,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        // Vertical layout implementation
+        FeatureHeader(data: data),
+        Expanded(child: FeatureContent(data: data)),
+        FeatureActionButton(onPressed: onAction),
+      ],
+    );
+  }
+}
+
+class FeatureLandscapeView extends StatelessWidget {
+  final FeatureData data;
+  final VoidCallback onAction;
+
+  const FeatureLandscapeView({
+    super.key,
+    required this.data,
+    required this.onAction,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        // Horizontal layout implementation
+        Expanded(
+          flex: 4,
+          child: FeatureHeader(data: data),
+        ),
+        Expanded(
+          flex: 6,
+          child: Column(
+            children: [
+              Expanded(child: FeatureContent(data: data)),
+              FeatureActionButton(onPressed: onAction),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+```
+
+### 2. Page Component with Orientation Handling
+
+Create a page component that handles orientation switching:
+
+```dart
+class FeaturePage extends StatelessWidget {
+  const FeaturePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => getIt<FeatureCubit>(),
+      child: BlocBuilder<FeatureCubit, FeatureState>(
+        builder: (context, state) {
+          return Scaffold(
+            body: SafeArea(
+              child: MediaQuery.of(context).orientation == Orientation.portrait
+                ? FeaturePortraitView(
+                    data: state.data,
+                    onAction: () => context.read<FeatureCubit>().doAction(),
+                  )
+                : FeatureLandscapeView(
+                    data: state.data,
+                    onAction: () => context.read<FeatureCubit>().doAction(),
+                  ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+```
+
+### 3. OrientationBuilder for Reactive Layout Changes
+
+For more reactive orientation handling, use OrientationBuilder:
+
+```dart
+class FeaturePage extends StatelessWidget {
+  const FeaturePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => getIt<FeatureCubit>(),
+      child: BlocBuilder<FeatureCubit, FeatureState>(
+        builder: (context, state) {
+          return Scaffold(
+            body: SafeArea(
+              child: OrientationBuilder(
+                builder: (context, orientation) {
+                  return orientation == Orientation.portrait
+                    ? FeaturePortraitView(
+                        data: state.data,
+                        onAction: () => context.read<FeatureCubit>().doAction(),
+                      )
+                    : FeatureLandscapeView(
+                        data: state.data,
+                        onAction: () => context.read<FeatureCubit>().doAction(),
+                      );
+                },
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+```
+
+### 4. Shared Component Usage
+
+Create shared components used by both orientations:
+
+```dart
+class FeatureHeader extends StatelessWidget {
+  final FeatureData data;
+
+  const FeatureHeader({
+    super.key,
+    required this.data,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    // Component implementation used by both portrait and landscape
+    return Container(
+      padding: EdgeInsets.all(AppSizes.spacing16.r),
+      child: Text(
+        data.title,
+        style: AppTextStyles.heading1,
+      ),
+    );
+  }
+}
+```
+
+### 5. Responsive Styling
+
+Use ScreenUtil for responsive sizing:
+
+```dart
+Padding(
+  padding: EdgeInsets.all(AppSizes.spacing16.r),
+  child: Container(
+    width: AppSizes.iconSize.w,
+    height: AppSizes.iconSize.h,
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(AppSizes.radius8.r),
+    ),
+  ),
+)
+```
+
+## Testing Orientation-Specific UI
+
+### 1. Setting Orientation in Tests
+
+To test different orientations in widget tests:
+
+```dart
+testWidgets('renders correctly in portrait', (tester) async {
+  // Set portrait orientation
+  tester.binding.window.physicalSizeTestValue = const Size(1080, 1920);
+  tester.binding.window.devicePixelRatioTestValue = 1.0;
+  addTearDown(tester.binding.window.clearPhysicalSizeTestValue);
+  
+  // Test implementation
+  await tester.pumpWidget(
+    const MaterialApp(
+      home: FeaturePage(),
+    ),
+  );
+  
+  // Verify portrait-specific widgets are rendered
+  expect(find.byType(FeaturePortraitView), findsOneWidget);
+  expect(find.byType(FeatureLandscapeView), findsNothing);
+});
+
+testWidgets('renders correctly in landscape', (tester) async {
+  // Set landscape orientation
+  tester.binding.window.physicalSizeTestValue = const Size(1920, 1080);
+  tester.binding.window.devicePixelRatioTestValue = 1.0;
+  addTearDown(tester.binding.window.clearPhysicalSizeTestValue);
+  
+  // Test implementation
+  await tester.pumpWidget(
+    const MaterialApp(
+      home: FeaturePage(),
+    ),
+  );
+  
+  // Verify landscape-specific widgets are rendered
+  expect(find.byType(FeatureLandscapeView), findsOneWidget);
+  expect(find.byType(FeaturePortraitView), findsNothing);
+});
+```
+
+### 2. Verifying UI Interactions
+
+Test UI interactions in both orientations:
+
+```dart
+testWidgets('button tap works in portrait', (tester) async {
+  // Set portrait orientation
+  tester.binding.window.physicalSizeTestValue = const Size(1080, 1920);
+  tester.binding.window.devicePixelRatioTestValue = 1.0;
+  addTearDown(tester.binding.window.clearPhysicalSizeTestValue);
+  
+  // Test implementation
+  await tester.pumpWidget(
+    MaterialApp(
+      home: BlocProvider(
+        create: (_) => mockFeatureCubit,
+        child: const FeaturePage(),
+      ),
+    ),
+  );
+  
+  // Find and tap the button
+  await tester.tap(find.byType(FeatureActionButton));
+  await tester.pump();
+  
+  // Verify the action was called
+  verify(() => mockFeatureCubit.doAction()).called(1);
+});
+```
+
+## Common Patterns and Guidelines
+
+### 1. When to Create Separate Views
+
+Create separate portrait and landscape views when:
+* Layout structure differs significantly (e.g., vertical vs. horizontal flow)
+* Content organization changes substantially between orientations
+* Component sizing or arrangement needs major adjustments
+* User interaction patterns differ between orientations
+
+### 2. When to Use Adaptive Layout
+
+Use a single adaptive layout when:
+* Layout changes are minimal (e.g., adjusting paddings or margins)
+* Only component sizes need to change, not their arrangement
+* Basic flow and interaction patterns remain the same
+* A unified layout with responsive sizing is sufficient
+
+### 3. Flex Ratios Best Practices
+
+* **Portrait**: 
+  - Typical vertical ratios: 3:5:2 (header:content:footer)
+  - Give more vertical space to content than UI controls
+  - Use full width for most components
+
+* **Landscape**:
+  - Typical horizontal ratios: 4:6 or 5:7 (left:right)
+  - Balance horizontal space between informational and interactive areas
+  - Avoid excessive horizontal scrolling
+
+### 4. Size Adjustment Techniques
+
+* Use `AppSizes` values with ScreenUtil extensions (`.w`, `.h`, `.r`, `.sp`)
+* Adjust spacing based on orientation:
+  ```dart
+  EdgeInsets.symmetric(
+    horizontal: orientation == Orientation.portrait 
+        ? AppSizes.spacing16.w 
+        : AppSizes.spacing24.w,
+    vertical: AppSizes.spacing16.h,
+  )
+  ```
+* Scale text size appropriately for each orientation
+* Adjust image sizing and constraints based on available space
+
+## Examples from Codebase
+
+### Onboarding Feature
+
+The onboarding feature demonstrates our responsive design pattern:
+
+```dart
+class OnboardingPage extends StatefulWidget {
+  const OnboardingPage({super.key});
+
+  @override
+  State<OnboardingPage> createState() => _OnboardingPageState();
+}
+
+class _OnboardingPageState extends State<OnboardingPage> {
+  late final PageController _pageController;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController();
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => getIt<OnboardingCubit>(),
+      child: BlocBuilder<OnboardingCubit, OnboardingState>(
+        builder: (context, state) {
+          final orientation = MediaQuery.of(context).orientation;
+          
+          return Scaffold(
+            body: SafeArea(
+              child: orientation == Orientation.portrait
+                  ? OnboardingPortraitView(
+                      pageController: _pageController,
+                      slides: state.slides,
+                      currentPage: state.currentPage,
+                      isLastPage: state.isLastPage,
+                      onPageChanged: (index) => 
+                          context.read<OnboardingCubit>().updatePage(index),
+                      onNextPressed: () {
+                        if (state.isLastPage) {
+                          _finishOnboarding(context);
+                        } else {
+                          _nextPage(context);
+                        }
+                      },
+                      onSkipPressed: () => _finishOnboarding(context),
+                    )
+                  : OnboardingLandscapeView(
+                      // Same properties as portrait view
+                      pageController: _pageController,
+                      slides: state.slides,
+                      currentPage: state.currentPage,
+                      isLastPage: state.isLastPage,
+                      onPageChanged: (index) => 
+                          context.read<OnboardingCubit>().updatePage(index),
+                      onNextPressed: () {
+                        if (state.isLastPage) {
+                          _finishOnboarding(context);
+                        } else {
+                          _nextPage(context);
+                        }
+                      },
+                      onSkipPressed: () => _finishOnboarding(context),
+                    ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  void _nextPage(BuildContext context) {
+    _pageController.nextPage(
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+  }
+
+  void _finishOnboarding(BuildContext context) {
+    context.read<OnboardingCubit>().completeOnboarding();
+    context.router.replace(const LoginRoute());
+  }
+}
+```
+
+The portrait and landscape views implement different layouts:
+
+```dart
+// OnboardingPortraitView (vertical layout with stacked elements)
+Column(
+  children: [
+    Expanded(
+      flex: 3,  // More space for image
+      child: PageView.builder(
+        // Page view implementation
+      ),
+    ),
+    Expanded(
+      flex: 1,  // Less space for controls
+      child: Column(
+        children: [
+          OnboardingDotIndicator(
+            currentPage: currentPage,
+            pageCount: slides.length,
+          ),
+          // Navigation buttons
+        ],
+      ),
+    ),
+  ],
+)
+
+// OnboardingLandscapeView (horizontal layout with side-by-side elements)
+Row(
+  children: [
+    Expanded(
+      flex: 5,  // Image section
+      child: PageView.builder(
+        // Page view implementation
+      ),
+    ),
+    Expanded(
+      flex: 7,  // Content and controls section
+      child: Column(
+        children: [
+          // Content
+          Spacer(),
+          // Navigation controls
+        ],
+      ),
+    ),
+  ],
+)
+```
