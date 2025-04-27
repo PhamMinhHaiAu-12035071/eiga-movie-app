@@ -190,7 +190,7 @@ class MockAppSizes extends Mock implements AppSizes {
   double get borderRadiusLg => 12;
 
   @override
-  double get h14 => 14.0;
+  double get h14 => 14;
 }
 
 class MockAppColors extends Mock implements AppColors {

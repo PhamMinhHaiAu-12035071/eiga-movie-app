@@ -20,7 +20,7 @@ class MockAppSizes extends Mock implements AppSizes {
   double get r12 => 12;
 
   @override
-  double get h14 => 14.0;
+  double get h14 => 14;
 }
 
 class MockAppTextStyles extends Mock implements AppTextStyles {}
