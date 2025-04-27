@@ -44,7 +44,8 @@ void main() {
   });
 
   group('HeaderTitle Atom', () {
-    testWidgets('renders Text widget with correct text and key',
+    testWidgets(
+        'renders Text widget with correct text, key, and semanticsLabel',
         (tester) async {
       const testText = 'Test Title';
 
@@ -60,8 +61,11 @@ void main() {
       expect(textFinder, findsOneWidget);
       expect(find.byKey(const Key('onboarding_header_title')), findsOneWidget);
 
-      // Verify Semantics is present, but don't test specific properties
-      // which are complex to find in the widget tree
+      // Get the Text widget and verify semanticsLabel
+      final textWidget = tester.widget<Text>(textFinder);
+      expect(textWidget.semanticsLabel, testText);
+
+      // Verify Semantics is present
       expect(find.byType(Semantics), findsWidgets);
     });
 

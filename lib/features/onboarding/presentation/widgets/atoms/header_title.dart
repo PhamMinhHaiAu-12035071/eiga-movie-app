@@ -58,6 +58,7 @@ class HeaderTitle extends StatelessWidget {
       child: Text(
         text,
         key: const Key('onboarding_header_title'),
+        semanticsLabel: text,
         style: _buildHeaderStyle(context),
         textAlign: textAlign,
         maxLines: maxLines,

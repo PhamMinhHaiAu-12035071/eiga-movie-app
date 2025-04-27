@@ -59,10 +59,11 @@ class DotIndicator extends StatelessWidget {
     final curve = this.curve ?? Curves.easeInOut;
     final baseColor = activeColor ?? context.colors.onboardingBlue;
     final inactiveOpacity = this.inactiveOpacity ?? 0.4;
+    final inactiveColor = baseColor.withAlpha((inactiveOpacity * 255).round());
 
     return Semantics(
       container: true,
-      label: isActive ? 'Active onboarding step' : 'Inactive onboarding step',
+      label: 'Onboarding step ${isActive ? 'active' : 'inactive'}',
       child: AnimatedContainer(
         duration: duration,
         curve: curve,
@@ -70,9 +71,7 @@ class DotIndicator extends StatelessWidget {
         height: inactiveSize,
         width: isActive ? activeSize : inactiveSize,
         decoration: BoxDecoration(
-          color: isActive
-              ? baseColor
-              : baseColor.withAlpha((inactiveOpacity * 255).round()),
+          color: isActive ? baseColor : inactiveColor,
           borderRadius: BorderRadius.circular(borderRadius),
         ),
       ),

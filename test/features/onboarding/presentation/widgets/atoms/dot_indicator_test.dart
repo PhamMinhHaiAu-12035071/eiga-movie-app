@@ -213,7 +213,7 @@ void main() {
       );
 
       final semantics = tester.widget<Semantics>(semanticsWidget);
-      expect(semantics.properties.label, equals('Active onboarding step'));
+      expect(semantics.properties.label, equals('Onboarding step active'));
 
       // Test inactive state
       await tester.pumpWidget(buildTestWidget(isActive: false));
@@ -225,7 +225,7 @@ void main() {
       );
       expect(
         inactiveSemantics.properties.label,
-        equals('Inactive onboarding step'),
+        equals('Onboarding step inactive'),
       );
     });
 
