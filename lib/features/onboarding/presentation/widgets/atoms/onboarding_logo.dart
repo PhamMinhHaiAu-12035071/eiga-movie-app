@@ -5,11 +5,29 @@ import 'package:ksk_app/utils/context_x.dart';
 /// Logo widget used in the onboarding screen
 class OnboardingLogo extends StatelessWidget {
   /// Creates an OnboardingLogo with optional custom size
+  ///
+  /// [containerSize] kích thước của container (width = height),
+  /// nếu null sẽ dùng context.sizes.h56
+  /// [imageSize] kích thước của hình ảnh (width = height),
+  /// nếu null sẽ dùng context.sizes.h32
+  /// [borderRadius] bo góc của container,
+  /// nếu null sẽ dùng context.sizes.r12
+  /// [containerColor] màu nền của container,
+  /// nếu null sẽ dùng Theme.of(context).colorScheme.surface
+  /// [semanticLabel] nhãn accessibility cho logo,
+  /// nếu null sẽ dùng 'App logo - EIGA'
+  /// [testId] key cho container,
+  /// nếu null sẽ dùng Key('onboarding_logo_container')
+  /// [imageTestId] key cho hình ảnh,
+  /// nếu null sẽ dùng Key('onboarding_logo_image')
   const OnboardingLogo({
     this.containerSize,
     this.imageSize,
     this.borderRadius,
     this.containerColor,
+    this.semanticLabel,
+    this.testId,
+    this.imageTestId,
     super.key,
   })  : assert(
           imageSize == null ||
@@ -34,11 +52,23 @@ class OnboardingLogo extends StatelessWidget {
   /// The background color of the container
   final Color? containerColor;
 
-  /// The label for the logo
-  static const _label = 'App logo - EIGA';
+  /// The custom semantic label for the logo
+  final String? semanticLabel;
 
-  /// The key for the logo container
+  /// The custom test key for the container
+  final Key? testId;
+
+  /// The custom test key for the image
+  final Key? imageTestId;
+
+  /// The default label for the logo
+  static const _defaultLabel = 'App logo - EIGA';
+
+  /// The default key for the logo container
   static const _logoContainerKey = Key('onboarding_logo_container');
+
+  /// The default key for the image
+  static const _logoImageKey = Key('onboarding_logo_image');
 
   /// The key for the logo image container
   static const _logoImageContainerKey = Key('onboarding_logo_image_container');
@@ -54,11 +84,11 @@ class OnboardingLogo extends StatelessWidget {
     return Semantics(
       header: false,
       button: false,
-      label: _label,
+      label: semanticLabel ?? _defaultLabel,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(effectiveBorderRadius),
         child: Container(
-          key: _logoContainerKey,
+          key: testId ?? _logoContainerKey,
           width: effectiveContainerSize,
           height: effectiveContainerSize,
           color: effectiveColor,
@@ -68,7 +98,7 @@ class OnboardingLogo extends StatelessWidget {
               width: effectiveImageSize,
               height: effectiveImageSize,
               child: AppImage.of(context).onboarding.logo.image(
-                    key: const Key('onboarding_logo_image'),
+                    key: imageTestId ?? _logoImageKey,
                     fit: BoxFit.contain,
                   ),
             ),

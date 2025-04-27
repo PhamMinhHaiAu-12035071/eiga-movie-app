@@ -552,5 +552,81 @@ void main() {
         throwsAssertionError,
       );
     });
+
+    // Thêm test case cho semanticLabel tùy chỉnh
+    testWidgets('applies custom semantics label when provided', (tester) async {
+      const customLabel = 'Custom Logo Label';
+
+      await tester.pumpWidget(
+        ScreenUtilInit(
+          designSize: const Size(360, 800),
+          minTextAdapt: true,
+          splitScreenMode: true,
+          builder: (_, __) => buildTestApp(
+            const OnboardingLogo(
+              containerSize: 56,
+              imageSize: 32,
+              semanticLabel: customLabel,
+            ),
+          ),
+        ),
+      );
+
+      // Find Semantics with the custom label
+      final semanticsFinder = find.byWidgetPredicate(
+        (widget) =>
+            widget is Semantics && widget.properties.label == customLabel,
+      );
+      expect(semanticsFinder, findsOneWidget);
+    });
+
+    // Thêm test case cho testId tùy chỉnh
+    testWidgets('uses custom testId for container when provided',
+        (tester) async {
+      const customKey = Key('custom_logo_container');
+
+      await tester.pumpWidget(
+        ScreenUtilInit(
+          designSize: const Size(360, 800),
+          minTextAdapt: true,
+          splitScreenMode: true,
+          builder: (_, __) => buildTestApp(
+            const OnboardingLogo(
+              containerSize: 56,
+              imageSize: 32,
+              testId: customKey,
+            ),
+          ),
+        ),
+      );
+
+      // Verify custom key is used and default key is not
+      expect(find.byKey(customKey), findsOneWidget);
+      expect(find.byKey(const Key('onboarding_logo_container')), findsNothing);
+    });
+
+    // Thêm test case cho imageTestId tùy chỉnh
+    testWidgets('uses custom imageTestId when provided', (tester) async {
+      const customImageKey = Key('custom_logo_image');
+
+      await tester.pumpWidget(
+        ScreenUtilInit(
+          designSize: const Size(360, 800),
+          minTextAdapt: true,
+          splitScreenMode: true,
+          builder: (_, __) => buildTestApp(
+            const OnboardingLogo(
+              containerSize: 56,
+              imageSize: 32,
+              imageTestId: customImageKey,
+            ),
+          ),
+        ),
+      );
+
+      // Verify custom image key is used and default image key is not
+      expect(find.byKey(customImageKey), findsOneWidget);
+      expect(find.byKey(const Key('onboarding_logo_image')), findsNothing);
+    });
   });
 }
