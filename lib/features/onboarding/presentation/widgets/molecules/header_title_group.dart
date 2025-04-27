@@ -11,9 +11,8 @@ class HeaderTitleGroup extends StatelessWidget {
     required this.title,
     required this.subtitle,
     super.key,
-    this.verticalSpacing = _kDefaultVerticalSpacing,
+    this.verticalSpacing,
   });
-  static const double _kDefaultVerticalSpacing = 3.29;
 
   /// The title text to display
   final String title;

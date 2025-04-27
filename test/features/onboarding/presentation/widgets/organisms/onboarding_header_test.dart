@@ -16,6 +16,9 @@ import 'package:mocktail/mocktail.dart';
 class MockAppSizes extends Mock implements AppSizes {
   @override
   double get r12 => 12;
+
+  @override
+  double get h4 => 4;
 }
 
 class MockAppTextStyles extends Mock implements AppTextStyles {}

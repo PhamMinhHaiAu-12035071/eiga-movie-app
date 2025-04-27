@@ -35,18 +35,23 @@ class DotIndicatorRow extends StatelessWidget {
 
   Widget _dotList(BuildContext context) {
     final effectiveSpacing = spacing ?? context.sizes.h8;
+    final dots = List.generate(pageCount, (i) {
+      return Row(
+        children: [
+          if (i > 0) Gap(effectiveSpacing),
+          _buildDot(context, i),
+        ],
+      );
+    }).expand((w) => [w]).toList();
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        for (var i = 0; i < pageCount; i++) ...[
-          if (i > 0) Gap(effectiveSpacing),
-          Semantics(
-            selected: i == currentIndex,
-            label: 'Trang ${i + 1} trên $pageCount',
-            child: DotIndicator(isActive: i == currentIndex),
-          ),
-        ],
-      ],
+      children: dots,
     );
   }
+
+  Widget _buildDot(BuildContext ctx, int index) => Semantics(
+        selected: index == currentIndex,
+        label: 'Trang ${index + 1} trên $pageCount',
+        child: DotIndicator(isActive: index == currentIndex),
+      );
 }

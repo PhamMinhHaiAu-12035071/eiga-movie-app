@@ -18,6 +18,10 @@ class MockAppColors extends Mock implements AppColors {}
 
 class MockAppSizes extends Mock implements AppSizes {}
 
+extension SizeXMock on BuildContext {
+  AppSizes get sizes => GetIt.I<AppSizes>();
+}
+
 // Helper to build widgets with ScreenUtil initialized
 Widget buildTestWidget(Widget child) {
   return ScreenUtilInit(
@@ -145,7 +149,12 @@ void main() {
       );
 
       // Verify custom spacing is applied
-      expect(find.byType(Gap), findsOneWidget);
+      final gapFinder = find.byType(Gap);
+      expect(gapFinder, findsOneWidget);
+
+      // Kiểm tra Gap có spacing đúng
+      final gap = tester.widget<Gap>(gapFinder);
+      expect(gap.mainAxisExtent, equals(customSpacing));
     });
   });
 }

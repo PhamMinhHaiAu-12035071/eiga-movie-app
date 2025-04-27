@@ -104,8 +104,12 @@ void main() {
     testWidgets('should have correct layout properties', (tester) async {
       await tester.pumpWidget(buildTestWidget(pageCount: 3, currentIndex: 0));
 
-      final row = tester.widget<Row>(find.byType(Row));
-      expect(row.mainAxisAlignment, equals(MainAxisAlignment.center));
+      // Kiểm tra có Center wrap _dotList trong DotIndicatorRow
+      expect(find.byType(Center), findsOneWidget);
+
+      // Đảm bảo Center là parent của Row
+      final center = tester.widget<Center>(find.byType(Center));
+      expect(center.child, isA<Row>());
     });
 
     testWidgets('should handle edge cases - large page count', (tester) async {
@@ -153,6 +157,12 @@ void main() {
       // Find Gap widgets and verify they exist
       final spacers = find.byType(Gap);
       expect(spacers, findsWidgets);
+
+      // Kiểm tra sử dụng kích thước mặc định h8 từ context
+      final spacerWidgets = tester.widgetList<Gap>(spacers).toList();
+      for (final spacer in spacerWidgets) {
+        expect(spacer.mainAxisExtent, equals(8));
+      }
     });
 
     testWidgets('should wrap dots with semantic information', (tester) async {
@@ -167,6 +177,21 @@ void main() {
         return widget is Semantics && widget.properties.label != null;
       });
       expect(semanticsWithLabel, findsWidgets);
+
+      // Tìm semantics cụ thể cho DotIndicator (không phải semantics của atoms/dot_indicator.dart)
+      final dotSemantics = find.byWidgetPredicate((widget) {
+        return widget is Semantics &&
+            widget.properties.label != null &&
+            widget.properties.label!.contains('Trang');
+      });
+
+      expect(dotSemantics, findsNWidgets(3));
+
+      // Kiểm tra nội dung label có phù hợp
+      final semantics = tester.widgetList<Semantics>(dotSemantics).toList();
+      expect(semantics[0].properties.label, equals('Trang 1 trên 3'));
+      expect(semantics[1].properties.label, equals('Trang 2 trên 3'));
+      expect(semantics[2].properties.label, equals('Trang 3 trên 3'));
     });
   });
 }
