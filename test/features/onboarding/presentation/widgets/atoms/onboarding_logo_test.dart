@@ -86,13 +86,13 @@ class MockAppColors extends Mock implements AppColors {
 
 class MockAppSizes extends Mock implements AppSizes {
   @override
-  double get h56 => 56.0;
+  double get h56 => 56;
 
   @override
-  double get h32 => 32.0;
+  double get h32 => 32;
 
   @override
-  double get r12 => 12.0;
+  double get r12 => 12;
 }
 
 void main() {
@@ -250,7 +250,9 @@ void main() {
         matching: find.byWidgetPredicate(
           (widget) =>
               widget is Semantics &&
-              widget.properties.label == 'App logo - EIGA',
+              widget.properties.label == 'App logo - EIGA' &&
+              widget.properties.header == false &&
+              widget.properties.button == false,
         ),
       );
       expect(semanticsFinder, findsOneWidget);
@@ -544,6 +546,27 @@ void main() {
         matching: find.byType(Image),
       );
       expect(imageFinder, findsOneWidget);
+    });
+
+    // Test for the assertion with small imageSize
+    testWidgets('enforces imageSize <= containerSize assertion',
+        (tester) async {
+      expect(
+        () => OnboardingLogo(
+          containerSize: 50,
+          imageSize: 60, // Larger than container size
+        ),
+        throwsAssertionError,
+      );
+    });
+
+    // Test for the assertion requiring either containerSize or imageSize
+    testWidgets('enforces either containerSize or imageSize must be provided',
+        (tester) async {
+      expect(
+        OnboardingLogo.new,
+        throwsAssertionError,
+      );
     });
   });
 }

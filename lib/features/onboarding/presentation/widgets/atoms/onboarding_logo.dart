@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 import 'package:ksk_app/core/asset/app_image.dart';
-import 'package:ksk_app/core/styles/colors/app_colors.dart';
 import 'package:ksk_app/utils/context_x.dart';
 
 /// Logo widget used in the onboarding screen
@@ -14,14 +12,14 @@ class OnboardingLogo extends StatelessWidget {
     this.containerColor,
     super.key,
   })  : assert(
-          containerSize != null || imageSize != null,
-          'Either containerSize or imageSize must be provided',
+          imageSize == null ||
+              containerSize == null ||
+              imageSize <= containerSize,
+          'When both provided, imageSize must ≤ containerSize',
         ),
         assert(
-          imageSize != null &&
-              containerSize != null &&
-              imageSize <= containerSize,
-          'imageSize must not exceed containerSize',
+          containerSize != null || imageSize != null,
+          'Either containerSize or imageSize must be provided',
         );
 
   /// The size of the container (width = height)
@@ -47,13 +45,15 @@ class OnboardingLogo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = GetIt.I<AppColors>();
+    final colors = context.colors;
     final boxSize = containerSize ?? context.sizes.h56;
     final imageSize = this.imageSize ?? context.sizes.h32;
     final borderRadius = this.borderRadius ?? context.sizes.r12;
     final containerColor = this.containerColor ?? colors.white;
 
     return Semantics(
+      header: false,
+      button: false,
       label: _label,
       child: Container(
         key: _logoContainerKey,

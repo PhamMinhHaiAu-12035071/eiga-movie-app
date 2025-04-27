@@ -61,6 +61,7 @@ class DotIndicator extends StatelessWidget {
     final inactiveOpacity = this.inactiveOpacity ?? 0.4;
 
     return Semantics(
+      container: true,
       label: isActive ? 'Active onboarding step' : 'Inactive onboarding step',
       child: AnimatedContainer(
         duration: duration,
