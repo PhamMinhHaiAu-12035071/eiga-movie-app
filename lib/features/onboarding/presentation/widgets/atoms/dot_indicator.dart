@@ -4,6 +4,20 @@ import 'package:ksk_app/utils/context_x.dart';
 /// Widget that displays a single dot indicator for onboarding
 class DotIndicator extends StatelessWidget {
   /// Constructor
+  ///
+  /// [isActive] trạng thái dot hiện tại (active/inactive)
+  /// [activeSize] kích thước dot khi active, mặc định là 16
+  /// [inactiveSize] kích thước dot khi inactive, mặc định là 8
+  /// [margin] khoảng cách xung quanh dot, mặc định 8px horizontal
+  /// [borderRadius] bo góc dot, mặc định là 8
+  /// [duration] thời gian animation, mặc định là duration medium
+  /// [curve] kiểu animation, mặc định là easeInOut
+  /// [activeColor] màu dot khi active, mặc định là onboardingBlue
+  /// [inactiveOpacity] độ trong suốt khi inactive (0.0-1.0), mặc định là 0.4
+  /// [border] viền chung cho dot, ưu tiên thấp hơn activeBorder và
+  /// [activeBorder] viền riêng cho dot khi active
+  /// [inactiveBorder] viền riêng cho dot khi inactive
+  /// [testId] key cho test UI, nếu null sẽ tạo key tự động dựa trên trạng thái
   const DotIndicator({
     required this.isActive,
     super.key,
@@ -15,6 +29,10 @@ class DotIndicator extends StatelessWidget {
     this.curve,
     this.activeColor,
     this.inactiveOpacity,
+    this.border,
+    this.activeBorder,
+    this.inactiveBorder,
+    this.testId,
   }) : assert(
           inactiveOpacity == null ||
               (inactiveOpacity >= 0 && inactiveOpacity <= 1),
@@ -48,6 +66,18 @@ class DotIndicator extends StatelessWidget {
   /// Opacity for inactive dot (0.0 to 1.0)
   final double? inactiveOpacity;
 
+  /// Border for both active and inactive dots (override by active/inactive specific borders)
+  final BoxBorder? border;
+
+  /// Border specifically for active dot
+  final BoxBorder? activeBorder;
+
+  /// Border specifically for inactive dot
+  final BoxBorder? inactiveBorder;
+
+  /// Test ID key for dot
+  final Key? testId;
+
   @override
   Widget build(BuildContext context) {
     final effectiveActiveSize = activeSize ?? context.sizes.h16;
@@ -61,10 +91,19 @@ class DotIndicator extends StatelessWidget {
     final effInactiveOpacity = inactiveOpacity ?? .4;
     final effInactiveColor = base.withAlpha((effInactiveOpacity * 255).round());
 
+    // Xác định border hiệu quả dựa trên trạng thái
+    final effectiveBorder =
+        isActive ? activeBorder ?? border : inactiveBorder ?? border;
+
+    // Tạo key tự động nếu không có testId
+    final effectiveKey =
+        testId ?? Key('dot_indicator_${isActive ? 'active' : 'inactive'}');
+
     return Semantics(
       container: true,
       label: 'Onboarding step ${isActive ? 'active' : 'inactive'}',
       child: AnimatedContainer(
+        key: effectiveKey,
         duration: effectiveDuration,
         curve: effectiveCurve,
         margin: effectiveMargin,
@@ -73,6 +112,7 @@ class DotIndicator extends StatelessWidget {
         decoration: BoxDecoration(
           color: isActive ? base : effInactiveColor,
           borderRadius: BorderRadius.circular(effectiveBorderRadius),
+          border: effectiveBorder,
         ),
       ),
     );

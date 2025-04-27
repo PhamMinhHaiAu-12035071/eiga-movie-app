@@ -73,6 +73,10 @@ void main() {
     Curve? curve,
     Color? activeColor,
     double? inactiveOpacity,
+    BoxBorder? border,
+    BoxBorder? activeBorder,
+    BoxBorder? inactiveBorder,
+    Key? testId,
   }) {
     return MaterialApp(
       home: Scaffold(
@@ -87,6 +91,10 @@ void main() {
             curve: curve,
             activeColor: activeColor,
             inactiveOpacity: inactiveOpacity,
+            border: border,
+            activeBorder: activeBorder,
+            inactiveBorder: inactiveBorder,
+            testId: testId,
           ),
         ),
       ),
@@ -362,6 +370,131 @@ void main() {
         ),
         throwsA(isA<AssertionError>()),
       );
+    });
+
+    testWidgets('should render with custom border', (tester) async {
+      const customBorder = Border.fromBorderSide(
+        BorderSide(color: Colors.red, width: 2),
+      );
+
+      await tester.pumpWidget(
+        buildTestWidget(
+          isActive: true,
+          border: customBorder,
+        ),
+      );
+
+      // Find and check the AnimatedContainer
+      final container = tester.widget<AnimatedContainer>(
+        find.descendant(
+          of: find.byType(DotIndicator),
+          matching: find.byType(AnimatedContainer),
+        ),
+      );
+
+      final decoration = container.decoration! as BoxDecoration;
+      expect(decoration.border, equals(customBorder));
+    });
+
+    testWidgets('should render with custom activeBorder when active',
+        (tester) async {
+      const commonBorder = Border.fromBorderSide(
+        BorderSide(color: Colors.grey),
+      );
+      const activeBorder = Border.fromBorderSide(
+        BorderSide(color: Colors.green, width: 2),
+      );
+
+      await tester.pumpWidget(
+        buildTestWidget(
+          isActive: true,
+          border: commonBorder,
+          activeBorder: activeBorder,
+        ),
+      );
+
+      // Find and check the AnimatedContainer
+      final container = tester.widget<AnimatedContainer>(
+        find.descendant(
+          of: find.byType(DotIndicator),
+          matching: find.byType(AnimatedContainer),
+        ),
+      );
+
+      final decoration = container.decoration! as BoxDecoration;
+      expect(
+        decoration.border,
+        equals(activeBorder),
+      ); // Should use activeBorder
+    });
+
+    testWidgets('should render with custom inactiveBorder when inactive',
+        (tester) async {
+      const commonBorder = Border.fromBorderSide(
+        BorderSide(color: Colors.grey),
+      );
+      const inactiveBorder = Border.fromBorderSide(
+        BorderSide(color: Colors.orange, width: 2),
+      );
+
+      await tester.pumpWidget(
+        buildTestWidget(
+          isActive: false,
+          border: commonBorder,
+          inactiveBorder: inactiveBorder,
+        ),
+      );
+
+      // Find and check the AnimatedContainer
+      final container = tester.widget<AnimatedContainer>(
+        find.descendant(
+          of: find.byType(DotIndicator),
+          matching: find.byType(AnimatedContainer),
+        ),
+      );
+
+      final decoration = container.decoration! as BoxDecoration;
+      expect(
+        decoration.border,
+        equals(inactiveBorder),
+      ); // Should use inactiveBorder
+    });
+
+    testWidgets('should use custom testId for dot', (tester) async {
+      const customKey = Key('custom_dot_key');
+
+      await tester.pumpWidget(
+        buildTestWidget(
+          isActive: true,
+          testId: customKey,
+        ),
+      );
+
+      // Should find the AnimatedContainer with the custom key
+      expect(find.byKey(customKey), findsOneWidget);
+    });
+
+    testWidgets('should generate automatic key when testId not provided',
+        (tester) async {
+      // Test active state
+      await tester.pumpWidget(
+        buildTestWidget(
+          isActive: true,
+        ),
+      );
+
+      // Should find the AnimatedContainer with the generated active key
+      expect(find.byKey(const Key('dot_indicator_active')), findsOneWidget);
+
+      // Test inactive state
+      await tester.pumpWidget(
+        buildTestWidget(
+          isActive: false,
+        ),
+      );
+
+      // Should find the AnimatedContainer with the generated inactive key
+      expect(find.byKey(const Key('dot_indicator_inactive')), findsOneWidget);
     });
   });
 }
