@@ -49,7 +49,7 @@ void main() {
       const testText = 'Test Subtitle';
 
       await tester.pumpWidget(
-        MaterialApp(
+        const MaterialApp(
           home: Scaffold(
             body: HeaderSubtitle(text: testText),
           ),
@@ -69,7 +69,7 @@ void main() {
 
     testWidgets('uses styles from GetIt by default', (tester) async {
       await tester.pumpWidget(
-        MaterialApp(
+        const MaterialApp(
           home: Scaffold(
             body: HeaderSubtitle(text: 'Default Style'),
           ),
@@ -90,7 +90,7 @@ void main() {
       const customColor = Colors.orange;
 
       await tester.pumpWidget(
-        MaterialApp(
+        const MaterialApp(
           home: Scaffold(
             body: HeaderSubtitle(
               text: 'Injected Style',
@@ -110,7 +110,7 @@ void main() {
     testWidgets('uses default maxLines value when not specified',
         (tester) async {
       await tester.pumpWidget(
-        MaterialApp(
+        const MaterialApp(
           home: Scaffold(
             body: HeaderSubtitle(text: 'Default MaxLines'),
           ),
@@ -125,7 +125,7 @@ void main() {
       const customMaxLines = 3;
 
       await tester.pumpWidget(
-        MaterialApp(
+        const MaterialApp(
           home: Scaffold(
             body: HeaderSubtitle(
               text: 'Custom MaxLines',
@@ -142,7 +142,7 @@ void main() {
     testWidgets('uses default textAlign value when not specified',
         (tester) async {
       await tester.pumpWidget(
-        MaterialApp(
+        const MaterialApp(
           home: Scaffold(
             body: HeaderSubtitle(text: 'Default TextAlign'),
           ),
@@ -157,7 +157,7 @@ void main() {
       const customTextAlign = TextAlign.center;
 
       await tester.pumpWidget(
-        MaterialApp(
+        const MaterialApp(
           home: Scaffold(
             body: HeaderSubtitle(
               text: 'Custom TextAlign',
@@ -174,7 +174,7 @@ void main() {
     testWidgets('uses default overflow value when not specified',
         (tester) async {
       await tester.pumpWidget(
-        MaterialApp(
+        const MaterialApp(
           home: Scaffold(
             body: HeaderSubtitle(text: 'Default Overflow'),
           ),
@@ -189,7 +189,7 @@ void main() {
       const customOverflow = TextOverflow.fade;
 
       await tester.pumpWidget(
-        MaterialApp(
+        const MaterialApp(
           home: Scaffold(
             body: HeaderSubtitle(
               text: 'Custom Overflow',

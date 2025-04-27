@@ -13,7 +13,10 @@ import 'package:ksk_app/features/onboarding/presentation/widgets/organisms/onboa
 import 'package:ksk_app/generated/assets.gen.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockAppSizes extends Mock implements AppSizes {}
+class MockAppSizes extends Mock implements AppSizes {
+  @override
+  double get r12 => 12;
+}
 
 class MockAppTextStyles extends Mock implements AppTextStyles {}
 

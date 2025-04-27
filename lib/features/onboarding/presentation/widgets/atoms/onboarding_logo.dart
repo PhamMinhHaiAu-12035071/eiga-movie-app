@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
 import 'package:ksk_app/core/asset/app_image.dart';
 import 'package:ksk_app/core/styles/colors/app_colors.dart';
+import 'package:ksk_app/utils/context_x.dart';
 
 /// Logo widget used in the onboarding screen
 class OnboardingLogo extends StatelessWidget {
@@ -45,21 +45,12 @@ class OnboardingLogo extends StatelessWidget {
   /// The key for the logo image container
   static const _logoImageContainerKey = Key('onboarding_logo_image_container');
 
-  /// The default size of the logo container
-  static const _defaultBox = 59.0;
-
-  /// The default size of the logo image
-  static const _defaultImage = 37.0;
-
-  /// The default border radius of the logo container
-  static const _defaultRadius = 12.0;
-
   @override
   Widget build(BuildContext context) {
     final colors = GetIt.I<AppColors>();
-    final boxSize = containerSize ?? _defaultBox.sp;
-    final imageSize = this.imageSize ?? _defaultImage.sp;
-    final borderRadius = this.borderRadius ?? _defaultRadius.r;
+    final boxSize = containerSize ?? context.sizes.h56;
+    final imageSize = this.imageSize ?? context.sizes.h32;
+    final borderRadius = this.borderRadius ?? context.sizes.r12;
     final containerColor = this.containerColor ?? colors.white;
 
     return Semantics(

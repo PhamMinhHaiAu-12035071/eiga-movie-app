@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:ksk_app/core/asset/app_image.dart';
+import 'package:ksk_app/core/sizes/app_sizes.dart';
 import 'package:ksk_app/core/styles/colors/app_colors.dart';
 import 'package:ksk_app/features/onboarding/presentation/widgets/atoms/onboarding_logo.dart';
 import 'package:ksk_app/generated/assets.gen.dart';
@@ -83,16 +84,30 @@ class MockAppColors extends Mock implements AppColors {
       );
 }
 
+class MockAppSizes extends Mock implements AppSizes {
+  @override
+  double get h56 => 56.0;
+
+  @override
+  double get h32 => 32.0;
+
+  @override
+  double get r12 => 12.0;
+}
+
 void main() {
   late MockAppImage mockAppImage;
   late MockAppColors mockAppColors;
+  late MockAppSizes mockAppSizes;
 
   setUpAll(() {
     // Register mocks once for all tests in this file
     mockAppImage = MockAppImage();
     mockAppColors = MockAppColors();
+    mockAppSizes = MockAppSizes();
     GetIt.I.registerSingleton<AppImage>(mockAppImage);
     GetIt.I.registerSingleton<AppColors>(mockAppColors);
+    GetIt.I.registerSingleton<AppSizes>(mockAppSizes);
   });
 
   tearDownAll(() {
@@ -116,9 +131,9 @@ void main() {
           minTextAdapt: true,
           splitScreenMode: true,
           builder: (_, __) => buildTestApp(
-            OnboardingLogo(
-              containerSize: 59.sp,
-              imageSize: 37.sp,
+            const OnboardingLogo(
+              containerSize: 56,
+              imageSize: 32,
             ),
           ),
         ),
@@ -132,11 +147,11 @@ void main() {
       expect(containerFinder, findsOneWidget);
 
       final container = tester.widget<Container>(containerFinder);
-      expect(container.constraints?.maxWidth, 59.sp);
-      expect(container.constraints?.maxHeight, 59.sp);
+      expect(container.constraints?.maxWidth, 56);
+      expect(container.constraints?.maxHeight, 56);
 
       final boxDecoration = container.decoration! as BoxDecoration;
-      expect((boxDecoration.borderRadius! as BorderRadius).topLeft.x, 12.r);
+      expect((boxDecoration.borderRadius! as BorderRadius).topLeft.x, 12);
 
       // Verify container background color
       expect(boxDecoration.color, mockAppColors.white);
@@ -149,8 +164,8 @@ void main() {
       expect(imageSizedBoxFinder, findsOneWidget);
 
       final imageSizedBox = tester.widget<SizedBox>(imageSizedBoxFinder);
-      expect(imageSizedBox.width, 37.sp);
-      expect(imageSizedBox.height, 37.sp);
+      expect(imageSizedBox.width, 32);
+      expect(imageSizedBox.height, 32);
 
       // Verify Image is rendered
       expect(find.byType(Image), findsOneWidget);
@@ -217,9 +232,9 @@ void main() {
           minTextAdapt: true,
           splitScreenMode: true,
           builder: (_, __) => buildTestApp(
-            OnboardingLogo(
-              containerSize: 59.sp,
-              imageSize: 37.sp,
+            const OnboardingLogo(
+              containerSize: 56,
+              imageSize: 32,
             ),
           ),
         ),
@@ -248,9 +263,9 @@ void main() {
           minTextAdapt: true,
           splitScreenMode: true,
           builder: (_, __) => buildTestApp(
-            OnboardingLogo(
-              containerSize: 59.sp,
-              imageSize: 37.sp,
+            const OnboardingLogo(
+              containerSize: 56,
+              imageSize: 32,
             ),
           ),
         ),
@@ -270,9 +285,9 @@ void main() {
           minTextAdapt: true,
           splitScreenMode: true,
           builder: (_, __) => buildTestApp(
-            OnboardingLogo(
-              containerSize: 59.sp,
-              imageSize: 37.sp,
+            const OnboardingLogo(
+              containerSize: 56,
+              imageSize: 32,
             ),
           ),
         ),
@@ -298,9 +313,9 @@ void main() {
           minTextAdapt: true,
           splitScreenMode: true,
           builder: (_, __) => buildTestApp(
-            OnboardingLogo(
-              containerSize: 59.sp,
-              imageSize: 37.sp,
+            const OnboardingLogo(
+              containerSize: 56,
+              imageSize: 32,
             ),
           ),
         ),
@@ -319,9 +334,9 @@ void main() {
           minTextAdapt: true,
           splitScreenMode: true,
           builder: (_, __) => buildTestApp(
-            OnboardingLogo(
-              containerSize: 59.sp,
-              imageSize: 37.sp,
+            const OnboardingLogo(
+              containerSize: 56,
+              imageSize: 32,
             ),
           ),
         ),
@@ -361,7 +376,7 @@ void main() {
 
       // Check other properties remain default
       final boxDecoration = container.decoration! as BoxDecoration;
-      expect((boxDecoration.borderRadius! as BorderRadius).topLeft.x, 12.r);
+      expect((boxDecoration.borderRadius! as BorderRadius).topLeft.x, 12);
       expect(boxDecoration.color, mockAppColors.white);
 
       // Check image size is as provided
@@ -406,7 +421,7 @@ void main() {
       expect(container.constraints?.maxHeight, containerSize);
 
       final boxDecoration = container.decoration! as BoxDecoration;
-      expect((boxDecoration.borderRadius! as BorderRadius).topLeft.x, 12.r);
+      expect((boxDecoration.borderRadius! as BorderRadius).topLeft.x, 12);
       expect(boxDecoration.color, mockAppColors.white);
     });
 
@@ -419,9 +434,9 @@ void main() {
           minTextAdapt: true,
           splitScreenMode: true,
           builder: (_, __) => buildTestApp(
-            OnboardingLogo(
-              containerSize: 59.sp,
-              imageSize: 37.sp,
+            const OnboardingLogo(
+              containerSize: 56,
+              imageSize: 32,
               borderRadius: customRadius,
             ),
           ),
@@ -439,16 +454,16 @@ void main() {
       );
 
       // Check other properties remain default
-      expect(container.constraints?.maxWidth, 59.sp);
-      expect(container.constraints?.maxHeight, 59.sp);
+      expect(container.constraints?.maxWidth, 56);
+      expect(container.constraints?.maxHeight, 56);
       expect(boxDecoration.color, mockAppColors.white);
 
       // Check image size remains default
       final imageSizedBox = tester.widget<SizedBox>(
         find.byKey(const Key('onboarding_logo_image_container')),
       );
-      expect(imageSizedBox.width, 37.sp);
-      expect(imageSizedBox.height, 37.sp);
+      expect(imageSizedBox.width, 32);
+      expect(imageSizedBox.height, 32);
     });
 
     testWidgets('only overrides containerColor', (tester) async {
@@ -460,9 +475,9 @@ void main() {
           minTextAdapt: true,
           splitScreenMode: true,
           builder: (_, __) => buildTestApp(
-            OnboardingLogo(
-              containerSize: 59.sp,
-              imageSize: 37.sp,
+            const OnboardingLogo(
+              containerSize: 56,
+              imageSize: 32,
               containerColor: customColor,
             ),
           ),
@@ -477,16 +492,16 @@ void main() {
       expect(boxDecoration.color, customColor);
 
       // Check other properties remain default
-      expect(container.constraints?.maxWidth, 59.sp);
-      expect(container.constraints?.maxHeight, 59.sp);
-      expect((boxDecoration.borderRadius! as BorderRadius).topLeft.x, 12.r);
+      expect(container.constraints?.maxWidth, 56);
+      expect(container.constraints?.maxHeight, 56);
+      expect((boxDecoration.borderRadius! as BorderRadius).topLeft.x, 12);
 
       // Check image size remains default
       final imageSizedBox = tester.widget<SizedBox>(
         find.byKey(const Key('onboarding_logo_image_container')),
       );
-      expect(imageSizedBox.width, 37.sp);
-      expect(imageSizedBox.height, 37.sp);
+      expect(imageSizedBox.width, 32);
+      expect(imageSizedBox.height, 32);
     });
 
     testWidgets('has correct widget tree structure', (tester) async {
@@ -496,9 +511,9 @@ void main() {
           minTextAdapt: true,
           splitScreenMode: true,
           builder: (_, __) => buildTestApp(
-            OnboardingLogo(
-              containerSize: 59.sp,
-              imageSize: 37.sp,
+            const OnboardingLogo(
+              containerSize: 56,
+              imageSize: 32,
             ),
           ),
         ),

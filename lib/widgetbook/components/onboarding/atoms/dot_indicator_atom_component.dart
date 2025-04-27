@@ -36,7 +36,7 @@ WidgetbookComponent getDotIndicatorAtomComponent() {
             label: 'Horizontal Margin',
             description: 'Horizontal spacing between dots',
             max: 16,
-            initialValue: 4,
+            initialValue: 8,
           );
 
           final borderRadius = context.knobs.double.slider(

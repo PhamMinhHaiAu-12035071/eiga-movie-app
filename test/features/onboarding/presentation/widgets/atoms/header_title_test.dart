@@ -49,7 +49,7 @@ void main() {
       const testText = 'Test Title';
 
       await tester.pumpWidget(
-        MaterialApp(
+        const MaterialApp(
           home: Scaffold(
             body: HeaderTitle(text: testText),
           ),
@@ -67,7 +67,7 @@ void main() {
 
     testWidgets('uses styles from GetIt by default', (tester) async {
       await tester.pumpWidget(
-        MaterialApp(
+        const MaterialApp(
           home: Scaffold(
             body: HeaderTitle(text: 'Default Style'),
           ),
@@ -107,7 +107,7 @@ void main() {
       );
 
       await tester.pumpWidget(
-        MaterialApp(
+        const MaterialApp(
           home: Scaffold(
             body: HeaderTitle(
               text: 'Injected Style',
@@ -127,7 +127,7 @@ void main() {
     testWidgets('applies default maxLines of 1 and TextOverflow.ellipsis',
         (tester) async {
       await tester.pumpWidget(
-        MaterialApp(
+        const MaterialApp(
           home: Scaffold(
             body: HeaderTitle(text: 'Default MaxLines'),
           ),
@@ -143,7 +143,7 @@ void main() {
       const customMaxLines = 2;
 
       await tester.pumpWidget(
-        MaterialApp(
+        const MaterialApp(
           home: Scaffold(
             body: HeaderTitle(
               text: 'Custom MaxLines',
@@ -160,7 +160,7 @@ void main() {
 
     testWidgets('applies default textAlign of TextAlign.start', (tester) async {
       await tester.pumpWidget(
-        MaterialApp(
+        const MaterialApp(
           home: Scaffold(
             body: HeaderTitle(text: 'Default TextAlign'),
           ),
@@ -175,7 +175,7 @@ void main() {
       const customTextAlign = TextAlign.center;
 
       await tester.pumpWidget(
-        MaterialApp(
+        const MaterialApp(
           home: Scaffold(
             body: HeaderTitle(
               text: 'Custom TextAlign',
@@ -193,7 +193,7 @@ void main() {
       const customOverflow = TextOverflow.fade;
 
       await tester.pumpWidget(
-        MaterialApp(
+        const MaterialApp(
           home: Scaffold(
             body: HeaderTitle(
               text: 'Custom Overflow',

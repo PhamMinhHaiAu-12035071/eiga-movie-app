@@ -4,7 +4,7 @@ import 'package:ksk_app/utils/context_x.dart';
 /// Title widget used in the onboarding header
 class HeaderTitle extends StatelessWidget {
   /// Creates a HeaderTitle with the specified text
-  HeaderTitle({
+  const HeaderTitle({
     required this.text,
     super.key,
     this.textStyle,
@@ -12,7 +12,7 @@ class HeaderTitle extends StatelessWidget {
     this.maxLines = 1,
     this.textAlign = TextAlign.start,
     this.overflow = TextOverflow.ellipsis,
-  })  : assert(text.trim().isNotEmpty, 'Header title must not be empty'),
+  })  : assert(text != '', 'Header title must not be empty'),
         assert(maxLines > 0, 'maxLines must be positive');
 
   /// The text to display as the title
@@ -46,6 +46,12 @@ class HeaderTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Additional runtime check for whitespace-only text
+    assert(
+      text.trim().isNotEmpty,
+      'Header title must not contain only whitespace',
+    );
+
     return Semantics(
       header: true,
       label: text,

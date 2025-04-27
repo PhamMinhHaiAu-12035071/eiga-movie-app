@@ -45,6 +45,7 @@ void main() {
     when(() => mockSizes.h16).thenReturn(16);
     when(() => mockSizes.v8).thenReturn(8);
     when(() => mockSizes.r4).thenReturn(4);
+    when(() => mockSizes.r8).thenReturn(8);
 
     // Setup color mocks
     when(() => mockColors.onboardingBlue).thenReturn(mockOnboardingBlue);

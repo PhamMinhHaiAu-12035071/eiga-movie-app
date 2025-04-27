@@ -44,6 +44,7 @@ void main() {
     when(() => mockSizes.h16).thenReturn(16);
     when(() => mockSizes.v8).thenReturn(8);
     when(() => mockSizes.r4).thenReturn(4);
+    when(() => mockSizes.r8).thenReturn(8);
 
     // Setup color mocks
     when(() => mockColors.onboardingBlue).thenReturn(mockOnboardingBlue);
@@ -62,12 +63,16 @@ void main() {
     GetIt.I.reset();
   });
 
-  Widget buildTestWidget({required bool isActive}) {
+  Widget buildTestWidget({
+    required bool isActive,
+    double? inactiveOpacity,
+  }) {
     return MaterialApp(
       home: Scaffold(
         body: Center(
           child: DotIndicator(
             isActive: isActive,
+            inactiveOpacity: inactiveOpacity,
           ),
         ),
       ),
@@ -103,7 +108,7 @@ void main() {
       // Verify the properties
       expect(containerWidget.constraints?.minWidth, equals(16.0));
       expect(decoration.color, equals(mockOnboardingBlue));
-      expect(decoration.borderRadius, equals(BorderRadius.circular(4)));
+      expect(decoration.borderRadius, equals(BorderRadius.circular(8)));
     });
 
     testWidgets('should render inactive dot with correct properties',
@@ -136,7 +141,7 @@ void main() {
       );
       expect(
         decoration.borderRadius,
-        equals(BorderRadius.circular(4)),
+        equals(BorderRadius.circular(8)),
       );
     });
 
@@ -190,7 +195,7 @@ void main() {
       // Verify the properties
       expect(
         containerWidget.margin,
-        equals(const EdgeInsets.symmetric(horizontal: 4)),
+        equals(const EdgeInsets.symmetric(horizontal: 8)),
       );
       expect(containerWidget.constraints?.minHeight, equals(8));
     });
@@ -221,6 +226,61 @@ void main() {
       expect(
         inactiveSemantics.properties.label,
         equals('Inactive onboarding step'),
+      );
+    });
+
+    testWidgets('should render inactive dot with custom opacity',
+        (tester) async {
+      await tester.pumpWidget(
+        buildTestWidget(isActive: false, inactiveOpacity: 0.8),
+      );
+
+      // Find the container
+      final container = find.descendant(
+        of: find.byType(DotIndicator),
+        matching: find.byType(AnimatedContainer),
+      );
+
+      final containerWidget = tester.widget<AnimatedContainer>(container);
+      final decoration = containerWidget.decoration! as BoxDecoration;
+
+      // Verify the color with custom opacity (0.8 * 255 = 204)
+      expect(
+        decoration.color,
+        equals(mockOnboardingBlue.withAlpha(204)),
+      );
+    });
+
+    testWidgets('should accept boundary values for inactiveOpacity',
+        (tester) async {
+      // Test with minimum value 0.0
+      await tester.pumpWidget(
+        buildTestWidget(isActive: false, inactiveOpacity: 0),
+      );
+      expect(find.byType(DotIndicator), findsOneWidget);
+
+      // Test with maximum value 1.0
+      await tester.pumpWidget(
+        buildTestWidget(isActive: false, inactiveOpacity: 1),
+      );
+      expect(find.byType(DotIndicator), findsOneWidget);
+    });
+
+    test('should throw assertion error for invalid inactiveOpacity', () {
+      expect(
+        () => DotIndicator(
+          isActive: false,
+          inactiveOpacity: -0.1, // Negative value
+        ),
+        throwsA(isA<AssertionError>()),
+      );
+
+      expect(
+        () => DotIndicator(
+          isActive: false,
+          inactiveOpacity: 1.1, // Greater than 1.0
+        ),
+        throwsA(isA<AssertionError>()),
       );
     });
   });

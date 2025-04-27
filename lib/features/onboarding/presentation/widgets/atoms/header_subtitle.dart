@@ -4,7 +4,7 @@ import 'package:ksk_app/utils/context_x.dart';
 /// Subtitle widget used in the onboarding header
 class HeaderSubtitle extends StatelessWidget {
   /// Creates a HeaderSubtitle with the specified text
-  HeaderSubtitle({
+  const HeaderSubtitle({
     required this.text,
     super.key,
     this.textStyle,
@@ -12,7 +12,7 @@ class HeaderSubtitle extends StatelessWidget {
     this.maxLines = 1,
     this.textAlign = TextAlign.start,
     this.overflow = TextOverflow.ellipsis,
-  })  : assert(text.trim().isNotEmpty, 'Header subtitle must not be empty'),
+  })  : assert(text != '', 'Header subtitle must not be empty'),
         assert(maxLines > 0, 'maxLines must be positive');
 
   /// The text to display as the subtitle
@@ -46,6 +46,12 @@ class HeaderSubtitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Additional runtime check for whitespace-only text
+    assert(
+      text.trim().isNotEmpty,
+      'Header subtitle must not contain only whitespace',
+    );
+
     return Semantics(
       label: text,
       child: Text(

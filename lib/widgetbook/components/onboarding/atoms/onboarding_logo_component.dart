@@ -19,7 +19,7 @@ WidgetbookComponent getOnboardingLogoComponent() {
             description: 'Size of the container (width = height)',
             min: 40,
             max: 200,
-            initialValue: 59,
+            initialValue: 56,
             divisions: 16,
           );
 
@@ -28,7 +28,7 @@ WidgetbookComponent getOnboardingLogoComponent() {
             description: 'Size of the logo image (width = height)',
             min: 20,
             max: 150,
-            initialValue: 37,
+            initialValue: 32,
             divisions: 13,
           );
 

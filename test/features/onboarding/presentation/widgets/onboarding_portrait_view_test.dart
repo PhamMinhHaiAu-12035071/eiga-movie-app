@@ -15,7 +15,10 @@ import 'package:ksk_app/features/onboarding/presentation/widgets/onboarding_port
 import 'package:ksk_app/features/onboarding/presentation/widgets/organisms/onboarding_header.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockAppSizes extends Mock implements AppSizes {}
+class MockAppSizes extends Mock implements AppSizes {
+  @override
+  double get r12 => 12;
+}
 
 class MockAppTextStyles extends Mock implements AppTextStyles {}
 
@@ -152,6 +155,7 @@ void main() {
     when(() => mockSizes.v56).thenReturn(56);
     when(() => mockSizes.v260).thenReturn(260);
     when(() => mockSizes.r4).thenReturn(4);
+    when(() => mockSizes.r8).thenReturn(8);
     when(() => mockSizes.r16).thenReturn(16);
     when(() => mockSizes.r64).thenReturn(64);
     when(() => mockSizes.r80).thenReturn(80);

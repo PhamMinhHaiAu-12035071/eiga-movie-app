@@ -56,6 +56,11 @@ void main() {
     when(() => mockSizes.r64).thenReturn(64);
     when(() => mockSizes.r4).thenReturn(4);
     when(() => mockSizes.borderRadiusMd).thenReturn(8);
+    when(() => mockSizes.v260).thenReturn(260);
+    when(() => mockSizes.r8).thenReturn(8);
+    when(() => mockSizes.r16).thenReturn(16);
+    when(() => mockSizes.r64).thenReturn(64);
+    when(() => mockSizes.r80).thenReturn(80);
 
     // Mock colors
     when(() => mockColors.onboardingBackground)
