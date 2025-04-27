@@ -16,6 +16,8 @@
 - **Updating memory bank and rules (`@common`) to formalize orientation handling patterns.**
 - **Building and testing movie-related features (browse, details, ticket booking)**
 - **Conducting code reviews of existing components, particularly in the onboarding feature**
+- Monitoring overall test suite health after recent refactoring
+- Preparing for next development tasks, likely involving further feature implementation or addressing remaining test gaps
 
 ## Recent Findings
 - ✅ Code review of onboarding atoms components reveals high quality implementation:
@@ -57,6 +59,12 @@
   - `context.router.replace(const LoginRoute())` pattern for navigation
   - Ensures back button doesn't return to onboarding after completion
   - Testing with mock routers to verify navigation behavior
+
+- ✅ Unit tests for `OnboardingHeader` required multiple adjustments after the initial refactor:
+  - Mock updates (`MockAppSizes` needed `h14` in multiple test files).
+  - Finder strategy adjustments (moving from predicate-based finders to direct child inspection).
+  - Assertion corrections (comparing unscaled values for `Gap.mainAxisExtent` instead of scaled `.w` values).
+- ✅ `make test` command is effective in catching integration issues between components and their tests.
 
 ## Recent Changes
 - ✅ Updated HeaderTitle widget to improve text handling:
@@ -152,6 +160,17 @@
 - ✅ Improved error handling in test assertions and validations
 - ✅ **Created movie discovery and browsing feature structure (in progress)**
 - ✅ **Established Cinema entity model for ticket booking feature (in progress)**
+- ✅ Refactored `OnboardingHeader` widget:
+  - Replaced magic number `0.63` with a named constant `_kImageSizeRatio` for image size calculation.
+- ✅ Updated and fixed unit tests for `OnboardingHeader` (`onboarding_header_test.dart`):
+  - Removed assertion testing internal implementation detail (`imageSize` calculation).
+  - Added missing `h14` mock to `MockAppSizes`.
+  - Simplified `buildTestApp` helper.
+  - Refactored widget finders for `Row` and `Gap`.
+  - Corrected `Gap.mainAxisExtent` assertions to use unscaled values.
+- ✅ Updated and fixed unit tests in related files (`onboarding_portrait_view_test.dart`, `onboarding_page_test.dart`):
+  - Added missing `h14` mock to `MockAppSizes` in affected files.
+- ✅ Successfully ran `make test` to confirm all tests pass after the fixes.
 
 ## Testing Patterns Established
 1. Mock Dependencies:

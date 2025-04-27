@@ -63,6 +63,8 @@
       - ✅ Initially used Padding, then refactored to Container for better structure
       - ✅ Added transparent color property for consistent styling
       - ✅ Created and maintained comprehensive unit tests
+      - ✅ Refactored to use named constant for image sizing
+      - ✅ Updated and fixed unit tests after refactoring
       - ✅ Added Widgetbook component for development and testing
     - ✅ Created HeaderTitle widget for title display
       - ✅ Implemented with configurable text style and color
@@ -119,6 +121,8 @@
       - ✅ Tested text content and styling
       - ✅ Validated layout and dimensions
       - ✅ Checked logo BoxFit properties
+      - ✅ Verified correct named constant usage
+      - ✅ Ensured tests pass after refactoring and fixes
     - ✅ HeaderTitle widget tests (100% coverage)
       - ✅ Verified default maxLines (1) and TextOverflow.ellipsis
       - ✅ Tested custom maxLines values
