@@ -258,5 +258,87 @@ void main() {
       const widget = HeaderSubtitle(text: 'Test');
       expect(widget.textKey, const Key('onboarding_header_subtitle'));
     });
+
+    // New test for custom fontWeight
+    testWidgets('should use custom fontWeight when provided', (tester) async {
+      const customFontWeight = FontWeight.w600;
+
+      // Set up specific mock for this test
+      when(
+        () => mockTextStyles.headingSm(
+          fontWeight: customFontWeight,
+          color: any(named: 'color'),
+        ),
+      ).thenReturn(
+        const TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w600,
+          color: Colors.green,
+        ),
+      );
+
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: HeaderSubtitle(
+              text: 'Custom Weight',
+              fontWeight: customFontWeight,
+            ),
+          ),
+        ),
+      );
+
+      // Verify the method was called with expected fontWeight
+      verify(
+        () => mockTextStyles.headingSm(
+          fontWeight: customFontWeight,
+          color: any(named: 'color'),
+        ),
+      ).called(1);
+    });
+
+    // New test for custom semanticLabel
+    testWidgets('should use custom semanticLabel when provided',
+        (tester) async {
+      const customLabel = 'Custom Accessibility Label';
+
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: HeaderSubtitle(
+              text: 'Subtitle Text',
+              semanticLabel: customLabel,
+            ),
+          ),
+        ),
+      );
+
+      final semanticsWidget = tester.widget<Semantics>(
+        find.descendant(
+          of: find.byType(HeaderSubtitle),
+          matching: find.byType(Semantics),
+        ),
+      );
+      expect(semanticsWidget.properties.label, customLabel);
+    });
+
+    // New test for custom testId
+    testWidgets('should use custom testId when provided', (tester) async {
+      const customKey = Key('custom_header_subtitle_key');
+
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: HeaderSubtitle(
+              text: 'With Custom Key',
+              testId: customKey,
+            ),
+          ),
+        ),
+      );
+
+      expect(find.byKey(customKey), findsOneWidget);
+      expect(find.byKey(const Key('onboarding_header_subtitle')), findsNothing);
+    });
   });
 }
